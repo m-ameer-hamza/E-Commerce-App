@@ -50,11 +50,10 @@ const Product = ({ product }) => {
       }}
       style={{
         marginVertical: 20,
-        marginHorizontal: 20,
+
         backgroundColor: "#fff",
-        width: "40%",
+        width: "45%",
         alignItems: "center",
-        justifyContent: "center",
       }}
     >
       {product.discount && (
@@ -63,7 +62,7 @@ const Product = ({ product }) => {
           style={{
             position: "absolute",
             top: 0,
-            left: 0,
+            left: 10,
             width: 60,
             height: 60,
             zIndex: 1,

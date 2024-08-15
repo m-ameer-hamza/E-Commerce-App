@@ -73,49 +73,7 @@ export default function HomeStackNavigation() {
         name="Address"
         component={Address}
         options={{
-          headerStyle: {
-            backgroundColor: "#00CED1",
-
-            shadowColor: "#AFEEEE",
-            elevation: 2,
-            shadowOpacity: 0.8,
-            borderBottomWidth: 1,
-          },
-          headerTitle: () => null,
-
-          headerLeft: () => {
-            const navigation = useNavigation();
-            return (
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingTop: 10,
-                  paddingBottom: 10,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => navigation.goBack()}
-                  style={{ marginRight: 10 }}
-                >
-                  <Ionicons name="arrow-back" size={24} />
-                </TouchableOpacity>
-                <View style={{ width: "100%", paddingHorizontal: 20 }}>
-                  <Searchbar
-                    style={{
-                      width: "70%",
-                      height: 40,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                    textAlignVertical="center"
-                    onChangeText={setSearchQuery}
-                    value={searchQuery}
-                  />
-                </View>
-              </View>
-            );
-          },
+          headerShown: false,
         }}
       />
       <Stack.Screen

@@ -49,7 +49,8 @@ const Header = ({ setAddressModel }) => {
         <IconButton
           icon="microphone"
           iconColor="#000"
-          size={35}
+          containerColor="#00b2b5"
+          size={27}
           onPress={() => console.log("Pressed")}
         />
       </View>

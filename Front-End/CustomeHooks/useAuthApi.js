@@ -81,8 +81,10 @@ export function useAuthApi() {
     if (error.response) {
       // The request was made and the server responded with a status code
 
-      if (error.response.data.status === 400) {
+      if (error.response.data.status === 409) {
         setError("Email already exists");
+      } else if (error.response.data.status === 400) {
+        setError("Bad Request");
       } else if (error.response.data.status === 401) {
         setError("Error Email or password not match");
       } else if (error.response.data.status === 404) {

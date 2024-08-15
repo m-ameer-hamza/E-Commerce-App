@@ -51,7 +51,7 @@ const Home = () => {
                     margin: 10,
                     padding: 10,
                     borderRadius: 10,
-                    elevation: 5,
+                    elevation: 2,
                     width: 100,
                     height: 100,
                     justifyContent: "space-around",
@@ -82,11 +82,9 @@ const Home = () => {
 
               {/* Hot Deals for the week */}
 
-              <Text style={{ padding: 10, fontSize: 18, fontWeight: "bold" }}>
+              <Text style={{ padding: 15, fontSize: 20, fontWeight: "bold" }}>
                 Trending Deals of the week
               </Text>
-
-              {/* Image source={require("../assets/Category/cloths.png")} */}
 
               <View>
                 {DealsData.map((item, index) => {
@@ -99,10 +97,10 @@ const Home = () => {
                       style={{
                         flexDirection: "row",
                         backgroundColor: "#fff",
-                        margin: 10,
+                        margin: 3,
                         padding: 10,
                         borderRadius: 10,
-                        elevation: 5,
+                        marginBottom: 10,
                       }}
                     >
                       <Image
@@ -139,7 +137,14 @@ const Home = () => {
                           Rs. {"  "}
                           {item.price}
                         </Text>
-                        <Text style={{ fontSize: 14, color: "#444" }}>
+                        <Text
+                          style={{
+                            fontSize: 15,
+                            color: "#f58d25",
+                            marginTop: 5,
+                            fontWeight: "700",
+                          }}
+                        >
                           Discount {item.discount}
                         </Text>
                       </View>
@@ -156,6 +161,8 @@ const Home = () => {
                   alignItems: "center",
                   flexWrap: "wrap",
                   width: "100%",
+                  justifyContent: "space-around",
+                  marginTop: 20,
                 }}
               >
                 {DropDownCategory === "Select Category"

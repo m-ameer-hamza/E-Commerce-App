@@ -99,11 +99,13 @@ const AddressesList = ({ address, btn, stepHandler }) => {
             justifyContent: "center",
             alignItems: "center",
             marginTop: 10,
-            backgroundColor: "#f0960e",
+            backgroundColor: "#f0b300",
             width: "80%",
           }}
         >
-          <Text>Deliver to this Address</Text>
+          <Text style={{ fontSize: 16, fontWeight: "500" }}>
+            Deliver to this Address
+          </Text>
         </Pressable>
       )}
     </Pressable>

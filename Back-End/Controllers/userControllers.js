@@ -31,7 +31,7 @@ exports.createUser = async (req, res, next) => {
   } catch (err) {
     if (err.message.includes("duplicate key error collection")) {
       console.log("Email Already Exists");
-      return next(new appError("User Already Exists", 400));
+      return next(new appError("User Already Exists", 409));
     }
     console.log(err.message);
     return next(new appError(err.message, 500));

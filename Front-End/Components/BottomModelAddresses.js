@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, TouchableWithoutFeedback } from "react-native";
 import { Icon } from "react-native-paper";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -29,7 +29,7 @@ const BottomModelAddresses = ({ toggleState, data }) => {
 
   return (
     <Pressable
-      onPressOut={() => {
+      onPress={() => {
         selectedAddress();
       }}
       style={{

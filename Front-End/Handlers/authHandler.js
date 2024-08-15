@@ -40,6 +40,8 @@ export const authHandlers = () => {
     if (error) {
       if (error === "Email already exists") {
         alert("User already exists");
+      } else if (error == "Bad Request") {
+        alert("Bad Request");
       } else if (error === "User is not verified") {
         alert("User is not verified");
         navigation.navigate("EmailVerification", { email: email });

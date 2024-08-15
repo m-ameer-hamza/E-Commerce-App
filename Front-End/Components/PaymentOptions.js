@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import { RadioButton } from "react-native-paper";
+import { RadioButton, PaperProvider } from "react-native-paper";
 import { useSelector, useDispatch } from "react-redux";
 import { paymentHandler } from "../Handlers/paymentHandler";
 import { calculateDiscountedTotal } from "../Redux/cartSlice";
 import { CURRENCY_TYPE } from "../Global";
-
-import { ActivityIndicator } from "react-native-paper";
+import ActivityLoading from "../Components/ActivityLoading";
 
 const PaymentOptions = ({
   order,
@@ -14,8 +13,9 @@ const PaymentOptions = ({
   currStep,
   currStepHandler,
   setPaymentKey,
+  loading,
+  setLoading,
 }) => {
-  const [loading, setLoading] = useState(false);
   const [cardAccepted, setCardAccepted] = useState(false);
 
   const [disTotal, setDisTotal] = useState(0);
@@ -56,12 +56,12 @@ const PaymentOptions = ({
       setPaymentKey(payInstanceKey);
     }
 
-    // setLoading(false);
+    setLoading(false);
   }, [payInstanceKey]);
 
   // Function to handle the addition of card
   const addCardHandler = async () => {
-    // setLoading(true);
+    setLoading(true);
     handlePayment(disTotal + order.deliveryCharge, CURRENCY_TYPE);
   };
 
@@ -78,7 +78,12 @@ const PaymentOptions = ({
     currStepHandler(currStep + 1);
   };
   return (
-    <View style={{ marginHorizontal: 20, marginTop: 5 }}>
+    <View
+      style={{
+        marginHorizontal: 20,
+        marginTop: 5,
+      }}
+    >
       <Text style={{ fontSize: 18, fontWeight: "bold" }}>
         Select Payment Option
       </Text>
@@ -139,7 +144,7 @@ const PaymentOptions = ({
               addPayOptHandler();
             }}
             style={{
-              backgroundColor: "#ffc72c",
+              backgroundColor: "#fab300",
               padding: 10,
               borderRadius: 10,
               justifyContent: "center",
@@ -149,7 +154,7 @@ const PaymentOptions = ({
               alignSelf: "center",
             }}
           >
-            <Text style={{ fontSize: 16, fontWeight: "400" }}>Continue</Text>
+            <Text style={{ fontSize: 18, fontWeight: "500" }}>Continue</Text>
           </Pressable>
         )}
 
@@ -160,7 +165,7 @@ const PaymentOptions = ({
                 addPayOptHandler();
               }}
               style={{
-                backgroundColor: "#ffc72c",
+                backgroundColor: "#fab300",
                 padding: 10,
                 borderRadius: 10,
                 justifyContent: "center",
@@ -170,7 +175,7 @@ const PaymentOptions = ({
                 alignSelf: "center",
               }}
             >
-              <Text style={{ fontSize: 16, fontWeight: "400" }}>Continue</Text>
+              <Text style={{ fontSize: 18, fontWeight: "500" }}>Continue</Text>
             </Pressable>
           ) : (
             <Pressable
@@ -180,7 +185,7 @@ const PaymentOptions = ({
               }}
               style={{
                 flexDirection: "row",
-                backgroundColor: "#ffc72c",
+                backgroundColor: "#fab300",
                 padding: 10,
                 borderRadius: 10,
                 justifyContent: "center",
@@ -191,10 +196,9 @@ const PaymentOptions = ({
                 justifyContent: "space-around",
               }}
             >
-              <Text style={{ fontSize: 16, fontWeight: "400" }}>
+              <Text style={{ fontSize: 16, fontWeight: "500" }}>
                 Check out using Card
               </Text>
-              {loading && <ActivityIndicator animating={true} color="black" />}
             </Pressable>
           ))}
       </View>

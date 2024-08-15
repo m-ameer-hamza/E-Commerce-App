@@ -333,7 +333,7 @@ const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
           handleCheckOut();
         }}
         style={{
-          backgroundColor: "#ffc72c",
+          backgroundColor: "#fab300",
           padding: 10,
           borderRadius: 5,
           justifyContent: "center",

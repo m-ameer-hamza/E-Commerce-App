@@ -78,10 +78,10 @@ const CartItemBottom = ({ item }) => {
             borderRadius: 7,
             paddingHorizontal: 50,
             alignItems: "center",
-            backgroundColor: "#ffa72c",
+            backgroundColor: "#fab305",
           }}
         >
-          <Text style={{ fontSize: 15, fontWeight: "400" }}>
+          <Text style={{ fontSize: 15, fontWeight: "500" }}>
             Rs.{" "}
             {itemPriceCalculation(item?.price, item?.quantity, item?.discount)}
           </Text>

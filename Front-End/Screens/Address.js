@@ -5,19 +5,23 @@ import {
   ScrollView,
   Pressable,
   RefreshControl,
+  TextInput,
 } from "react-native";
 import { useState, useEffect, useCallback } from "react";
-import { Icon, PaperProvider } from "react-native-paper";
+import { Icon, PaperProvider, IconButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { addressHandlers } from "../Handlers/addressHandler";
 import ActivityLoader from "../Components/ActivityLoader";
 import { useSelector } from "react-redux";
 import AddressesList from "../Components/AddressesList";
+import ActivityLoading from "../Components/ActivityLoading";
+import Header from "../Components/Header";
 const AddAdress = () => {
   const navigation = useNavigation();
 
   const [loader, setLoader] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const user = useSelector((state) => state.user);
 
@@ -49,13 +53,46 @@ const AddAdress = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={["#19bd2c"]}
+            colors={["#f58d25"]}
           />
         }
       >
-        <View style={{ padding: 10 }}>
+        <View
+          style={{
+            backgroundColor: "#00CED1",
+            padding: 10,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+            height: 60,
+            alignContent: "center",
+          }}
+        >
+          <TextInput
+            style={{
+              width: "80%",
+              height: 40,
+              backgroundColor: "#fff",
+              borderRadius: 10,
+              padding: 10,
+              fontSize: 16,
+              fontWeight: "500",
+            }}
+            placeholder="Search"
+            onChangeText={setSearchQuery}
+            value={searchQuery}
+          />
+          <IconButton
+            icon="microphone"
+            iconColor="#000"
+            containerColor="#00b2b5"
+            size={27}
+            onPress={() => console.log("Pressed")}
+          />
+        </View>
+        <View style={{ padding: 10, paddingLeft: 15 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-            Your Addresses
+            Saved Addresses
           </Text>
         </View>
         <Pressable
@@ -85,7 +122,7 @@ const AddAdress = () => {
             <AddressesList key={index} address={address} btn={false} />
           ))}
       </ScrollView>
-      {loader && <ActivityLoader />}
+      {loader && <ActivityLoading />}
     </PaperProvider>
   );
 };

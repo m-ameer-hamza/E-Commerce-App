@@ -95,7 +95,7 @@ const DeliveryOptions = ({ currStepHandler, currStep, order, setOrder }) => {
             addDeliveryHandler();
           }}
           style={{
-            backgroundColor: "#ffc72c",
+            backgroundColor: "#fab300",
             padding: 10,
             borderRadius: 10,
             justifyContent: "center",
