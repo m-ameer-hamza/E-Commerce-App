@@ -17,10 +17,22 @@ export default CustomDrawerContent = (props) => {
 
   // Define route configurations with text and icons
   const routeConfigs = {
-    BottomNavigation: { label: "Home", icon: "home" },
-    ProfileStack: { label: "Profile", icon: "account" },
-    Settings: { label: "Settings", icon: "cog" },
-    OrderStack: { label: "Orders", icon: "receipt" },
+    BottomNavigation: {
+      label: "Home",
+      icon: "home",
+      focusIcon: "home-outline",
+    },
+    ProfileStack: {
+      label: "Profile",
+      icon: "account",
+      focusIcon: "account-outline",
+    },
+    Settings: { label: "Settings", icon: "cog", focusIcon: "cog-outline" },
+    LikedItemsStack: {
+      label: "Liked",
+      icon: "heart",
+      focusIcon: "heart-outline",
+    },
     // Add more routes here
     // Orders: { label: "My Orders", icon: "receipt-outline" },
   };
@@ -54,7 +66,7 @@ export default CustomDrawerContent = (props) => {
         }}
       >
         {props.state.routes.map((route, index) => {
-          const { label, icon } = routeConfigs[route.name] || {};
+          const { label, icon, focusIcon } = routeConfigs[route.name] || {};
           const focused = props.state.index === index;
 
           return (
@@ -76,7 +88,7 @@ export default CustomDrawerContent = (props) => {
                 }}
               >
                 <IconButton
-                  icon={focused ? icon : icon + "-outline"}
+                  icon={focused ? icon : focusIcon}
                   size={30}
                   iconColor={focused ? "#fab300" : "#000"}
                 />

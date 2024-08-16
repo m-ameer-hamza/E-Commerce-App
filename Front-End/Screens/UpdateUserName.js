@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
-import { TextInput, Button, PaperProvider } from "react-native-paper";
+import { View, StyleSheet, Text, Pressable } from "react-native";
+import {
+  TextInput,
+  Button,
+  PaperProvider,
+  IconButton,
+} from "react-native-paper";
 import { useSelector } from "react-redux";
 import { userHandler } from "../Handlers/userHandler";
 import PasswordConfirm from "../Components/PasswordConfirm";
 import ActivityLoader from "../Components/ActivityLoader";
+import { useNavigation } from "@react-navigation/native";
 
 const UpdateUserName = () => {
   const [currentUserName, setCurrentUserName] = useState("");
@@ -36,6 +42,8 @@ const UpdateUserName = () => {
   const user = useSelector((state) => state.user.name);
   const session = useSelector((state) => state.session.session);
 
+  const navigation = useNavigation();
+
   useEffect(() => {
     setCurrentUserName(user);
   }, [user]);
@@ -51,6 +59,24 @@ const UpdateUserName = () => {
 
   return (
     <PaperProvider>
+      <Pressable
+        style={{
+          flexDirection: "row",
+
+          backgroundColor: "#AFEEEE",
+          height: 70,
+          alignItems: "center",
+          paddingHorizontal: 10,
+        }}
+      >
+        <IconButton
+          icon="arrow-left"
+          iconColor="#000"
+          size={30}
+          onPress={() => navigation.goBack()}
+        />
+        <Text style={{ fontSize: 23, fontWeight: "500" }}> Update Name </Text>
+      </Pressable>
       <View
         style={{
           flex: 1,

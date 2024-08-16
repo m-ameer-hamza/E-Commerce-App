@@ -23,24 +23,9 @@ export default function ProfileStackNavigation() {
       <Stack.Screen
         name="UpdateUserName"
         component={UpdateUserName}
-        options={({ navigation }) => ({
-          headerLeft: () => (
-            <TouchableOpacity
-              style={{ paddingLeft: 20 }}
-              onPress={() => navigation.toback()}
-            >
-              <Icon source="arrow-left" size={30} iconColor="#000" />
-              {/* Adjust the size here */}
-            </TouchableOpacity>
-          ),
-          headerStyle: {
-            backgroundColor: "#AFEEEE",
-            height: 70,
-          },
-          headerTitleStyle: {
-            fontSize: 25,
-          },
-        })}
+        options={{
+          headerShown: false,
+        }}
       />
       <Stack.Screen
         name="UpdatePassword"

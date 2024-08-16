@@ -1,4 +1,4 @@
-import { Text, View, ScrollView } from "react-native";
+import { Text, View, ScrollView, Pressable } from "react-native";
 import {
   TouchableRipple,
   PaperProvider,
@@ -34,7 +34,7 @@ export default function Profile() {
 
   return (
     <PaperProvider>
-      <View
+      <Pressable
         style={{
           flexDirection: "row",
 
@@ -51,11 +51,16 @@ export default function Profile() {
           onPress={() => navigation.toggleDrawer()}
         />
         <Text style={{ fontSize: 25, fontWeight: "500" }}> Profile </Text>
-      </View>
+      </Pressable>
       <ScrollView
         contentContainerStyle={[styles.Settings.Container, containerColor]}
       >
-        <View style={[styles.Settings.listContainer, listColor]}>
+        <Pressable
+          style={[styles.Settings.listContainer, listColor]}
+          onPress={() => {
+            navigation.navigate("UpdateUserName");
+          }}
+        >
           <View style={[styles.Settings.fontColor]}>
             <Text style={[{ fontSize: 20, fontWeight: "bold" }, fontColor]}>
               Update User Name
@@ -78,7 +83,7 @@ export default function Profile() {
             /> */}
             <Icon source="account-edit" size={35} color="grey" />
           </View>
-        </View>
+        </Pressable>
         <View style={[styles.Settings.listContainer, listColor]}>
           <View style={[styles.Settings.fontColor]}>
             <Text style={[{ fontSize: 20, fontWeight: "bold" }, fontColor]}>

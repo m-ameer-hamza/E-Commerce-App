@@ -5,6 +5,7 @@ import Settings from "../Screens/Settings";
 import ProfileStackNavigation from "../Navigation/ProfileStackNavigation";
 import { TouchableOpacity } from "react-native";
 import { Icon } from "react-native-paper";
+import LikedItemsStack from "../Navigation/LikedItemsStackNavigation";
 export default function DrawerNavigation() {
   const Drawer = createDrawerNavigator();
   return (
@@ -49,6 +50,15 @@ export default function DrawerNavigation() {
           drawerIcon: () => null,
         }}
         component={ProfileStackNavigation}
+      />
+      <Drawer.Screen
+        name="LikedItemsStack"
+        options={{
+          headerShown: false,
+          drawerLabel: () => null,
+          drawerIcon: () => null,
+        }}
+        component={LikedItemsStack}
       />
     </Drawer.Navigator>
   );
