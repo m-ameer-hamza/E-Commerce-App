@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import AuthStackNavigation from "./Navigation/AuthStackNavigation";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BottomNavigation from "./Navigation/BottomNavigation";
+import DrawerNavigation from "./Navigation/DrawerNavigation";
 
 //import BottomNavigation from "./Navigation/BottomNavigation"
 // import DrawerNavigation from "./Navigation/DrawerNavigation";
@@ -12,7 +13,7 @@ export default function Navigation() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <NavigationContainer>
-        {isAuth ? <BottomNavigation /> : <AuthStackNavigation />}
+        {isAuth ? <DrawerNavigation /> : <AuthStackNavigation />}
       </NavigationContainer>
     </GestureHandlerRootView>
   );

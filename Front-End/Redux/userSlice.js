@@ -1,6 +1,6 @@
 const initialStateLoginUser = {
-  name: "",
-  email: "",
+  name: "Ameer Hamza",
+  email: "dummy@gmail.com",
   userAddresses: [],
 };
 

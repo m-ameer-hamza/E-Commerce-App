@@ -4,6 +4,7 @@ import userReducer from "./userSlice";
 import sessionReducer from "./sessionSlice";
 import authReducer from "./authSlice";
 import cartReducer from "./cartSlice";
+import settingsReducer from "./appSettingsSlice";
 
 // import dropDownReducer from "./MenuListSlice";
 // import settingsReducer from "./AppSettingsSlice";
@@ -15,7 +16,7 @@ const rootReducer = combineReducers({
   cart: cartReducer,
 
   // menu: dropDownReducer,
-  // settings: settingsReducer,
+  settings: settingsReducer,
 });
 
 const store = createStore(rootReducer);

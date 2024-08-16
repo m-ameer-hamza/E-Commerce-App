@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { StyleSheet, Text, View, Pressable, TextInput } from "react-native";
-import { IconButton, Searchbar } from "react-native-paper";
+import { IconButton } from "react-native-paper";
 import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 const Header = ({ setAddressModel }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const user = useSelector((state) => state.user);
+
+  const navigation = useNavigation();
 
   const displayAddress = (text) => {
     // Check if "Address" is not included in address.saveAs
@@ -25,16 +28,21 @@ const Header = ({ setAddressModel }) => {
         style={{
           width: "100%",
           backgroundColor: "#00CED1",
-          padding: 10,
+
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "space-around",
+          justifyContent: "space-between",
           height: 60,
         }}
       >
+        <IconButton
+          icon="menu"
+          iconColor="black"
+          onPress={() => navigation.toggleDrawer()}
+        />
         <TextInput
           style={{
-            width: "80%",
+            width: "70%",
             height: 40,
             backgroundColor: "#fff",
             borderRadius: 10,

@@ -11,11 +11,11 @@ export default function sessionSlice(state = initialStateSession, action) {
 
         session: action.payload.session,
       };
-    
+
     case "session/logout":
       return {
         ...initialStateSession,
-      };  
+      };
     default:
       return state;
   }
@@ -31,7 +31,6 @@ export function editSession(session) {
     },
   };
 }
-
 
 //action handler to clear the user data
 export function logoutSession() {

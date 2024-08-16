@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import CartItem from "../Components/CartItem";
 import { useNavigation } from "@react-navigation/native";
 import { calculateDiscountedTotal } from "../Redux/cartSlice";
-
+import { IconButton } from "react-native-paper";
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
   const [disTotal, setDisTotal] = useState(0);
@@ -29,10 +29,33 @@ const Cart = () => {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
       {/* Header of Cart Screen */}
-      <View style={{ width: "100%", alignItems: "center" }}>
-        <Text> Cart Screen</Text>
+      <View
+        style={{
+          width: "100%",
+          backgroundColor: "#AFEEEE",
+
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          height: 50,
+          paddingHorizontal: 10,
+        }}
+      >
+        <IconButton
+          icon="menu"
+          iconColor="black"
+          onPress={() => navigation.toggleDrawer()}
+        />
+        <Text style={{ fontSize: 22, fontWeight: "600" }}> Cart Screen</Text>
       </View>
-      <View style={{ padding: 10, flexDirection: "row", alignItems: "center" }}>
+      <View
+        style={{
+          padding: 10,
+          flexDirection: "row",
+          marginLeft: 20,
+          marginTop: 20,
+        }}
+      >
         <Text style={{ fontSize: 18, fontWeight: "400" }}>Subtotal: </Text>
         <Text style={{ fontSize: 20, fontWeight: "bold" }}>{disTotal} </Text>
       </View>
