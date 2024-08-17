@@ -56,14 +56,13 @@ export const ProductLikeHandlers = () => {
   //function that search for the item in the liked items
   //based upon id of item. IT should return true if found  otherwise return false
   const isItemLiked = async (itemId) => {
-    console.log("From Product Like Handlers ISliked function", itemId);
     try {
+      const jsonValue = await AsyncStorage.getItem("likedItems");
       const items = jsonValue != null ? JSON.parse(jsonValue) : [];
 
       // Check if the item with the specified itemId exists in the liked items list
       const isLiked = items.some((item) => item.id === itemId);
 
-      console.log("From Product Like Handlers ISliked function", isLiked);
       return isLiked;
     } catch (e) {
       return false;
