@@ -48,6 +48,7 @@ export default CustomDrawerContent = (props) => {
           />
         </View>
       </View>
+      <View style={{ borderWidth: 1, borderColor: "#fff" }} />
       <View
         style={{
           width: "100%",

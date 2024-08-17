@@ -12,6 +12,7 @@ import { PaperProvider, IconButton } from "react-native-paper";
 import ActivityLoader from "../Components/ActivityLoader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { ProductLikeHandlers } from "../CompHandlers/ProductLikeHandlers";
 
 const LikedItems = () => {
   const [likedItems, setLikedItems] = useState([]);
@@ -19,53 +20,31 @@ const LikedItems = () => {
   const [refreshing, setRefreshing] = useState(false); // Added refreshing state
   const navigation = useNavigation();
 
-  const getLikedItems = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem("likedItems");
-      const items = jsonValue != null ? JSON.parse(jsonValue) : [];
-      setLikedItems(items); // Set the state with the retrieved items
-    } catch (e) {
-      console.error("Error fetching liked items:", e);
-    }
-  };
+  const { getLikedItems, unlikeItemAsync } = ProductLikeHandlers();
 
   useEffect(() => {
     setLoading(true);
-    getLikedItems();
+    setLikedItems(getLikedItems());
     setLoading(false);
     console.log("Liked Items useEffect");
   }, []);
 
   // Function to handle pull-to-refresh
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    getLikedItems().finally(() => {
-      setRefreshing(false);
-    });
+
+    try {
+      const items = await getLikedItems(); // Await the result of getLikedItems
+      setLikedItems(items);
+    } finally {
+      setRefreshing(false); // Always set refreshing to false at the end
+    }
   }, []);
 
   // This function will remove the liked item from the liked items list
   const unlikeItem = async (itemId) => {
     setLoading(true);
-    try {
-      // Retrieve the existing liked items from AsyncStorage
-      const jsonValue = await AsyncStorage.getItem("likedItems");
-      let likedItems = jsonValue != null ? JSON.parse(jsonValue) : [];
-
-      // Remove the item by filtering out the one with the specified itemId
-      likedItems = likedItems.filter((item) => item.id !== itemId);
-
-      // Save the updated list back to AsyncStorage
-      await AsyncStorage.setItem("likedItems", JSON.stringify(likedItems));
-
-      // Update the state with the new list
-      setLikedItems(likedItems);
-
-      alert("Item unliked successfully");
-    } catch (e) {
-      console.error("Error unliking the item:", e);
-      alert("Error unliking the item");
-    }
+    await unlikeItemAsync(itemId);
     setLoading(false);
   };
 

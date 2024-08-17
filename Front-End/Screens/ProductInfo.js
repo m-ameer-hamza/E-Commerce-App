@@ -14,7 +14,7 @@ import { List } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../Redux/cartSlice";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ProductLikeHandlers } from "../CompHandlers/ProductLikeHandlers";
 
 const ProductInfo = ({ route }) => {
   const { product } = route.params;
@@ -29,10 +29,24 @@ const ProductInfo = ({ route }) => {
   const [addedToCart, setAddedToCart] = useState(false);
 
   const dispatch = useDispatch();
+  const { likeItemSaveAsync, unlikeItemAsync, isItemLiked } =
+    ProductLikeHandlers();
+
+  useEffect(() => {
+    const checkIfItemIsLiked = async () => {
+      const liked = await isItemLiked(product.id);
+
+      if (liked) {
+        setIconColor("#ffac1c");
+        setIconName("cards-heart");
+      }
+    };
+
+    checkIfItemIsLiked();
+  }, [product.id]);
 
   //this function will handle the like button.
   //this function will change the icon and color of the icon
-
   const likeHandler = async (likedItem) => {
     if (iconName === "cards-heart-outline" && iconColor === "#777") {
       const isSaved = await likeItemSaveAsync(likedItem);
@@ -54,48 +68,6 @@ const ProductInfo = ({ route }) => {
       } else {
         alert("Product NOT Removed from Like");
       }
-    }
-  };
-
-  //This function will remove Item from Async storage
-  //It takes the id of the Product
-  const unlikeItemAsync = async (itemId) => {
-    try {
-      // Retrieve the existing liked items from AsyncStorage
-      const jsonValue = await AsyncStorage.getItem("likedItems");
-      let likedItems = jsonValue != null ? JSON.parse(jsonValue) : [];
-
-      // Remove the item by filtering out the one with the specified itemId
-      likedItems = likedItems.filter((item) => item.id !== itemId);
-
-      // Save the updated list back to AsyncStorage
-      await AsyncStorage.setItem("likedItems", JSON.stringify(likedItems));
-
-      return true;
-    } catch (e) {
-      console.error("Error unliking the item:", e);
-      return false;
-    }
-  };
-
-  //This function will add an Item to Async storage
-  //It takes the whole of the Product
-  const likeItemSaveAsync = async (item) => {
-    try {
-      // Retrieve the existing liked items from AsyncStorage
-      const jsonValue = await AsyncStorage.getItem("likedItems");
-      let likedItems = jsonValue != null ? JSON.parse(jsonValue) : [];
-
-      // Add the new item to the liked items array
-      likedItems.push(item);
-
-      // Save the updated list back to AsyncStorage
-      await AsyncStorage.setItem("likedItems", JSON.stringify(likedItems));
-      console.log("Item liked successfully!");
-      return true;
-    } catch (e) {
-      console.error("Error liking the item:", e);
-      return false;
     }
   };
 
