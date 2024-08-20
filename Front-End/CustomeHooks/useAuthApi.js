@@ -22,13 +22,22 @@ export function useAuthApi() {
   };
 
   //Checked
-  const createUser = async (userName, email, password, url) => {
+  const createUser = async (
+    userName,
+    email,
+    password,
+    userType,
+    loginWith,
+    url
+  ) => {
     try {
       setLoading(true);
       const res = await axios.post(url, {
         name: userName,
         email: email,
         password: password,
+        userType: userType,
+        loginWith: loginWith,
       });
 
       setLoading(false);
@@ -75,7 +84,38 @@ export function useAuthApi() {
     }
   };
 
-  // Custom error handler
+  const googleLogin = async (email, url) => {
+    try {
+      setLoading(true);
+      const res = await axios.post(url, {
+        email: email,
+      });
+
+      // console.log(res.data);
+      if (res.status === 200) {
+        const tokenStatus = await saveToken(res.data.token);
+
+        // console.log(tokenStatus);
+        setLoading(false);
+
+        if (tokenStatus) {
+          // console.log("Token saved successfully");
+
+          setResponse(res.data);
+          setError(null);
+          setStatusCode(res.status);
+        } else {
+          console.log("Token not saved");
+          alert("Something went wrong. Try again");
+          setResponse(null);
+          setStatusCode(null);
+          setError("Token not saved");
+        }
+      }
+    } catch (error) {
+      ErrorHandler(error);
+    }
+  };
 
   function ErrorHandler(error) {
     if (error.response) {
@@ -89,6 +129,8 @@ export function useAuthApi() {
         setError("Error Email or password not match");
       } else if (error.response.data.status === 404) {
         setError("User not found");
+      } else if (error.response.data.status === 406) {
+        setError("Wrong Login Method");
       } else if (error.response.data.status === 403) {
         setError("User is not verified");
       } else {
@@ -108,6 +150,7 @@ export function useAuthApi() {
   return {
     createUser,
     loginUser,
+    googleLogin,
     error,
     statusCode,
     setError,

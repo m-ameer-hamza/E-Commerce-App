@@ -9,7 +9,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { TouchableRipple, IconButton } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import drawer from "../assets/drawer.png";
+import Drawer from "../assets/drawer.png";
 
 export default CustomDrawerContent = (props) => {
   const navigation = useNavigation();
@@ -43,7 +43,7 @@ export default CustomDrawerContent = (props) => {
         <View style={{ width: 150, height: 150 }}>
           <Image
             resizeMode="contain"
-            source={drawer}
+            source={Drawer}
             style={{ width: "100%", height: "100%" }}
           />
         </View>

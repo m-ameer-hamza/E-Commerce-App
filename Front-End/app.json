@@ -3,6 +3,7 @@
     "entryPoint": "./index.js",
     "name": "Front-End",
     "slug": "Front-End",
+    "scheme": "mycoolredirect",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,9 +14,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.ecommerc"
     },
     "android": {
+      "package": "com.yourcompany.ecommerc",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -25,7 +28,21 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-secure-store"
-    ]
+      "expo-secure-store",
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "merchant.com.yourcompany.ecommerce",
+          "enableGooglePay": true
+        }
+      ],
+
+      "expo-updates"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "aae421b8-8e3f-4829-a238-e04c102df5c4"
+      }
+    }
   }
 }

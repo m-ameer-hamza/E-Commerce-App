@@ -14,6 +14,7 @@ router
   )
 
   .post("/login", authHandler.login)
+  .post("/googleLogin", authHandler.googleLogin)
   .patch(
     "/updateUserName",
     authHandler.verifyUserLogedIn,

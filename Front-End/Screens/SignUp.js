@@ -2,21 +2,31 @@ import {
   StyleSheet,
   Text,
   View,
-  KeyboardAvoidingView,
   Pressable,
   Image,
   ScrollView,
+  Keyboard,
 } from "react-native";
 import React, { useEffect } from "react";
 
-import { TextInput, Button, PaperProvider, Icon } from "react-native-paper";
+import {
+  TextInput,
+  Button,
+  PaperProvider,
+  RadioButton,
+} from "react-native-paper";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import LogoComponent from "../Components/Logo";
 import validator from "validator";
 import { authHandlers } from "../Handlers/authHandler";
 import ActivityLoading from "../Components/ActivityLoading";
-import ActivityLoader from "../Components/ActivityLoader";
+import GoogleLogo from "../assets/googleLogo.png";
+import { GOOGLE_CLIENT_ID } from "../Global";
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -24,11 +34,22 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { signUpFunc } = authHandlers();
+  const { signUpFunc, navigate } = authHandlers();
 
   const [isValideEmail, setIsValideEmail] = useState(true);
   const [isValidePassword, setIsValidePassword] = useState(true);
   const [isValideName, setIsValideName] = useState(true);
+  const [usrInfo, setUsrInfo] = useState(null);
+  const [signUpAs, setSignUpAs] = React.useState(null);
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: GOOGLE_CLIENT_ID,
+      offlineAccess: true, // Enables refreshing tokens
+      forceCodeForRefreshToken: true, // Forces a refresh token
+      prompt: "select_account", // Ensures the account picker is shown every time
+    });
+  }, []);
 
   const validateInput = () => {
     const trimmedName = name.replace(/\s+/g, "");
@@ -69,28 +90,90 @@ const SignUp = () => {
     return true;
   };
 
+  useEffect(() => {
+    console.log("Navigate", navigate);
+    if (navigate) {
+      console.log("Navigate to Email Verification");
+      navigation.navigate("EmailVerification", { email: email });
+    }
+  }, [navigate]);
+
   const SignUp = async () => {
     let valide = validateInput();
     if (valide) {
       //send data to server
 
       setLoading(true);
-      let success = await signUpFunc(name, email, password);
-      setLoading(false);
+      await signUpFunc(name, email, password, signUpAs);
 
       //clear the input fields
       setEmail("");
       setPassword("");
       setName("");
-      if (success) {
-        navigation.navigate("EmailVerification", { email: email });
-      }
+      setLoading(false);
+
+      setLoading(false);
     } else {
       alert("Please enter valid data from Sign Up");
+      setLoading(false);
     }
   };
 
   const navigation = useNavigation();
+
+  // Somewhere in your code
+  const googleSignUp = async () => {
+    if (signUpAs === null) {
+      alert("Please select the user type");
+      return;
+    }
+
+    setLoading(true);
+    console.log("Google Sign-Up initiated");
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      //console.log("Google Sign-Up initiated", userInfo);
+      setUsrInfo(userInfo);
+
+      //send the user info to password Screen
+      if (userInfo) {
+        navigation.navigate("GLoginPassword", {
+          userInfo: userInfo,
+          userType: signUpAs,
+        });
+      } else {
+        alert("Probelm in Google Sign-Up");
+      }
+      setLoading(false);
+    } catch (error) {
+      console.log("Google Sign-Up initiated", error);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        setLoading(false);
+        alert("User cancelled the sign-in");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        alert("Cancelled the Signin in progress");
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        alert("Play Services not available or outdated");
+      } else {
+        alert("Something went wrong", error);
+        console.log("An unknown error occurred:", error);
+      }
+    }
+    setLoading(false);
+  };
+
+  // const googleSignOut = async () => {
+  //   try {
+  //     console.log("Google Sign-Out initiated");
+  //     await GoogleSignin.revokeAccess(); // Optional: Revokes access to the current token
+  //     await GoogleSignin.signOut(); // Sign out the user
+  //     setUsrInfo(null); // Clear user info from state
+  //     console.log("User signed out successfully");
+  //   } catch (error) {
+  //     console.log("An error occurred during sign-out:", error);
+  //   }
+  // };
 
   return (
     <PaperProvider>
@@ -196,6 +279,37 @@ const SignUp = () => {
               label="Enter Password"
             />
           </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-around",
+              paddingHorizontal: 20,
+              marginTop: 20,
+            }}
+          >
+            <Text style={{ fontSize: 15, fontWeight: "500" }}>
+              Register As:{" "}
+            </Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={{ fontSize: 15, fontWeight: 600 }}>Buyer</Text>
+              <RadioButton
+                value="buyer"
+                color="#f58d25"
+                status={signUpAs === "buyer" ? "checked" : "unchecked"}
+                onPress={() => setSignUpAs("buyer")}
+              />
+            </View>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={{ fontSize: 15, fontWeight: 600 }}>Seller</Text>
+              <RadioButton
+                color="#f58d25"
+                value="seller"
+                status={signUpAs === "seller" ? "checked" : "unchecked"}
+                onPress={() => setSignUpAs("seller")}
+              />
+            </View>
+          </View>
 
           <View
             style={{
@@ -208,6 +322,7 @@ const SignUp = () => {
             <Button
               disabled={loading}
               onPress={async () => {
+                Keyboard.dismiss();
                 await SignUp();
               }}
               mode="contained"
@@ -261,6 +376,7 @@ const SignUp = () => {
           </View>
 
           <Pressable
+            disabled={loading}
             style={{
               backgroundColor: "#4285f4", // Google blue color
               borderRadius: 5,
@@ -275,11 +391,14 @@ const SignUp = () => {
               borderColor: "#fff",
               marginBottom: 30,
             }}
-            onPress={() => console.log("Sign In with Google pressed")}
+            onPress={async () => {
+              Keyboard.dismiss();
+              await googleSignUp();
+            }}
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Image
-                source={require("../assets/googleLogo.png")}
+                source={GoogleLogo}
                 style={{
                   width: 24,
                   height: 24,
@@ -289,7 +408,7 @@ const SignUp = () => {
                 }}
               />
               <Text style={{ color: "#fff", fontSize: 16 }}>
-                Sign In with Google
+                Sign Up with Google
               </Text>
             </View>
           </Pressable>

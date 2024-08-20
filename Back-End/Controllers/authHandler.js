@@ -18,6 +18,18 @@ exports.login = async (req, res, next) => {
   }
   // 2)- Check if email exist in DB
   const loginUser = await Users.findOne({ email: req.body.email });
+
+  if (!loginUser) {
+    return res.status(404).json({ status: "Error", message: "User Not Found" });
+  }
+
+  //3)- Checck the sign up method
+  if (loginUser.signUpMethod != "email") {
+    return res
+      .status(406)
+      .json({ status: "Error", message: "Wrong Login Method" });
+  }
+
   // 3)- Check if email found in DB
   if (!loginUser) {
     return res
@@ -38,8 +50,6 @@ exports.login = async (req, res, next) => {
     return res.status(403).json({ message: "User is not verified" });
   }
 
-  //passwords are matched
-
   //creating the jwt
 
   const token = jwt.sign(
@@ -51,7 +61,36 @@ exports.login = async (req, res, next) => {
     process.env.SECREAT_KEY
   );
 
-  let decode = jwt.decode(token, { complete: true });
+  res.status(200).json({
+    status: "Loged In",
+    message: "Successfully Logined In",
+    userName: loginUser.name,
+    token,
+  });
+};
+
+exports.googleLogin = async (req, res, next) => {
+  // 2)- Check if email exist in DB
+  const loginUser = await Users.findOne({ email: req.body.email });
+  // 3)- Check if email found in DB
+  if (!loginUser) {
+    return res.status(404).json({ status: "Error", message: "User Not Found" });
+  }
+  //4)- Check the Sign UP method
+  if (loginUser.signUpMethod !== "google") {
+    return res.status(406).json({ message: "Wrong Login Method" });
+  }
+
+  //creating the jwt
+
+  const token = jwt.sign(
+    {
+      id: loginUser._id,
+      iat: Date.now(),
+      exp: Date.now() + parseInt(process.env.TOKEN_DURATION),
+    },
+    process.env.SECREAT_KEY
+  );
 
   res.status(200).json({
     status: "Loged In",

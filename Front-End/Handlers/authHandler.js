@@ -10,6 +10,7 @@ import { toggleAuth } from "../Redux/authSlice";
 
 export const authHandlers = () => {
   const [clicked, setIsClicked] = useState(false);
+  const [navigate, setNavigate] = useState(false);
 
   const [email, setEmail] = useState("");
 
@@ -19,6 +20,7 @@ export const authHandlers = () => {
   const {
     loginUser,
     createUser,
+    googleLogin,
     error,
     loading,
     response,
@@ -38,8 +40,15 @@ export const authHandlers = () => {
 
   useEffect(() => {
     if (error) {
+      setNavigate(false);
+
       if (error === "Email already exists") {
         alert("User already exists");
+        navigation.navigate("Login");
+      } else if (error === "Token is expired!!") {
+        alert("Token is expired!!");
+      } else if (error === "Wrong Login Method") {
+        alert("Wrong Login Method");
       } else if (error == "Bad Request") {
         alert("Bad Request");
       } else if (error === "User is not verified") {
@@ -69,12 +78,11 @@ export const authHandlers = () => {
       console.log("From Auth Handler", response.message);
       console.log("From Auth Handler", statusCode);
       if (response.message === "Successfully Logined In" || statusCode == 200) {
-        //calling the function that  saving the user in Redux
-        console.log("navigating to home");
         savingLoginedUser({ email: email, userName: response.userName });
         dispatch(toggleAuth());
-        //navigation.navigate("Home");
-      } else if (response.message === "Created" && statusCode == 201) {
+        setNavigate(true);
+      } else if (response.message === "Created" || statusCode == 201) {
+        setNavigate(true);
         alert("User Created Successfully");
       }
     }
@@ -103,7 +111,7 @@ export const authHandlers = () => {
     }
   };
 
-  const signUpFunc = async (username, email, password) => {
+  const signUpFunc = async (username, email, password, userType, loginWith) => {
     setIsClicked(true);
     setEmail(email);
     try {
@@ -111,14 +119,27 @@ export const authHandlers = () => {
         username,
         email,
         password,
+        userType,
+        loginWith,
         `${BACK_END_URL}/e-commerce/users/signup`
       );
-      return true;
     } catch (e) {
       console.log(e.message);
-      return false;
+      setNavigate(false);
     }
   };
 
-  return { loginFunc, signUpFunc };
+  const googleLoginFunc = async (email) => {
+    try {
+      await googleLogin(
+        email,
+
+        `${BACK_END_URL}/e-commerce/users/googleLogin`
+      );
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  return { loginFunc, signUpFunc, googleLoginFunc, navigate };
 };

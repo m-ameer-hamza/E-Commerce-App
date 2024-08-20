@@ -20,10 +20,33 @@ function filterBody(body, ...filerArray) {
   return newFileredArray;
 }
 
+//This method is called by createUser Handler
+//This method checks if the user is logined with google
+//If yes, then set the verified field to true
+function processUserObject(user) {
+  if (user.loginWith === "google") {
+    return {
+      ...user,
+      verified: "Verified",
+    };
+  } else {
+    return user;
+  }
+}
+
 //creating  a user
 exports.createUser = async (req, res, next) => {
+  if (!req.body) {
+    return next(new appError("Provide the Data", 400));
+  }
+
+  //Check if the user is logined as google
+  //if yes, then set the verified field to true
+  //This is done because google users are already verified
+  let modifiedUser = processUserObject(req.body);
+
   try {
-    const user = await Users.create(req.body);
+    const user = await Users.create(modifiedUser);
     res.status(201).json({
       message: "Created",
       data: user,

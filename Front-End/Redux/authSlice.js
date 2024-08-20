@@ -1,5 +1,5 @@
 const initialStateSession = {
-  isAuthenticated: true, // Corrected property name for consistency
+  isAuthenticated: false, // Corrected property name for consistency
 };
 
 // Action types

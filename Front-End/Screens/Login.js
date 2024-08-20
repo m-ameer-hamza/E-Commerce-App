@@ -8,16 +8,22 @@ import {
   Image,
 } from "react-native";
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import { TextInput, Button, PaperProvider } from "react-native-paper";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import LogoComponent from "../Components/Logo";
 import { authHandlers } from "../Handlers/authHandler";
-import ActivityLoader from "../Components/ActivityLoader";
+
 import ActivityLoading from "../Components/ActivityLoading";
+import GoogleLogo from "../assets/googleLogo.png";
 import { Keyboard } from "react-native";
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
+import { GOOGLE_CLIENT_ID } from "../Global";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -25,13 +31,19 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: GOOGLE_CLIENT_ID,
+      offlineAccess: true, // Enables refreshing tokens
+      forceCodeForRefreshToken: true, // Forces a refresh token
+      prompt: "select_account", // Ensures the account picker is shown every time
+    });
+  }, []);
+
   const navigation = useNavigation();
-  const { loginFunc } = authHandlers();
+  const { loginFunc, googleLoginFunc } = authHandlers();
 
   const loginUser = async () => {
-    //send email and password to server for verification.
-    //here is the code to verify
-    //after verification navigate to next screen
     setLoading(true);
     setEmail("");
     setPassword("");
@@ -42,6 +54,37 @@ const Login = () => {
       return;
     }
     await loginFunc(email, password);
+    setLoading(false);
+  };
+
+  const googleLogin = async () => {
+    setLoading(true);
+
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+
+      //send the user info to password Screen
+      if (userInfo) {
+        await googleLoginFunc(userInfo.user.email);
+      } else {
+        alert("Probelm in Google Sign-Up");
+      }
+      setLoading(false);
+    } catch (error) {
+      console.log("Google Sign-Up initiated", error);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        setLoading(false);
+        alert("User cancelled the sign-in");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        alert("Cancelled the Signin in progress");
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        alert("Play Services not available or outdated");
+      } else {
+        alert("Something went wrong", error);
+        console.log("An unknown error occurred:", error);
+      }
+    }
     setLoading(false);
   };
 
@@ -172,6 +215,11 @@ const Login = () => {
             </Text>
           </View>
           <Pressable
+            disabled={loading}
+            onPress={() => {
+              Keyboard.dismiss();
+              googleLogin();
+            }}
             style={{
               backgroundColor: "#4285f4", // Google blue color
               borderRadius: 5,
@@ -186,11 +234,10 @@ const Login = () => {
               borderColor: "#fff",
               marginBottom: 30,
             }}
-            onPress={() => console.log("Sign In with Google pressed")}
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Image
-                source={require("../assets/googleLogo.png")}
+                source={GoogleLogo}
                 style={{
                   width: 24,
                   height: 24,

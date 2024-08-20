@@ -18,6 +18,17 @@ const userSchema = new mongoose.Schema({
     required: [true, "password is required"],
     type: String,
   },
+  userType: {
+    type: String,
+    enum: ["buyer", "seller"],
+    required: [true, "User Type is required"],
+  },
+  signUpMethod: {
+    type: String,
+    enum: ["email", "google"],
+    required: [true, "Sign Up With is required"],
+    default: "email",
+  },
   verified: {
     type: String,
     enum: ["Verified", "Not-Verified"],

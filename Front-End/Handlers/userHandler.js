@@ -4,6 +4,7 @@ import { useUserApi } from "../CustomeHooks/useUserApi";
 import { useDispatch } from "react-redux";
 import { editSession } from "../Redux/sessionSlice";
 import { editUserName } from "../Redux/userSlice";
+import { toggleAuth } from "../Redux/authSlice";
 import { BACK_END_URL } from "../Global";
 export function userHandler() {
   const dispatch = useDispatch();
