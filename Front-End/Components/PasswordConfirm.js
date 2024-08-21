@@ -9,11 +9,12 @@ import {
   TextInput,
   StyleSheet,
   TouchableWithoutFeedback,
+  Pressable,
+  Keyboard,
 } from "react-native";
 import {
   Portal,
   Dialog,
-  Button,
   Text,
   Provider as PaperProvider,
 } from "react-native-paper";
@@ -23,7 +24,7 @@ export default PasswordConfirm = () => {
   const session = useSelector((state) => state.session.session);
   const user = useSelector((state) => state.user);
 
-  const { loginFunc } = authHandlers();
+  const { refreshTokenFunc } = authHandlers();
 
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
@@ -57,16 +58,21 @@ export default PasswordConfirm = () => {
                 )}
               </Dialog.Content>
               <Dialog.Actions>
-                <Button
+                <Pressable
+                  style={{
+                    padding: 10,
+
+                    borderRadius: 5,
+                  }}
                   onPress={async () => {
-                    // console.log("From password confirm", password, user.email);
-                    await loginFunc(password, user.email, false);
+                    console.log("From password confirm", user.email, password);
+                    Keyboard.dismiss();
+                    await refreshTokenFunc(user.email, password);
                     hideDialog();
                   }}
-                  textColor="#0fba1a"
                 >
-                  Done
-                </Button>
+                  <Text style={{ color: "#041e42" }}> Done</Text>
+                </Pressable>
               </Dialog.Actions>
             </Dialog>
           </TouchableWithoutFeedback>

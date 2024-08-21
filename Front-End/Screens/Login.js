@@ -8,10 +8,10 @@ import {
   Image,
 } from "react-native";
 
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { TextInput, Button, PaperProvider } from "react-native-paper";
-import { useState } from "react";
+
 import { useNavigation } from "@react-navigation/native";
 import LogoComponent from "../Components/Logo";
 import { authHandlers } from "../Handlers/authHandler";
@@ -30,6 +30,8 @@ const Login = () => {
 
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isPassSecure, setIsPassSecure] = useState(true);
+  const [passIcon, setPassIcon] = useState("eye");
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -134,12 +136,25 @@ const Login = () => {
               value={password}
               contentStyle={{ fontSize: 16, letterSpacing: 1.3 }}
               onChangeText={(text) => setPassword(text)}
-              secureTextEntry={true}
+              secureTextEntry={isPassSecure}
               style={{ borderRadius: 10, width: "80%" }}
               mode="outlined"
               outlineColor="#D0D0D0"
               activeOutlineColor="#041E42"
               label="Enter Password"
+              right={
+                <TextInput.Icon
+                  icon={passIcon}
+                  onPress={() => {
+                    if (passIcon === "eye") {
+                      setPassIcon("eye-off");
+                    } else {
+                      setPassIcon("eye");
+                    }
+                    setIsPassSecure(!isPassSecure);
+                  }}
+                />
+              }
             />
           </View>
           <View

@@ -47,6 +47,32 @@ export function useUserApi() {
     }
   };
 
+  const updatePassword = async (oldPassword, newPassword, email, url) => {
+    try {
+      setLoading(true);
+      const res = await axios.patch(
+        url,
+        {
+          currPassword: oldPassword,
+          newPassword: newPassword,
+        },
+        {
+          params: {
+            usrEmail: email,
+          },
+        }
+      );
+
+      setStatusCode(res.status);
+      setLoading(false);
+      setResponse(res.data);
+
+      setError(null);
+    } catch (error) {
+      ErrorHandler(error);
+    }
+  };
+
   // Custom error handler
 
   function ErrorHandler(error) {
@@ -56,11 +82,16 @@ export function useUserApi() {
       console.log(error.response.data);
       if (error.response.data.status === 400) {
         setError("Email already exists");
+      } else if (
+        error.response.data.status === 400 &&
+        error.response.data.message === "Provide Current and New Password!!"
+      ) {
+        setError("Provide Current and New Password!!");
       } else if (error.response.data.status === 419) {
         setError("Token is expired!!");
         setStatusCode(419);
       } else if (error.response.data.status === 401) {
-        setError("Error Email or password not match");
+        setError("Credentials do not match");
       } else {
         setError(error.response.data.message);
       }
@@ -77,6 +108,7 @@ export function useUserApi() {
 
   return {
     updateUserName,
+    updatePassword,
     error,
     statusCode,
     response,

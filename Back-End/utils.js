@@ -1,35 +1,82 @@
-const nodemailer = require("nodemailer");
-const { promisify } = require("util");
-const dotenv = require("dotenv");
+// const fs = require("fs");
+// const { google } = require("googleapis");
+// const nodemailer = require("nodemailer");
 
-//path to config-file
-dotenv.config({ path: "./config.env" });
-console.log(process.env.NODE_MAILER_PASS);
-// Create a transporter with promisified sendMail
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "az889480@gmail.com",
-    pass: process.env.NODE_MAILER_PASS,
-  },
-});
-const sendMailPromise = promisify(transporter.sendMail).bind(transporter);
+// // Load client secrets from a local file.
+// fs.readFile("credentials.json", (err, content) => {
+//   if (err) return console.log("Error loading client secret file:", err);
+//   authorize(JSON.parse(content), sendEmail);
+// });
 
-exports.ResetMailHandler = async (OTP) => {
-  const mailOptions = {
-    from: "az889480@gmail.com",
-    to: "az889480@gmail.com",
-    subject: "Password Reset OTP",
-    text: "Your password reset OTP is:" + OTP,
-  };
+// // Authorize a client with credentials, then call the Gmail API.
+// function authorize(credentials, callback) {
+//   const { client_secret, client_id, redirect_uris } = credentials.installed;
+//   const oAuth2Client = new google.auth.OAuth2(
+//     client_id,
+//     client_secret,
+//     redirect_uris[0]
+//   );
 
-  try {
-    // Sending the email and waiting for it to be sent
-    await sendMailPromise(mailOptions);
-    console.log("Email sent successfully");
-    return true;
-  } catch (err) {
-    console.error("Error sending email:", err);
-    return false;
-  }
-};
+//   // Check if we have previously stored a token.
+//   fs.readFile("token.json", (err, token) => {
+//     if (err) return getAccessToken(oAuth2Client, callback);
+//     oAuth2Client.setCredentials(JSON.parse(token));
+//     callback(oAuth2Client);
+//   });
+// }
+
+// function getAccessToken(oAuth2Client, callback) {
+//   const authUrl = oAuth2Client.generateAuthUrl({
+//     access_type: "offline",
+//     scope: ["https://www.googleapis.com/auth/gmail.send"],
+//   });
+//   console.log("Authorize this app by visiting this url:", authUrl);
+//   const rl = require("readline").createInterface({
+//     input: process.stdin,
+//     output: process.stdout,
+//   });
+//   rl.question("Enter the code from that page here: ", (code) => {
+//     rl.close();
+//     oAuth2Client.getToken(code, (err, token) => {
+//       if (err) return console.error("Error retrieving access token", err);
+//       oAuth2Client.setCredentials(token);
+//       // Store the token to disk for later program executions
+//       fs.writeFile("token.json", JSON.stringify(token), (err) => {
+//         if (err) return console.error(err);
+//         console.log("Token stored to", "token.json");
+//       });
+//       callback(oAuth2Client);
+//     });
+//   });
+// }
+
+// function sendEmail(auth) {
+//   const gmail = google.gmail({ version: "v1", auth });
+
+//   // Set up Nodemailer
+//   const transporter = nodemailer.createTransport({
+//     service: "gmail",
+//     auth: {
+//       type: "OAuth2",
+//       user: "az889480@gmail.com",
+//       clientId: auth._clientId,
+//       clientSecret: auth._clientSecret,
+//       refreshToken: auth.credentials.refresh_token,
+//       accessToken: auth.credentials.access_token,
+//     },
+//   });
+
+//   const mailOptions = {
+//     from: "az889480email@gmail.com",
+//     to: "az889482@gmail.com",
+//     subject: "Test Email from Node.js",
+//     text: "Hello from Node.js using the Gmail API!",
+//   };
+
+//   transporter.sendMail(mailOptions, (error, info) => {
+//     if (error) {
+//       return console.log(error);
+//     }
+//     console.log("Email sent: " + info.response);
+//   });
+// }

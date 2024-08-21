@@ -4,14 +4,16 @@ import { useUserApi } from "../CustomeHooks/useUserApi";
 import { useDispatch } from "react-redux";
 import { editSession } from "../Redux/sessionSlice";
 import { editUserName } from "../Redux/userSlice";
-import { toggleAuth } from "../Redux/authSlice";
+import { useSelector } from "react-redux";
 import { BACK_END_URL } from "../Global";
 export function userHandler() {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
   const [clicked, setClicked] = useState(false);
   const {
     updateUserName,
+    updatePassword,
     error,
     loading,
     response,
@@ -30,6 +32,12 @@ export function userHandler() {
     if (error) {
       if (error === "Token is expired!!" || statusCode === 419) {
         toggleSession();
+      } else if (error === "Provide Current and New Password!!") {
+        alert("Provide Current and New Password!!");
+      } else if (error === "Credentials do not match") {
+        alert("Credentials do not match");
+      } else if (error === "Email already exists") {
+        alert("Email already exists");
       } else if (error === "No Response from server") {
         alert("No Response from server");
       } else {
@@ -48,15 +56,14 @@ export function userHandler() {
       setError(false);
       setLoading(false);
       setResponse(false);
-      console.log("From useEffect of UserHandler", response);
 
       //alert(response.message);
-      if (response.message === "User Name Modified" || statusCode == 200) {
-        console.log(statusCode);
+      if (response.message === "User Name Modified") {
         //calling the function that  saving the user in Redux
         updateUserRedux(response.userName);
-        //  getUserTasks();
-        // console.log("Login Success");
+        alert("User Name Modified");
+      } else if (response.message === "Password Updated Successfully") {
+        alert("Your Password Modified!!");
       }
     }
   }, [response, error]);
@@ -78,10 +85,22 @@ export function userHandler() {
     await updateUserName(
       userName,
 
-      `${BACK_END_URL}/portfolio/v1/users/updateUserName`
+      `${BACK_END_URL}/e-commerce/users/updateUserName`
     );
     setClicked(false);
   };
 
-  return { modifyUserName };
+  const modifyPassword = async (oldPassword, newPassword) => {
+    setClicked(true);
+
+    await updatePassword(
+      oldPassword,
+      newPassword,
+      user.email,
+      `${BACK_END_URL}/e-commerce/users/updatePassword`
+    );
+    setClicked;
+  };
+
+  return { modifyUserName, modifyPassword };
 }

@@ -15,6 +15,7 @@ router
 
   .post("/login", authHandler.login)
   .post("/googleLogin", authHandler.googleLogin)
+  .get("/refreshToken", authHandler.tokenRefresh)
   .patch(
     "/updateUserName",
     authHandler.verifyUserLogedIn,
@@ -22,10 +23,6 @@ router
   )
   .post("/forgetPassword", authHandler.forgetPassword)
   .patch("/resetPassword", authHandler.resetPassword)
-  .patch(
-    "/updatePassword",
-    authHandler.verifyUserLogedIn,
-    authHandler.updatePassword
-  );
+  .patch("/updatePassword", authHandler.updatePassword);
 
 module.exports = router;

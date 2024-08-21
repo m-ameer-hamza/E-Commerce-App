@@ -7,7 +7,7 @@ import {
   ScrollView,
   Keyboard,
 } from "react-native";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import {
   TextInput,
@@ -15,7 +15,7 @@ import {
   PaperProvider,
   RadioButton,
 } from "react-native-paper";
-import { useState } from "react";
+
 import { useNavigation } from "@react-navigation/native";
 import LogoComponent from "../Components/Logo";
 import validator from "validator";
@@ -40,7 +40,10 @@ const SignUp = () => {
   const [isValidePassword, setIsValidePassword] = useState(true);
   const [isValideName, setIsValideName] = useState(true);
   const [usrInfo, setUsrInfo] = useState(null);
-  const [signUpAs, setSignUpAs] = React.useState(null);
+  const [signUpAs, setSignUpAs] = useState(null);
+
+  const [isPassSecure, setIsPassSecure] = useState(true);
+  const [passIcon, setPassIcon] = useState("eye");
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -271,12 +274,25 @@ const SignUp = () => {
               }}
               onChangeText={(text) => setPassword(text)}
               error={isValidePassword ? false : true}
-              secureTextEntry={true}
+              secureTextEntry={isPassSecure}
               style={{ borderRadius: 10, width: "80%" }}
               mode="outlined"
               outlineColor="#D0D0D0"
               activeOutlineColor="#041E42"
               label="Enter Password"
+              right={
+                <TextInput.Icon
+                  icon={passIcon}
+                  onPress={() => {
+                    if (passIcon === "eye") {
+                      setPassIcon("eye-off");
+                    } else {
+                      setPassIcon("eye");
+                    }
+                    setIsPassSecure(!isPassSecure);
+                  }}
+                />
+              }
             />
           </View>
           <View

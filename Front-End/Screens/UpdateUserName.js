@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, StyleSheet, Text, Pressable } from "react-native";
+import { View, StyleSheet, Text, Pressable, Keyboard } from "react-native";
 import {
   TextInput,
   Button,
@@ -11,6 +11,7 @@ import { userHandler } from "../Handlers/userHandler";
 import PasswordConfirm from "../Components/PasswordConfirm";
 import ActivityLoader from "../Components/ActivityLoader";
 import { useNavigation } from "@react-navigation/native";
+import { ScrollView } from "react-native-gesture-handler";
 
 const UpdateUserName = () => {
   const [currentUserName, setCurrentUserName] = useState("");
@@ -30,7 +31,7 @@ const UpdateUserName = () => {
     } else {
       setIsError(false);
       setIsNewName(false);
-      //calling the function to update the user name
+
       setLoading(true);
       await modifyUserName(newUserName);
       setLoading(false);
@@ -58,7 +59,11 @@ const UpdateUserName = () => {
   }
 
   return (
-    <PaperProvider>
+    <ScrollView
+      contentContainerStyle={{
+        flexGrow: 1,
+      }}
+    >
       <Pressable
         style={{
           flexDirection: "row",
@@ -72,87 +77,100 @@ const UpdateUserName = () => {
         <IconButton
           icon="arrow-left"
           iconColor="#000"
-          size={30}
+          size={27}
           onPress={() => navigation.goBack()}
         />
-        <Text style={{ fontSize: 23, fontWeight: "500" }}> Update Name </Text>
+        <Text style={{ fontSize: 20, fontWeight: "500" }}> Update Name </Text>
       </Pressable>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          padding: 16,
-          backgroundColor: containerColor,
-        }}
-      >
-        <View style={{ width: "100%", alignItems: "center" }}>
-          <Text
-            style={{
-              alignSelf: "flex-start",
-              marginLeft: "10%",
-              marginBottom: "3%",
-              fontSize: 17,
-              fontWeight: "bold",
-              color: fontColor,
-            }}
-          >
-            Current User Name
-          </Text>
-          <TextInput
-            label="Current User Name"
-            value={currentUserName}
-            editable={false}
-            onChangeText={setCurrentUserName}
-            mode="outlined"
-            style={styles.input}
-            activeOutlineColor="#19bd2c"
-          />
-        </View>
-        <View style={{ width: "100%", alignItems: "center", marginTop: "10%" }}>
-          <Text
-            style={{
-              alignSelf: "flex-start",
-              marginLeft: "10%",
-              marginBottom: "3%",
-              fontSize: 17,
-              fontWeight: "bold",
-              color: fontColor,
-            }}
-          >
-            New User Name
-          </Text>
-          <TextInput
-            label="New User Name"
-            value={newUserName}
-            onChangeText={setNewUserName}
-            mode="outlined"
-            style={styles.input}
-            activeOutlineColor="#19bd2c"
-          />
-          {isError && (
-            <Text style={{ color: "#ed071a" }}>
-              *Provide atleast 5 Letter Name{" "}
-            </Text>
-          )}
-          {isNewName && (
-            <Text style={{ color: "#ed071a" }}>
-              *New Name is sam as Old one{" "}
-            </Text>
-          )}
-        </View>
-
-        <Button
-          mode="contained"
-          onPress={handleUpdate}
-          style={{ width: "40%", backgroundColor: "#19bd2c", marginTop: 30 }}
+      <PaperProvider>
+        <View
+          style={{
+            marginTop: 80,
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 16,
+            backgroundColor: containerColor,
+          }}
         >
-          Update
-        </Button>
-      </View>
-      {!session && <PasswordConfirm />}
-      {loading && <ActivityLoader />}
-    </PaperProvider>
+          <View style={{ width: "100%", alignItems: "center" }}>
+            <Text
+              style={{
+                alignSelf: "flex-start",
+                marginLeft: "10%",
+                marginBottom: "3%",
+                fontSize: 17,
+                fontWeight: "bold",
+                color: fontColor,
+              }}
+            >
+              Current User Name
+            </Text>
+            <TextInput
+              label="Current User Name"
+              value={currentUserName}
+              editable={false}
+              onChangeText={setCurrentUserName}
+              mode="outlined"
+              style={styles.input}
+              activeOutlineColor="#041e42"
+            />
+          </View>
+          <View
+            style={{ width: "100%", alignItems: "center", marginTop: "10%" }}
+          >
+            <Text
+              style={{
+                alignSelf: "flex-start",
+                marginLeft: "10%",
+                marginBottom: "3%",
+                fontSize: 17,
+                fontWeight: "bold",
+                color: fontColor,
+              }}
+            >
+              New User Name
+            </Text>
+            <TextInput
+              label="New User Name"
+              value={newUserName}
+              onChangeText={setNewUserName}
+              mode="outlined"
+              style={styles.input}
+              activeOutlineColor="#041e42"
+            />
+            {isError && (
+              <Text style={{ color: "#ed071a" }}>
+                *Provide atleast 5 Letter Name{" "}
+              </Text>
+            )}
+            {isNewName && (
+              <Text style={{ color: "#ed071a" }}>
+                *New Name is sam as Old one{" "}
+              </Text>
+            )}
+          </View>
+
+          <Button
+            mode="contained"
+            onPress={() => {
+              Keyboard.dismiss();
+              handleUpdate();
+            }}
+            style={{
+              width: "45%",
+              backgroundColor: "#fab305",
+              marginTop: 30,
+            }}
+          >
+            <Text style={{ fontSize: 16, fontWeight: "500", color: "#000" }}>
+              Update
+            </Text>
+          </Button>
+        </View>
+        {!session && <PasswordConfirm />}
+        {loading && <ActivityLoader />}
+      </PaperProvider>
+    </ScrollView>
   );
 };
 

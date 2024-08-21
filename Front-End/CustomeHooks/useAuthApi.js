@@ -116,6 +116,37 @@ export function useAuthApi() {
       ErrorHandler(error);
     }
   };
+  const tokenRefresh = async (email, password, url) => {
+    try {
+      setLoading(true);
+
+      const res = await axios.get(url, {
+        params: {
+          usrEmail: email,
+          usrPassword: password,
+        },
+      });
+
+      if (res.status === 200) {
+        const tokenStatus = await saveToken(res.data.token);
+        setLoading(false);
+
+        if (tokenStatus) {
+          setResponse(res.data);
+          setError(null);
+          setStatusCode(res.status);
+        } else {
+          console.log("Token not saved");
+          alert("Something went wrong. Try again");
+          setResponse(null);
+          setStatusCode(null);
+          setError("Token not saved");
+        }
+      }
+    } catch (error) {
+      ErrorHandler(error);
+    }
+  };
 
   function ErrorHandler(error) {
     if (error.response) {
@@ -126,7 +157,7 @@ export function useAuthApi() {
       } else if (error.response.data.status === 400) {
         setError("Bad Request");
       } else if (error.response.data.status === 401) {
-        setError("Error Email or password not match");
+        setError("Email or password not match");
       } else if (error.response.data.status === 404) {
         setError("User not found");
       } else if (error.response.data.status === 406) {
@@ -151,6 +182,7 @@ export function useAuthApi() {
     createUser,
     loginUser,
     googleLogin,
+    tokenRefresh,
     error,
     statusCode,
     setError,
@@ -159,5 +191,6 @@ export function useAuthApi() {
     loading,
     setLoading,
     setResponse,
+    setStatusCode,
   };
 }

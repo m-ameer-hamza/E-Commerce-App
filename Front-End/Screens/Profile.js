@@ -75,16 +75,15 @@ export default function Profile() {
               justifyContent: "center",
             }}
           >
-            {/* <Switch
-              value={isDark}
-              onValueChange={onToggleSwitch}
-              color="#FAB300"
-              style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }}
-            /> */}
             <Icon source="account-edit" size={35} color="grey" />
           </View>
         </Pressable>
-        <View style={[styles.Settings.listContainer, listColor]}>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("UpdatePassword");
+          }}
+          style={[styles.Settings.listContainer, listColor]}
+        >
           <View style={[styles.Settings.fontColor]}>
             <Text style={[{ fontSize: 20, fontWeight: "bold" }, fontColor]}>
               Update Password
@@ -99,15 +98,9 @@ export default function Profile() {
               justifyContent: "center",
             }}
           >
-            {/* <Switch
-              value={isDark}
-              onValueChange={onToggleSwitch}
-              color="#FAB300"
-              style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }}
-            /> */}
             <Icon source="pencil-lock" size={35} color="grey" />
           </View>
-        </View>
+        </Pressable>
       </ScrollView>
     </PaperProvider>
   );

@@ -136,19 +136,26 @@ const BottomModal = ({ toggleState }) => {
               marginVertical: 10,
             }}
           >
-            <View
+            <Pressable
               style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
+              onPress={() => {
+                hideModal();
+                navigation.navigate("Address");
+              }}
             >
               <IconButton
                 icon="map-marker-plus"
                 iconColor="#0066b2"
                 size={30}
-                onPress={() => console.log("Modal Location")}
+                onPress={() => {
+                  hideModal();
+                  navigation.navigate("Address");
+                }}
               />
               <Text style={{ color: "#0066b2", fontWeight: "400" }}>
                 Enter an address
               </Text>
-            </View>
+            </Pressable>
 
             <View
               style={{ flexDirection: "row", alignItems: "center", gap: 5 }}

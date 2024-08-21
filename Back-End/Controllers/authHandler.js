@@ -166,18 +166,98 @@ exports.verifyUserLogedIn = async (req, res, next) => {
   next();
 };
 
-//verify that the logined User is admin
-exports.restrictTo = (...role) => {
-  return (req, res, next) => {
-    if (!role.includes(req.user.role)) {
-      //admin is not logined
-      return next(new appError("Only Admin can Access this Route", 401));
-    }
+exports.tokenRefresh = async (req, res, next) => {
+  const { usrEmail, usrPassword } = req.query;
+  // console.log("Email is: ", req.body.email, "Password is: ", req.body.password);
+  //1)- Check if email and password is present in req body
+  if (!usrEmail || !usrPassword) {
+    return next(new appError("Bad Request", 400));
+  }
+  //2)- Check if the user exists in the DB
+  const loginUser = await Users.findOne({ email: usrEmail });
+  if (!loginUser) {
+    return next(new appError("User Not Found", 404));
+  }
 
-    //admin is loged In
-    next();
-  };
+  //check if password matches
+  if (!(await loginUser.matchPassword(usrPassword, loginUser.password))) {
+    return next(new appError("Email or password not match", 401));
+  }
+
+  //4)-Create the JWT token
+  const token = jwt.sign(
+    {
+      id: loginUser._id,
+      iat: Date.now(),
+      exp: Date.now() + parseInt(process.env.TOKEN_DURATION),
+    },
+    process.env.SECREAT_KEY
+  );
+  res.status(200).json({
+    status: "Loged In",
+    message: "Token Refreshed",
+    userName: loginUser.name,
+    token,
+  });
 };
+
+exports.updatePassword = async (req, res, next) => {
+  //1)- Current Password and new Password is present in Body
+  if (!req.body.currPassword || !req.body.newPassword) {
+    return next(new appError("Provide Current and New Password!!", 400));
+  }
+  //2)- Check if email is present in params
+  const { usrEmail } = req.query;
+  if (!usrEmail) {
+    return next(new appError("Email is not present in the URL", 401));
+  }
+
+  //3)- Check if the user exists
+  const loginUser = await Users.findOne({ email: usrEmail });
+
+  if (!loginUser) {
+    return next(new appError("User Not Found", 404));
+  }
+  //4)- Check if the current password is correct
+  if (
+    !(await loginUser.matchPassword(req.body.currPassword, loginUser.password))
+  ) {
+    return next(new appError("Invalid Password", 401));
+  }
+
+  //5)- Update the password
+  loginUser.password = req.body.newPassword;
+  loginUser.passwordChangeAt = Date.now();
+  await loginUser.save({ validateBeforeSave: false });
+
+  //6)- Create the JWT token
+  const token = jwt.sign(
+    {
+      id: loginUser._id,
+      iat: Date.now(),
+      exp: Date.now() + parseInt(process.env.TOKEN_DURATION),
+    },
+    process.env.SECREAT_KEY
+  );
+
+  res.status(200).json({
+    message: "Password Updated Successfully",
+    token,
+  });
+};
+
+//verify that the logined User is admin
+// exports.restrictTo = (...role) => {
+//   return (req, res, next) => {
+//     if (!role.includes(req.user.role)) {
+//       //admin is not logined
+//       return next(new appError("Only Admin can Access this Route", 401));
+//     }
+
+//     //admin is loged In
+//     next();
+//   };
+// };
 
 //forgetPassword Handler. This will generate  the OTP and send it to the user
 exports.forgetPassword = async (req, res, next) => {
@@ -286,51 +366,51 @@ exports.resetPassword = async (req, res, next) => {
 };
 
 //Update Current Loged In user password. This will update the password of the user
-exports.updatePassword = async (req, res, next) => {
-  //check if current password is present or not
+// exports.updatePassword = async (req, res, next) => {
+//   //check if current password is present or not
 
-  if (!req.body.currPassword) {
-    return next(new appError("Provide current password!", 400));
-  }
+//   if (!req.body.currPassword) {
+//     return next(new appError("Provide current password!", 400));
+//   }
 
-  //check that the current pssword is correct
+//   //check that the current pssword is correct
 
-  const passMatched = await req.user.matchPassword(
-    req.body.currPassword,
-    req.user.password
-  );
-  if (!passMatched) {
-    return next(
-      new appError("Invalid Password! Provide valid current password", 401)
-    );
-  }
-  //check if new Password is provided
-  if (!req.body.newPassword) {
-    return next(new appError("Provide New password!!", 400));
-  }
-  //update the password with hashing it
-  req.user.password = req.body.newPassword;
-  //adding the time for last password change
-  req.user.passwordChangeAt = Date.now();
-  try {
-    await req.user.save();
-  } catch (err) {
-    console.log(err.message);
-    return next(new appError("Password is NOT updated", 500));
-  }
+//   const passMatched = await req.user.matchPassword(
+//     req.body.currPassword,
+//     req.user.password
+//   );
+//   if (!passMatched) {
+//     return next(
+//       new appError("Invalid Password! Provide valid current password", 401)
+//     );
+//   }
+//   //check if new Password is provided
+//   if (!req.body.newPassword) {
+//     return next(new appError("Provide New password!!", 400));
+//   }
+//   //update the password with hashing it
+//   req.user.password = req.body.newPassword;
+//   //adding the time for last password change
+//   req.user.passwordChangeAt = Date.now();
+//   try {
+//     await req.user.save();
+//   } catch (err) {
+//     console.log(err.message);
+//     return next(new appError("Password is NOT updated", 500));
+//   }
 
-  //Lgin the user and send login token
+//   //Lgin the user and send login token
 
-  const token = jwt.sign(
-    {
-      id: req.user._id,
-      iat: Date.now(),
-    },
-    process.env.SECREAT_KEY,
-    {
-      expiresIn: process.env.TOKEN_DURATION,
-    }
-  );
+//   const token = jwt.sign(
+//     {
+//       id: req.user._id,
+//       iat: Date.now(),
+//     },
+//     process.env.SECREAT_KEY,
+//     {
+//       expiresIn: process.env.TOKEN_DURATION,
+//     }
+//   );
 
-  res.status(200).json({ message: "Password Modified", token });
-};
+//   res.status(200).json({ message: "Password Modified", token });
+// };

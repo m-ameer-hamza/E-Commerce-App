@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { OtpInput } from "react-native-otp-entry";
 import { TouchableRipple, TextInput, Button } from "react-native-paper";
@@ -17,6 +17,9 @@ export default function GLoginPassword({ route }) {
   const [password, setPassword] = useState("");
   const [isValidePassword, setValidePassword] = useState(true);
   const [loading, setLoading] = useState(false);
+
+  const [isPassSecure, setIsPassSecure] = useState(true);
+  const [passIcon, setPassIcon] = useState("eye");
 
   //for navigation to next screen
   const navigation = useNavigation();
@@ -96,12 +99,25 @@ export default function GLoginPassword({ route }) {
           }}
           onChangeText={(text) => setPassword(text)}
           error={isValidePassword ? false : true}
-          secureTextEntry={true}
+          secureTextEntry={isPassSecure}
           style={{ borderRadius: 10, width: "87%" }}
           mode="outlined"
           outlineColor="#D0D0D0"
           activeOutlineColor="#041E42"
           label="Enter Password"
+          right={
+            <TextInput.Icon
+              icon={passIcon}
+              onPress={() => {
+                if (passIcon === "eye") {
+                  setPassIcon("eye-off");
+                } else {
+                  setPassIcon("eye");
+                }
+                setIsPassSecure(!isPassSecure);
+              }}
+            />
+          }
         />
       </View>
 

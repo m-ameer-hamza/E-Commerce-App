@@ -21,6 +21,7 @@ export const authHandlers = () => {
     loginUser,
     createUser,
     googleLogin,
+    tokenRefresh,
     error,
     loading,
     response,
@@ -28,6 +29,7 @@ export const authHandlers = () => {
     setError,
     setLoading,
     setResponse,
+    setStatusCode,
   } = useAuthApi();
 
   //useEffect to handle loading.
@@ -55,7 +57,7 @@ export const authHandlers = () => {
         alert("User is not verified");
         navigation.navigate("EmailVerification", { email: email });
       } else if (error === "Email or password not match") {
-        alert("Email or password not match");
+        alert("Creditentials not match");
       } else if (error === "No response from server") {
         alert("No Response from server");
       } else {
@@ -74,13 +76,14 @@ export const authHandlers = () => {
       setError(false);
       setLoading(false);
       setResponse(false);
+      setStatusCode(null);
 
-      console.log("From Auth Handler", response.message);
-      console.log("From Auth Handler", statusCode);
-      if (response.message === "Successfully Logined In" || statusCode == 200) {
+      if (response.message === "Successfully Logined In") {
         savingLoginedUser({ email: email, userName: response.userName });
         dispatch(toggleAuth());
         setNavigate(true);
+      } else if (response.message === "Token Refreshed") {
+        savingLoginedUser({ email: email, userName: response.userName });
       } else if (response.message === "Created" || statusCode == 201) {
         setNavigate(true);
         alert("User Created Successfully");
@@ -130,6 +133,7 @@ export const authHandlers = () => {
   };
 
   const googleLoginFunc = async (email) => {
+    setEmail(email);
     try {
       await googleLogin(
         email,
@@ -141,5 +145,18 @@ export const authHandlers = () => {
     }
   };
 
-  return { loginFunc, signUpFunc, googleLoginFunc, navigate };
+  const refreshTokenFunc = async (email, password) => {
+    console.log("From password confirm", email, password);
+    try {
+      await tokenRefresh(
+        email,
+        password,
+        `${BACK_END_URL}/e-commerce/users/refreshToken`
+      );
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  return { loginFunc, signUpFunc, googleLoginFunc, refreshTokenFunc, navigate };
 };
