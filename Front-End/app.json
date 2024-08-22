@@ -34,14 +34,17 @@
         {
           "merchantIdentifier": "merchant.com.yourcompany.ecommerce",
           "enableGooglePay": true
-        },
+        }
+      ],
+
+      "expo-updates",
+
+      [
         "expo-location",
         {
           "locationAlwaysAndWhenInUsePermission": "Allow Amazone to use your location."
         }
-      ],
-
-      "expo-updates"
+      ]
     ],
     "extra": {
       "eas": {

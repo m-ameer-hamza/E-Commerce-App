@@ -11,11 +11,12 @@ import { useState, useEffect, useCallback } from "react";
 import { Icon, PaperProvider, IconButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { addressHandlers } from "../Handlers/addressHandler";
-import ActivityLoader from "../Components/ActivityLoader";
+
 import { useSelector } from "react-redux";
 import AddressesList from "../Components/AddressesList";
 import ActivityLoading from "../Components/ActivityLoading";
-import Header from "../Components/Header";
+import { Ionicons } from "@expo/vector-icons";
+
 const AddAdress = () => {
   const navigation = useNavigation();
 
@@ -63,14 +64,20 @@ const AddAdress = () => {
             padding: 10,
             flexDirection: "row",
             alignItems: "center",
-            justifyContent: "space-evenly",
+            justifyContent: "space-between",
             height: 60,
             alignContent: "center",
           }}
         >
+          <Ionicons
+            name="arrow-back"
+            size={27}
+            color="black"
+            onPress={() => navigation.goBack()}
+          />
           <TextInput
             style={{
-              width: "80%",
+              width: "70%",
               height: 40,
               backgroundColor: "#fff",
               borderRadius: 10,

@@ -11,6 +11,7 @@ import { Searchbar } from "react-native-paper";
 import { useState } from "react";
 import AddNewAddress from "../Screens/AddNewAddress";
 import OrderConfirm from "../Screens/OrderConfirm";
+import MapLocation from "../Screens/MapLocation";
 
 export default function HomeStackNavigation() {
   const Stack = createNativeStackNavigator();
@@ -28,9 +29,8 @@ export default function HomeStackNavigation() {
         component={ProductInfo}
         options={{
           headerStyle: {
-            backgroundColor: "#00CED1",
+            backgroundColor: "#afeeee",
 
-            shadowColor: "#AFEEEE",
             elevation: 2,
             shadowOpacity: 0.8,
             borderBottomWidth: 1,
@@ -57,9 +57,9 @@ export default function HomeStackNavigation() {
 
                 <Text
                   style={{
-                    marginLeft: 10,
-                    fontSize: 22,
-                    letterSpacing: 0.8,
+                    marginLeft: 2,
+                    fontSize: 19,
+                    letterSpacing: 0.4,
                   }}
                 >
                   Product Info
@@ -80,7 +80,90 @@ export default function HomeStackNavigation() {
         name="AddNewAddress"
         component={AddNewAddress}
         options={{
-          headerShown: false,
+          headerStyle: {
+            backgroundColor: "#afeeee",
+
+            elevation: 2,
+            shadowOpacity: 0.8,
+            borderBottomWidth: 1,
+          },
+          headerTitle: () => null,
+
+          headerLeft: () => {
+            const navigation = useNavigation();
+            return (
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
+                  style={{ marginRight: 10 }}
+                >
+                  <Ionicons name="arrow-back" size={24} />
+                </TouchableOpacity>
+
+                <Text
+                  style={{
+                    marginLeft: 2,
+                    fontSize: 19,
+                    letterSpacing: 0.4,
+                  }}
+                >
+                  Add New Address
+                </Text>
+              </View>
+            );
+          },
+        }}
+      />
+      <Stack.Screen
+        name="MapLocation"
+        component={MapLocation}
+        options={{
+          headerStyle: {
+            backgroundColor: "#afeeee",
+
+            elevation: 2,
+            shadowOpacity: 0.8,
+            borderBottomWidth: 1,
+          },
+          headerTitle: () => null,
+
+          headerLeft: () => {
+            const navigation = useNavigation();
+            return (
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
+                  style={{ marginRight: 10 }}
+                >
+                  <Ionicons name="arrow-back" size={24} />
+                </TouchableOpacity>
+
+                <Text
+                  style={{
+                    marginLeft: 2,
+                    fontSize: 19,
+                    letterSpacing: 0.4,
+                  }}
+                >
+                  Location Picker
+                </Text>
+              </View>
+            );
+          },
         }}
       />
     </Stack.Navigator>

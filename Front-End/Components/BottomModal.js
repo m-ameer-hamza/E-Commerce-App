@@ -157,7 +157,8 @@ const BottomModal = ({ toggleState }) => {
               </Text>
             </Pressable>
 
-            <View
+            <Pressable
+              onPress={() => navigation.navigate("MapLocation")}
               style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
             >
               <IconButton
@@ -169,7 +170,7 @@ const BottomModal = ({ toggleState }) => {
               <Text style={{ color: "#0066b2", fontWeight: "400" }}>
                 Use my current location
               </Text>
-            </View>
+            </Pressable>
           </View>
         </Modal>
       </Portal>

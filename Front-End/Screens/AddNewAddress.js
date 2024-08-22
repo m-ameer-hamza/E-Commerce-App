@@ -144,6 +144,9 @@ const AddNewAddress = () => {
             title={address.province}
             expanded={expandedL1}
             onPress={toggleExpandedL1}
+            titleStyle={{
+              color: "#041e42",
+            }}
           >
             <List.Item
               title="Punjab"
@@ -178,6 +181,9 @@ const AddNewAddress = () => {
             title={address.city}
             expanded={expandedL2}
             onPress={toggleExpandedL2}
+            titleStyle={{
+              color: "#041e42",
+            }}
           >
             {address.province === "Punjab" ? (
               <>
@@ -233,6 +239,9 @@ const AddNewAddress = () => {
             title={address.area}
             expanded={expandedL3}
             onPress={toggleExpandedL3}
+            titleStyle={{
+              color: "#041e42",
+            }}
           >
             {address.city === "Lahore" && (
               <>
@@ -319,7 +328,7 @@ const AddNewAddress = () => {
           mode="outlined"
           style={{ marginTop: "5%", padding: 2 }}
           outlineColor="#d0d0d0"
-          activeOutlineColor="#f77707"
+          activeOutlineColor="#041e42"
           numberOfLines={1}
           value={address.phoneNumber}
         />
@@ -335,7 +344,7 @@ const AddNewAddress = () => {
           mode="outlined"
           style={{ marginTop: "5%", padding: 10 }}
           outlineColor="#d0d0d0"
-          activeOutlineColor="#f77707"
+          activeOutlineColor="#041e42"
           numberOfLines={5}
           multiline={true}
           value={address.houseAddress}
@@ -351,7 +360,7 @@ const AddNewAddress = () => {
           mode="outlined"
           style={{ marginTop: "5%" }}
           outlineColor="#d0d0d0"
-          activeOutlineColor="#f77707"
+          activeOutlineColor="#041e42"
           numberOfLines={1}
           value={address.saveAs}
         />
@@ -359,7 +368,7 @@ const AddNewAddress = () => {
         <Pressable
           onPress={saveAdressHandler}
           style={{
-            backgroundColor: "#f78307",
+            backgroundColor: "#fab300",
             width: "60%",
             justifyContent: "center",
             alignContent: "center",
