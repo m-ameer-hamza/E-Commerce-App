@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import React from "react";
-import { Icon } from "react-native-paper";
 
 import CartItemBottom from "./CartItemBottom";
 const CartItem = ({ item, index }) => {

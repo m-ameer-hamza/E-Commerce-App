@@ -33,6 +33,11 @@ export default CustomDrawerContent = (props) => {
       icon: "heart",
       focusIcon: "heart-outline",
     },
+    OrderStack: {
+      label: "Orders",
+      icon: "shopping",
+      focusIcon: "shopping-outline",
+    },
     // Add more routes here
     // Orders: { label: "My Orders", icon: "receipt-outline" },
   };
@@ -62,7 +67,6 @@ export default CustomDrawerContent = (props) => {
 
       <ScrollView
         contentContainerStyle={{
-          flex: 1,
           alignItems: "center",
         }}
       >
@@ -137,7 +141,7 @@ const InlineStyles = StyleSheet.create({
   drawerItem: {
     width: "100%",
     alignItems: "baseline",
-    paddingVertical: 35,
+    paddingVertical: 20,
     paddingHorizontal: 20,
   },
   logoutButton: {

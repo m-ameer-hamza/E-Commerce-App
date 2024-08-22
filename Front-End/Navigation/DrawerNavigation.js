@@ -3,8 +3,10 @@ import BottomNavigation from "./BottomNavigation";
 import CustomeDrawerContent from "../Components/CustomeDrawerContent";
 import Settings from "../Screens/Settings";
 import ProfileStackNavigation from "../Navigation/ProfileStackNavigation";
+import OrderStackNavigation from "../Navigation/OrderStackNavigation";
 import { TouchableOpacity } from "react-native";
 import { Icon } from "react-native-paper";
+
 import LikedItemsStack from "../Navigation/LikedItemsStackNavigation";
 export default function DrawerNavigation() {
   const Drawer = createDrawerNavigator();
@@ -59,6 +61,15 @@ export default function DrawerNavigation() {
           drawerIcon: () => null,
         }}
         component={LikedItemsStack}
+      />
+      <Drawer.Screen
+        name="OrderStack"
+        options={{
+          headerShown: false,
+          drawerLabel: () => null,
+          drawerIcon: () => null,
+        }}
+        component={OrderStackNavigation}
       />
     </Drawer.Navigator>
   );

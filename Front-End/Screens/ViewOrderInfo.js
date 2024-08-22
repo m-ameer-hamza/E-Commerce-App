@@ -6,7 +6,9 @@ import CartItem from "../Components/CartItem";
 import { useNavigation } from "@react-navigation/native";
 import { calculateDiscountedTotal } from "../Redux/cartSlice";
 import { IconButton } from "react-native-paper";
-const Cart = () => {
+const ViewOrderInfo = ({ route }) => {
+  const { data } = route.params;
+
   const cart = useSelector((state) => state.cart);
   const [disTotal, setDisTotal] = useState(0);
   const [cartLength, setCartLength] = useState(0);
@@ -23,33 +25,13 @@ const Cart = () => {
     console.log(cart.discountedTotal);
 
     setDisTotal(cart.discountedTotal);
-
-    console.log(cart.cartArray);
   }, [cart.cartArray, cart.discountedTotal, cart.total]);
 
   const navigation = useNavigation();
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
       {/* Header of Cart Screen */}
-      <View
-        style={{
-          width: "100%",
-          backgroundColor: "#AFEEEE",
 
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          height: 50,
-          paddingHorizontal: 10,
-        }}
-      >
-        <IconButton
-          icon="menu"
-          iconColor="black"
-          onPress={() => navigation.toggleDrawer()}
-        />
-        <Text style={{ fontSize: 22, fontWeight: "600" }}> Cart Screen</Text>
-      </View>
       <View
         style={{
           padding: 10,
@@ -96,6 +78,6 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default ViewOrderInfo;
 
 const styles = StyleSheet.create({});
