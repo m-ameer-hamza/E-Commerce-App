@@ -144,6 +144,136 @@ const Products = [
         Color: ["blue", "white", "black"],
       },
     ],
+
+    id: 9,
+    category: "Furniture",
+    name: "Sofa, Bed & Tables",
+    title: "Wooden Bed",
+    description: "Wooden Bed (King Size). Made with pure wood",
+    features: ["King Size", "Wooden Material", "10-year warranty"],
+    price: 45000,
+    discount: "5%",
+    images: [require("../assets/Deals/bed.png")],
+    sold: 15,
+    extra: [
+      {
+        Color: ["brown", "black"],
+      },
+      {
+        Size: ["king", "queen"],
+      },
+    ],
+
+    id: 10,
+    category: "Furniture",
+    name: "Sofa, Bed & Tables",
+    title: "Glass Table",
+    description: "Glass Table. Made with pure glass",
+    features: ["Glass Material", "Transparent", "5-year warranty"],
+    price: 25000,
+    discount: "",
+    images: [require("../assets/Deals/table.png")],
+    sold: 10,
+    extra: [
+      {
+        Color: ["transparent", "black"],
+      },
+      {
+        Size: ["small", "medium", "large"],
+      },
+    ],
+
+    id: 11,
+    category: "Electronics",
+    name: "Washing Machines",
+    title: "Haier Washing Machine",
+    description: "Haier Washing Machine (8KG)",
+    features: ["8KG", "White Color", "2-year warranty"],
+    price: 45000,
+    discount: "",
+    images: [require("../assets/Deals/washing2.png")],
+    sold: 5,
+    extra: [
+      {
+        Color: ["red", "white", "black"],
+      },
+      {
+        Capacity: ["8KG", "12KG"],
+      },
+    ],
+
+    id: 12,
+    category: "Electronics",
+    name: "Fridges",
+    title: "Haier Fridge",
+    description: "Haier Fridge (12 Cubic Feet)",
+    features: ["8KG", "White Color", "2-year warranty"],
+    price: 55000,
+    discount: "",
+    images: [require("../assets/Deals/fridge3.png")],
+    sold: 10,
+    extra: [
+      {
+        Color: ["red", "white", "black"],
+      },
+      {
+        Size: ["small", "medium", "large"],
+      },
+    ],
+
+    id: 13,
+    category: "Electronics",
+    name: "Fridges",
+    title: "Orient Fridge",
+    description: "Orient Fridge. Invertor Series",
+    features: ["Invertor", "Glass Door", "3-year warranty"],
+    price: 60000,
+    discount: "",
+    images: [require("../assets/Deals/fridge4.png")],
+    sold: 5,
+    extra: [
+      {
+        Color: ["blue", "green", "black"],
+      },
+      {
+        Size: ["small", "medium", "large"],
+      },
+    ],
+
+    id: 14,
+    category: "Phones & Accessories",
+    name: "Mobile Phones",
+    title: "Oppo A53",
+    description: "Oppo A53 (6GB, 128GB)",
+    features: ["6GB", "White Color", "3-year warranty,"],
+    price: 45000,
+    discount: "",
+    images: [require("../assets/Deals/phone3.png")],
+    sold: 15,
+    extra: [
+      {
+        Color: ["blue", "green", "black"],
+      },
+      {
+        Ram: ["4GB", "6GB"],
+      },
+    ],
+
+    id: 15,
+    category: "Phones & Accessories",
+    name: "Mobile Phones",
+    title: "Redmi Note 13",
+    description: "Redmi Note 13 (4GB, 64GB)",
+    features: ["4GB", "White Color", "50MP Camera"],
+    price: 80000,
+    discount: "15%",
+    images: [require("../assets/Deals/phone4.png")],
+    sold: 20,
+    extra: [
+      {
+        Ram: ["4GB", "6GB"],
+      },
+    ],
   },
 ];
 

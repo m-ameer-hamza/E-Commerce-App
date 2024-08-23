@@ -7,6 +7,7 @@ const userRouter = require("./Routes/userRouter");
 const taskRouter = require("./Routes/tasksRouter");
 const addressRouter = require("./Routes/addressRouter");
 const paymentRouter = require("./Routes/paymentRouter");
+const productRouter = require("./Routes/productRouter");
 
 const app = express();
 
@@ -21,6 +22,9 @@ app.use("/e-commerce/address", addressRouter);
 
 //adding the payment router as a middle-ware
 app.use("/e-commerce/payment", paymentRouter);
+
+//adding the product router as a middle-ware
+app.use("/e-commerce/products", productRouter);
 
 //adding the task router as a middle-ware
 app.use("/portfolio/v1/tasks", taskRouter);
