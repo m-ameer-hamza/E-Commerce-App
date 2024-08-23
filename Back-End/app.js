@@ -1,6 +1,8 @@
 const express = require("express");
 const morgan = require("morgan");
 const appError = require("./error");
+const path = require("path");
+const cors = require("cors");
 const globalerrorHandler = require("./Controllers/globalErrorHandler");
 
 const userRouter = require("./Routes/userRouter");
@@ -13,6 +15,10 @@ const app = express();
 
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(cors({ origin: "*" }));
+
+//path to serve the static files
+app.use(express.static(path.join(__dirname, "public")));
 
 //adding user routers as a middle-ware
 app.use("/e-commerce/users", userRouter);

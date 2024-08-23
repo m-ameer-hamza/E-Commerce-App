@@ -5,26 +5,72 @@ import {
   View,
   Image,
   ScrollView,
+  FlatList,
+  ActivityIndicator,
 } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PaperProvider } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import { BACK_END_URL } from "../Global";
 
 import CategoriesData from "../Const/CategoriesData";
-import DealsData from "../Const/DealsData";
-import ProductsData from "../Const/ProductsData";
 
 import ProductsList from "../Components/ProductList";
 import DropDownList from "../Components/DropDownList";
 import BottomModal from "../Components/BottomModal";
 import Header from "../Components/Header";
+import ActiivityLoading from "../Components/ActivityLoading";
+import { productHandler } from "../Handlers/productsHandler";
 
 const Home = () => {
   const [DropDownCategory, setDropDownCategory] = useState("Select Category");
   const [mainCategories, setMainCategories] = useState("All");
   const [addressModel, setAddressModel] = useState(false);
 
+  const [page, setPage] = useState(1);
+  const [DealsData, setDealsData] = useState([]);
+  const [ProductsData, setProductsData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const navigation = useNavigation();
+  const { getAllProductsFunc, products, saleProducts } = productHandler();
+
+  useEffect(() => {
+    setLoading(true);
+    getAllProductsFunc(page);
+
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    if (products.length > 0) {
+      setProductsData((prevData) => [...prevData, ...products]);
+    } else {
+      setProductsData(products);
+    }
+    if (saleProducts.length > 0) {
+      setDealsData(saleProducts);
+    }
+  }, [products]);
+
+  useEffect(() => {
+    if (page > 1) {
+      getAllProductsFunc(page);
+    }
+  }, [page]);
+
+  const renderFooter = () => {
+    console.log("Render Footer loading ", loading);
+    return loading ? (
+      <View style={{ paddingVertical: 20 }}>
+        <ActivityIndicator size="large" />
+      </View>
+    ) : null;
+  };
+  const loadMoreProducts = () => {
+    console.log("Load More Products");
+    setPage((prevPage) => prevPage + 1);
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -104,7 +150,7 @@ const Home = () => {
                       }}
                     >
                       <Image
-                        source={item.images[0]}
+                        source={{ uri: `${BACK_END_URL}/${item.images[0]}` }}
                         resizeMode="contain"
                         style={{
                           width: 100,

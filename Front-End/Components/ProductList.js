@@ -4,6 +4,7 @@ import SaleTag from "../assets/Tags/pngegg (2).png";
 import { Icon } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../Redux/cartSlice";
+import { BACK_END_URL } from "../Global";
 const Product = ({ product }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -73,7 +74,7 @@ const Product = ({ product }) => {
       <Image
         resizeMode="contain"
         style={{ width: "80%", height: 150, marginTop: 5 }}
-        source={product.images[0]}
+        source={{ uri: `${BACK_END_URL}/${product.images[0]}` }}
       />
       <Text
         numberOfLines={1}
@@ -95,7 +96,7 @@ const Product = ({ product }) => {
         }}
       >
         <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-          {product.price}
+          Rs. {product.price}
         </Text>
         {product.sold > 0 ? (
           <Text

@@ -7,7 +7,7 @@ const router = express.Router();
 router
   .post("/", authHandler.verifyUserLogedIn, productHandler.addProduct)
   .get("/", productHandler.getAllProducts)
-  .get("/sale", productHandler.getSaleProducts)
+
   .get("/:productId", productHandler.searchProduct);
 
 module.exports = router;

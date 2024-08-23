@@ -40,33 +40,26 @@ exports.getAllProducts = async (req, res, next) => {
     const limit = 8; // Number of products to return per request
     const skip = (page - 1) * limit; // Calculate the number of products to skip
 
+    let discountedProducts = [];
+    if (page === 1) {
+      discountedProducts = await Products.find({ discount: { $ne: "" } }) // discount is not equal to ""
+        .limit(4);
+    }
+
     // Fetch the products with pagination
     const products = await Products.find().skip(skip).limit(limit);
 
-    res.status(200).json({ message: "Products Fetched", data: products });
+    res.status(200).json({
+      message: "Products Fetched",
+      products,
+      discountedProducts,
+    });
   } catch (error) {
+    console.error("Error fetching products:", error); // Log the error for debugging
     res.status(500).json({ message: "Error fetching products", error });
   }
 };
 
-//This function fetches the products with a discount field that is not empty.
-//It returns the first 4 products with a discount.
-exports.getSaleProducts = async (req, res, next) => {
-  try {
-    // Fetch products with non-empty discount field
-    const discountedProducts = await Products.find({ discount: { $ne: "" } }) //discount is Not Equal  to "" ({$ne:"")
-      .limit(4);
-
-    res.status(200).json({
-      message: "Discounted Products Fetched!!",
-      data: discountedProducts,
-    });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error fetching discounted products", error });
-  }
-};
 exports.searchProduct = async (req, res, next) => {
   //1)- Check if productId is provided
   if (!req.params.productId) {
