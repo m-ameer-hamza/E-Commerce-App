@@ -8,6 +8,7 @@ const {
   prod_tt_sasportal,
 } = require("googleapis/build/src/apis/prod_tt_sasportal");
 //creating a schema for users
+
 const userSchema = new mongoose.Schema({
   name: { required: [true, "Name is required"], type: String },
   email: {
@@ -37,7 +38,8 @@ const userSchema = new mongoose.Schema({
     enum: ["Verified", "Not-Verified"],
     default: "Not-Verified",
   },
-  tasks: [Tasks],
+  order: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
+
   Address: [], //array of addresses
 
   passwordChangeAt: Date,

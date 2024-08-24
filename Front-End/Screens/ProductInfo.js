@@ -35,7 +35,7 @@ const ProductInfo = ({ route }) => {
 
   useEffect(() => {
     const checkIfItemIsLiked = async () => {
-      const liked = await isItemLiked(product.id);
+      const liked = await isItemLiked(product._id);
 
       if (liked) {
         setIconColor("#ffac1c");
@@ -44,7 +44,7 @@ const ProductInfo = ({ route }) => {
     };
 
     checkIfItemIsLiked();
-  }, [product.id]);
+  }, [product._id]);
 
   //this function will handle the like button.
   //this function will change the icon and color of the icon
@@ -96,7 +96,7 @@ const ProductInfo = ({ route }) => {
     }
 
     const product = {
-      id: item.id,
+      _id: item._id,
       title: item.title,
       description: item.description,
       price: item.price,

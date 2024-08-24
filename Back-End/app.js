@@ -6,7 +6,7 @@ const cors = require("cors");
 const globalerrorHandler = require("./Controllers/globalErrorHandler");
 
 const userRouter = require("./Routes/userRouter");
-const taskRouter = require("./Routes/tasksRouter");
+const orderRouter = require("./Routes/orderRouter");
 const addressRouter = require("./Routes/addressRouter");
 const paymentRouter = require("./Routes/paymentRouter");
 const productRouter = require("./Routes/productRouter");
@@ -32,8 +32,8 @@ app.use("/e-commerce/payment", paymentRouter);
 //adding the product router as a middle-ware
 app.use("/e-commerce/products", productRouter);
 
-//adding the task router as a middle-ware
-app.use("/portfolio/v1/tasks", taskRouter);
+//adding the order router as a middle-ware
+app.use("/e-commerce/orders", orderRouter);
 
 //handling error for undefined handler
 app.use("*", (req, res, next) => {

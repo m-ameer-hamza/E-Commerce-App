@@ -15,23 +15,29 @@ const Product = ({ product }) => {
     }
 
     return extra
-      .map((group) => {
+      .map((item) => {
         if (
-          typeof group === "object" &&
-          group !== null &&
-          Object.keys(group).length > 0
+          typeof item === "object" &&
+          item !== null &&
+          "key" in item &&
+          "values" in item &&
+          Array.isArray(item.values) &&
+          item.values.length > 0
         ) {
-          const key = Object.keys(group)[0];
-          const value = group[key][0];
+          const key = item.key;
+          const value = item.values[0];
+
           return { [key]: value };
         }
+
         return {};
       })
       .filter((item) => Object.keys(item).length > 0);
   };
+
   const addProToCart = (item) => {
     const temp = {
-      id: item.id,
+      _id: item._id,
       title: item.title,
       description: item.description,
       price: item.price,

@@ -7,6 +7,7 @@ import { calculateDiscountedTotal, calculateTotal } from "../Redux/cartSlice";
 import { useStripe } from "@stripe/stripe-react-native";
 import { clearCart } from "../Redux/cartSlice";
 import { useNavigation } from "@react-navigation/native";
+import { CheckOutHandler } from "../CompHandlers/CheckOutHandler";
 
 const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -18,6 +19,7 @@ const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
   const navigation = useNavigation();
 
   const dispatch = useDispatch();
+  const { CheckOutFunc } = CheckOutHandler();
 
   const [cartLength, setCartLength] = useState(0);
   const [disTotal, setDisTotal] = useState(0);
@@ -26,42 +28,15 @@ const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
 
   const cart = useSelector((state) => state.cart);
 
-  const handleCheckOut = async () => {
+  const checkOut = async () => {
     setLoading(true);
-    console.log("From Order Summary");
-    if (order.payment === "Credit Card") {
-      console.log("Payment initiated");
 
-      //1. Initizlize payment sheet
-
-      try {
-        await initPaymentSheet({
-          merchantDisplayName: "Amazone Clone",
-          paymentIntentClientSecret: paySecreatKey,
-        });
-      } catch (e) {
-        alert("Error in initializing payment sheet");
-        console.log(checkOutCardRes.error);
-        setLoading(false);
-        return;
-      }
-
-      //2. Present payment sheet
-      const { error: paymentError } = await presentPaymentSheet();
-
-      if (paymentError) {
-        alert(`Error code: ${paymentError.code}`, paymentError.message);
-        return;
-      }
-    }
-
-    //3. Store the order in the database
-    //4. Clear the cart
-    dispatch(clearCart());
-    //5. Show the success message || Navigate to the success page
-    navigation.navigate("OrderSuccess");
-
-    setPaySecreatKey("");
+    CheckOutFunc(
+      order,
+      paySecreatKey,
+      setPaySecreatKey,
+      disTotal + order.deliveryCharge
+    );
   };
 
   useEffect(() => {
@@ -330,7 +305,7 @@ const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
 
       <Pressable
         onPress={() => {
-          handleCheckOut();
+          checkOut();
         }}
         style={{
           backgroundColor: "#fab300",

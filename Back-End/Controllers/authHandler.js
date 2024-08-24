@@ -124,6 +124,7 @@ exports.verifyUserLogedIn = async (req, res, next) => {
   try {
     decoded = await promisify(jwt.verify)(token, process.env.SECREAT_KEY);
   } catch (err) {
+    console.log(err.message);
     return next(new appError(err.message, 400));
   }
 

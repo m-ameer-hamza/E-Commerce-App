@@ -13,13 +13,13 @@ export default cartSlice = (state = initialStateCart, action) => {
       const product = action.payload;
       // Check if product is already in the cart
       const existingProduct = state.cartArray.find(
-        (item) => item.id === product.id
+        (item) => item._id === product._id
       );
 
       if (existingProduct) {
         // If the product exists, increment the quantity
         const updatedCart = state.cartArray.map((item) =>
-          item.id === product.id
+          item._id === product._id
             ? { ...item, quantity: (item.quantity || 1) + 1 }
             : item
         );
@@ -34,7 +34,7 @@ export default cartSlice = (state = initialStateCart, action) => {
     case "REMOVE_FROM_CART": {
       const productId = action.payload;
       // Find the index of the product in the cart
-      const index = state.cartArray.findIndex((item) => item.id === productId);
+      const index = state.cartArray.findIndex((item) => item._id === productId);
 
       if (index !== -1) {
         const product = state.cartArray[index];
@@ -42,12 +42,14 @@ export default cartSlice = (state = initialStateCart, action) => {
         let updatedCart;
         if (product.quantity > 1) {
           updatedCart = state.cartArray.map((item) =>
-            item.id === productId
+            item._id === productId
               ? { ...item, quantity: item.quantity - 1 }
               : item
           );
         } else {
-          updatedCart = state.cartArray.filter((item) => item.id !== productId);
+          updatedCart = state.cartArray.filter(
+            (item) => item._id !== productId
+          );
         }
         return { ...state, cartArray: updatedCart };
       }

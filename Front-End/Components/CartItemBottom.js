@@ -37,7 +37,7 @@ const CartItemBottom = ({ item }) => {
   };
 
   const decreaseProHandler = (product) => {
-    dispatch(removeItemCart(product.id));
+    dispatch(removeItemCart(product._id));
   };
 
   return (

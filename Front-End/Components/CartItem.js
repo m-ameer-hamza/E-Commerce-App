@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import React from "react";
-
+import { BACK_END_URL } from "../Global";
 import CartItemBottom from "./CartItemBottom";
 const CartItem = ({ item, index }) => {
   return (
@@ -26,7 +26,7 @@ const CartItem = ({ item, index }) => {
         >
           <Image
             resizeMode="contain"
-            source={item?.image}
+            source={{ uri: `${BACK_END_URL}/${item?.image}` }}
             style={{ width: 150, height: 150 }}
           />
         </View>
