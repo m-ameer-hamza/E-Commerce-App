@@ -5,8 +5,6 @@ import {
   View,
   Image,
   ScrollView,
-  FlatList,
-  ActivityIndicator,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { PaperProvider } from "react-native-paper";
@@ -43,34 +41,11 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    if (products.length > 0) {
-      setProductsData((prevData) => [...prevData, ...products]);
-    } else {
-      setProductsData(products);
-    }
+    setProductsData(products);
     if (saleProducts.length > 0) {
       setDealsData(saleProducts);
     }
   }, [products]);
-
-  useEffect(() => {
-    if (page > 1) {
-      getAllProductsFunc(page);
-    }
-  }, [page]);
-
-  const renderFooter = () => {
-    console.log("Render Footer loading ", loading);
-    return loading ? (
-      <View style={{ paddingVertical: 20 }}>
-        <ActivityIndicator size="large" />
-      </View>
-    ) : null;
-  };
-  const loadMoreProducts = () => {
-    console.log("Load More Products");
-    setPage((prevPage) => prevPage + 1);
-  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>

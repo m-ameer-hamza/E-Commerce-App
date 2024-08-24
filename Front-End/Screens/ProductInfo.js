@@ -13,6 +13,7 @@ import React from "react";
 import { List } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../Redux/cartSlice";
+import { BACK_END_URL } from "../Global";
 
 import { ProductLikeHandlers } from "../CompHandlers/ProductLikeHandlers";
 
@@ -123,7 +124,7 @@ const ProductInfo = ({ route }) => {
             <ImageBackground
               resizeMode="contain"
               key={index}
-              source={image}
+              source={{ uri: `${BACK_END_URL}/${image}` }}
               style={{ width: width, height: height, marginRight: 10 }}
             />
           ))}
@@ -273,9 +274,8 @@ const ProductInfo = ({ route }) => {
           {product.extra && product.extra.length > 0 && (
             <List.Accordion title="Options" id="1">
               {product.extra.map((item, index) => {
-                const key = Object.keys(item)[0]; // Get the key like "Color" or "Size"
-                const values = item[key]; // Get the corresponding array
-
+                const key = item.key; // Get the key like "Ram"
+                const values = item.values; // Get the corresponding array of values
                 return (
                   <List.Accordion
                     title={key}
