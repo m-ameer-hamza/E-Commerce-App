@@ -32,8 +32,6 @@ export default PasswordConfirm = () => {
   const hideDialog = () => {
     if (password === "") {
       setPasswordError(true);
-    } else {
-      dispatch(editSession(true));
     }
   };
 

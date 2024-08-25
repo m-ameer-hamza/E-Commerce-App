@@ -247,6 +247,68 @@ exports.updatePassword = async (req, res, next) => {
   });
 };
 
+exports.verifyUser = async (req, res, next) => {
+  // 1)- JWT Token is there
+  if (
+    !req.headers.authorization ||
+    !req.headers.authorization.toLowerCase().startsWith("bearer")
+  ) {
+    //token is not present
+
+    return next(
+      new appError("You are not Loged In. Login to gain access", 440)
+    );
+    //return next(new appError("token is not present", 400));
+  }
+
+  //extract the token from the header
+  const token = req.headers.authorization.split(" ")[1];
+
+  // 2)- Verify Token and it is not expired
+
+  //check that the token is valid
+  let decoded;
+  try {
+    decoded = await promisify(jwt.verify)(token, process.env.SECREAT_KEY);
+  } catch (err) {
+    console.log(err.message);
+    return next(new appError(err.message, 400));
+  }
+
+  ////////////////////////////////////////////////////////////////////
+
+  //verify that the token is not expired
+  if (Date.now() > decoded.exp) {
+    return next(new appError("Token is expired!!", 419));
+  }
+
+  // 3)- User still present using the id form the decoded variable
+  const loginedUser = await Users.findById(decoded.id);
+
+  //no user find
+  if (!loginedUser) {
+    return next(new appError("User donot exist", 401));
+  }
+
+  // 4)- user password is not updated (after jwt is issued )
+
+  //getting the issue date and convert it to standerd date object
+  const jwtIssueTime = new Date(decoded.iat);
+
+  if (loginedUser.passwordChangeAt) {
+    // console.log(loginedUser.passwordChangeAt);
+    // console.log(jwtIssueTime);
+    if (loginedUser.passwordChangeAt > jwtIssueTime) {
+      //password is changed after jwt is created
+      return next(
+        new appError("Password is changed. Login again to get access!", 401)
+      );
+    }
+  }
+
+  res.status(200).json({ message: "User is verified" });
+};
+
 //verify that the logined User is admin
 // exports.restrictTo = (...role) => {
 //   return (req, res, next) => {

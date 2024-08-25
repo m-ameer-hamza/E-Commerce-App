@@ -1,16 +1,23 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import { Icon } from "react-native-paper";
+import { Icon, PaperProvider } from "react-native-paper";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { calculateDiscountedTotal, calculateTotal } from "../Redux/cartSlice";
+import { getSession } from "../Redux/sessionSlice";
 
 import { useStripe } from "@stripe/stripe-react-native";
 import { clearCart } from "../Redux/cartSlice";
 import { useNavigation } from "@react-navigation/native";
 import { CheckOutHandler } from "../CompHandlers/CheckOutHandler";
+import { authHandlers } from "../Handlers/authHandler";
+import ActivityLoading from "../Components/ActivityLoading";
+import PasswordConfirm from "../Components/PasswordConfirm";
+import ReduxStore from "../Redux/store";
 
 const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const { verifyUserFunc, navigate } = authHandlers();
+  const session = useSelector((state) => state.session.session);
 
   // useEffect(() => {
   //   console.log("Payment Key from OrderSummary", paySecreatKey);
@@ -25,18 +32,32 @@ const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
   const [disTotal, setDisTotal] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [userSession, setUserSession] = useState(false);
 
   const cart = useSelector((state) => state.cart);
 
   const checkOut = async () => {
     setLoading(true);
 
-    CheckOutFunc(
-      order,
-      paySecreatKey,
-      setPaySecreatKey,
-      disTotal + order.deliveryCharge
-    );
+    //Checking if the user is verified or not
+    await verifyUserFunc();
+
+    moveToFinal();
+  };
+
+  const moveToFinal = async () => {
+    const proceed = ReduxStore.getState().session.session;
+    console.log("Proceed from order Summery", proceed);
+
+    setLoading(false);
+    if (proceed) {
+      CheckOutFunc(
+        order,
+        paySecreatKey,
+        setPaySecreatKey,
+        disTotal + order.deliveryCharge
+      );
+    }
   };
 
   useEffect(() => {
@@ -62,7 +83,7 @@ const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
   };
 
   return (
-    <>
+    <PaperProvider>
       <View style={{ marginHorizontal: 10, marginTop: 5 }}>
         <Text style={{ fontSize: 20, fontWeight: "bold" }}>Order Summary</Text>
         <View
@@ -323,7 +344,9 @@ const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
           Place Order
         </Text>
       </Pressable>
-    </>
+      {loading && <ActivityLoading />}
+      {!session && <PasswordConfirm />}
+    </PaperProvider>
   );
 };
 

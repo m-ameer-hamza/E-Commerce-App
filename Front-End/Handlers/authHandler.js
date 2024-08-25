@@ -22,6 +22,7 @@ export const authHandlers = () => {
     createUser,
     googleLogin,
     tokenRefresh,
+    verifyLoginUser,
     error,
     loading,
     response,
@@ -48,7 +49,8 @@ export const authHandlers = () => {
         alert("User already exists");
         navigation.navigate("Login");
       } else if (error === "Token is expired!!") {
-        alert("Token is expired!!");
+        //alert("Token is expired!!");
+        toggleSession();
       } else if (error === "Wrong Login Method") {
         alert("Wrong Login Method");
       } else if (error == "Bad Request") {
@@ -82,14 +84,24 @@ export const authHandlers = () => {
         savingLoginedUser({ email: email, userName: response.userName });
         dispatch(toggleAuth());
         setNavigate(true);
+      } else if (response.message === "User is verified") {
+        setNavigate(true);
       } else if (response.message === "Token Refreshed") {
         savingLoginedUser({ email: email, userName: response.userName });
+        setNavigate(true);
+        dispatch(editSession(true));
       } else if (response.message === "Created" || statusCode == 201) {
         setNavigate(true);
         alert("User Created Successfully");
       }
     }
   }, [response, error]);
+
+  const toggleSession = () => {
+    // console.log("toggle");
+    //dispatch the action to change the session
+    dispatch(editSession(false));
+  };
 
   //function that save the user in Redux when logined Successfully
 
@@ -158,5 +170,20 @@ export const authHandlers = () => {
     }
   };
 
-  return { loginFunc, signUpFunc, googleLoginFunc, refreshTokenFunc, navigate };
+  const verifyUserFunc = async () => {
+    try {
+      await verifyLoginUser(`${BACK_END_URL}/e-commerce/users/verifyUser`);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  return {
+    loginFunc,
+    signUpFunc,
+    googleLoginFunc,
+    refreshTokenFunc,
+    verifyUserFunc,
+    navigate,
+  };
 };

@@ -148,6 +148,27 @@ export function useAuthApi() {
     }
   };
 
+  const verifyLoginUser = async (url) => {
+    let token = await SecureStore.getItemAsync(SCEREAT_KEY);
+
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        url,
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setResponse(res.data);
+      setError(null);
+      setStatusCode(res.status);
+    } catch (error) {
+      ErrorHandler(error);
+    }
+  };
   function ErrorHandler(error) {
     if (error.response) {
       // The request was made and the server responded with a status code
@@ -162,6 +183,9 @@ export function useAuthApi() {
         setError("User not found");
       } else if (error.response.data.status === 406) {
         setError("Wrong Login Method");
+      } else if (error.response.data.status === 419) {
+        setError("Token is expired!!");
+        setStatusCode(419);
       } else if (error.response.data.status === 403) {
         setError("User is not verified");
       } else {
@@ -183,6 +207,7 @@ export function useAuthApi() {
     loginUser,
     googleLogin,
     tokenRefresh,
+    verifyLoginUser,
     error,
     statusCode,
     setError,

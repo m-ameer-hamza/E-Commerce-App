@@ -56,6 +56,31 @@ export function useOrderApi() {
     }
   };
 
+  const verifyLoginUser = async (url) => {
+    let token = await getToken();
+    try {
+      setLoading(true);
+      const res = await axios.post(
+        url,
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setResponse(res.data);
+      setError(null);
+      setStatusCode(res.status);
+    } catch (error) {
+      ErrorHandler(error);
+      setError(error.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Custom error handler
 
   function ErrorHandler(error) {
