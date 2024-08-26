@@ -16,7 +16,6 @@ export const CheckOutHandler = () => {
 
   useEffect(() => {
     if (orderPlaced) {
-      console.log("Order Placed");
       dispatch(clearCart());
       navigation.navigate("OrderSuccess");
     }

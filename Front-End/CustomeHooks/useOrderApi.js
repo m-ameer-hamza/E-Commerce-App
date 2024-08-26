@@ -2,10 +2,11 @@ import { useState } from "react";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import { SCEREAT_KEY } from "../Global";
+
 // Custom hook to handle user api requests
 export function useOrderApi() {
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+
   const [response, setResponse] = useState(false);
   const [statusCode, setStatusCode] = useState("");
 
@@ -22,14 +23,8 @@ export function useOrderApi() {
   }
 
   const createOrder = async (url, products, total, paymentMethod, address) => {
-    console.log("Products from  useOrderApi", products);
-    console.log("Total from  useOrderApi", total);
-    console.log("PaymentMethod from  useOrderApi", paymentMethod);
-    console.log("Address from  useOrderApi", typeof address);
-
     let token = await getToken();
     try {
-      setLoading(true);
       const res = await axios.post(
         url,
         {
@@ -52,32 +47,20 @@ export function useOrderApi() {
       ErrorHandler(error);
       setError(error.message || "Something went wrong");
     } finally {
-      setLoading(false);
     }
   };
 
-  const verifyLoginUser = async (url) => {
-    let token = await getToken();
-    try {
-      setLoading(true);
-      const res = await axios.post(
-        url,
+  const getAllOrders = async (url, email) => {
+    //pass the email as a query string
 
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    try {
+      const res = await axios.get(`${url}?email=${email}`);
 
       setResponse(res.data);
       setError(null);
       setStatusCode(res.status);
     } catch (error) {
       ErrorHandler(error);
-      setError(error.message || "Something went wrong");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -89,6 +72,8 @@ export function useOrderApi() {
 
       if (error.response.data.status === 400) {
         setError("Provide All Details");
+      } else if (error.response.data.status === 404) {
+        setError("User not found");
       } else if (error.response.data.status === 403) {
         setError("Error with JWT token");
       } else if (error.response.data.status === 440) {
@@ -113,13 +98,13 @@ export function useOrderApi() {
 
   return {
     createOrder,
+    getAllOrders,
     error,
     statusCode,
     setError,
 
     response,
-    loading,
-    setLoading,
+
     setResponse,
     setStatusCode,
   };

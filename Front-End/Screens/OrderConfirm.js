@@ -21,13 +21,13 @@ const OrderConfirm = () => {
     deliveryCharge: 0,
   });
 
-  useEffect(() => {
-    console.log("Order DEtails from OrderConfirmation", order);
-  }, [order]);
+  // useEffect(() => {
+  //   console.log("Order DEtails from OrderConfirmation", order);
+  // }, [order]);
 
-  useEffect(() => {
-    console.log("Payment Key from OrderConfirmation", paySecreatKey);
-  }, [paySecreatKey]);
+  // useEffect(() => {
+  //   console.log("Payment Key from OrderConfirmation", paySecreatKey);
+  // }, [paySecreatKey]);
 
   return (
     <PaperProvider>

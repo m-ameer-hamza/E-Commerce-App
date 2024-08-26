@@ -3,11 +3,7 @@ import { Icon, PaperProvider } from "react-native-paper";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { calculateDiscountedTotal, calculateTotal } from "../Redux/cartSlice";
-import { getSession } from "../Redux/sessionSlice";
 
-import { useStripe } from "@stripe/stripe-react-native";
-import { clearCart } from "../Redux/cartSlice";
-import { useNavigation } from "@react-navigation/native";
 import { CheckOutHandler } from "../CompHandlers/CheckOutHandler";
 import { authHandlers } from "../Handlers/authHandler";
 import ActivityLoading from "../Components/ActivityLoading";
@@ -15,15 +11,8 @@ import PasswordConfirm from "../Components/PasswordConfirm";
 import ReduxStore from "../Redux/store";
 
 const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
-  const { initPaymentSheet, presentPaymentSheet } = useStripe();
-  const { verifyUserFunc, navigate } = authHandlers();
+  const { verifyUserFunc } = authHandlers();
   const session = useSelector((state) => state.session.session);
-
-  // useEffect(() => {
-  //   console.log("Payment Key from OrderSummary", paySecreatKey);
-  // }, [paySecreatKey]);
-
-  const navigation = useNavigation();
 
   const dispatch = useDispatch();
   const { CheckOutFunc } = CheckOutHandler();
@@ -32,10 +21,10 @@ const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
   const [disTotal, setDisTotal] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [userSession, setUserSession] = useState(false);
 
   const cart = useSelector((state) => state.cart);
 
+  //Function to check if the user is verified or not
   const checkOut = async () => {
     setLoading(true);
 
@@ -45,9 +34,9 @@ const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
     moveToFinal();
   };
 
+  //Function to move to the final step of the order
   const moveToFinal = async () => {
     const proceed = ReduxStore.getState().session.session;
-    console.log("Proceed from order Summery", proceed);
 
     setLoading(false);
     if (proceed) {
@@ -67,7 +56,6 @@ const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
 
     dispatch(calculateDiscountedTotal());
     dispatch(calculateTotal());
-    console.log(cart.discountedTotal);
 
     setDisTotal(cart.discountedTotal);
     setTotalPrice(cart.total);

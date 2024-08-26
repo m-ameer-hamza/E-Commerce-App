@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { paymentHandler } from "../Handlers/paymentHandler";
 import { calculateDiscountedTotal } from "../Redux/cartSlice";
 import { CURRENCY_TYPE } from "../Global";
-import ActivityLoading from "../Components/ActivityLoading";
 
 const PaymentOptions = ({
   order,
@@ -52,7 +51,7 @@ const PaymentOptions = ({
 
     if (payInstanceKey) {
       setCardAccepted(true);
-      console.log("Payment Key from payment options ", payInstanceKey);
+
       setPaymentKey(payInstanceKey);
     }
 

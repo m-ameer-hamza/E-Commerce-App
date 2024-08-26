@@ -2,6 +2,11 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 import React from "react";
 
 const CurrentOrder = ({ data }) => {
+  function formatDate(mongoDate) {
+    // Split the date string at the 'T' character to separate date and time
+    const datePart = mongoDate.split("T")[0];
+    return datePart;
+  }
   return (
     <Pressable
       style={{
@@ -44,7 +49,7 @@ const CurrentOrder = ({ data }) => {
             Total
           </Text>
           <Text style={{ color: "black", fontSize: 18, fontWeight: "600" }}>
-            {data.Total}
+            {data.total}
           </Text>
         </View>
       </View>
@@ -64,11 +69,11 @@ const CurrentOrder = ({ data }) => {
             fontStyle: "italic",
           }}
         >
-          {data.Status} ......
+          {data.status} ......
         </Text>
       </View>
       <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-        <Text style={{ fontSize: 16 }}>Date: {data.Date}</Text>
+        <Text style={{ fontSize: 16 }}>Date: {formatDate(data.orderDate)}</Text>
         <Text style={{ fontSize: 16 }}>Id: {data._id.substring(0, 8)}</Text>
       </View>
     </Pressable>

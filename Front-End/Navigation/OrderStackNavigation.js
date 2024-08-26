@@ -1,6 +1,7 @@
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Pressable } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
+import { IconButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import ViewOrders from "../Screens/ViewOrders";
 import ViewOrderInfo from "../Screens/ViewOrderInfo";
@@ -14,7 +15,27 @@ export default function ProfileStackNavigation() {
       <Stack.Screen
         name="ViewOrder"
         options={{
-          headerShown: false,
+          headerTitle: () => null,
+
+          header: () => (
+            <Pressable
+              style={{
+                flexDirection: "row",
+                backgroundColor: "#AFEEEE",
+                alignItems: "center",
+                paddingHorizontal: 5,
+                paddingVertical: 5,
+              }}
+            >
+              <IconButton
+                icon="menu"
+                iconColor="#000"
+                size={30}
+                onPress={() => navigation.toggleDrawer()}
+              />
+              <Text style={{ fontSize: 25, fontWeight: "500" }}> Orders </Text>
+            </Pressable>
+          ),
         }}
         component={ViewOrders}
       />

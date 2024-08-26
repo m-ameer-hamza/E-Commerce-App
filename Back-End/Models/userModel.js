@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
     enum: ["Verified", "Not-Verified"],
     default: "Not-Verified",
   },
-  order: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
+  orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
 
   Address: [], //array of addresses
 

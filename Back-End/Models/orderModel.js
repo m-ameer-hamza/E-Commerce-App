@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const User = require("./userModel");
 const appError = require("../error");
 const validator = require("validator");
 
@@ -20,7 +20,7 @@ const CartItemSchema = new Schema({
     default: "",
   },
   extra: {
-    type: String,
+    type: [{}],
     required: true,
   },
   image: {
@@ -89,6 +89,10 @@ const OrderSchema = new Schema({
     type: AddressSchema,
     required: true,
   },
+  status: {
+    type: String,
+    default: "Placed",
+  },
   orderDate: {
     type: Date,
     default: Date.now,
@@ -98,33 +102,6 @@ const OrderSchema = new Schema({
     required: true,
     enum: ["Cash on Delivery", "Credit Card"],
   },
-});
-
-const Order = mongoose.model("Order", OrderSchema);
-
-module.exports = Order;
-
-// Middleware to add order ID to the user's order array before saving the order
-//it uses transection to update the user schema
-OrderSchema.pre("save", async function (next) {
-  const session = await mongoose.startSession();
-  session.startTransaction();
-  try {
-    const User = mongoose.model("User");
-    await User.findByIdAndUpdate(
-      this.user,
-      { $push: { order: this._id } },
-      { session }
-    );
-
-    await session.commitTransaction();
-    session.endSession();
-    next();
-  } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-    next(new Error("Order creation failed: Unable to update user schema."));
-  }
 });
 
 module.exports = mongoose.model("Order", OrderSchema);

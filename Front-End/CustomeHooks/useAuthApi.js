@@ -31,13 +31,12 @@ export function useAuthApi() {
     url
   ) => {
     try {
-      setLoading(true);
       const res = await axios.post(url, {
         name: userName,
         email: email,
         password: password,
         userType: userType,
-        loginWith: loginWith,
+        signUpMethod: loginWith,
       });
 
       setLoading(false);

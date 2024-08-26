@@ -1,83 +1,115 @@
-import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
-import { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  ScrollView,
+  RefreshControl,
+  View,
+} from "react-native";
+import { useState, useEffect, useCallback } from "react";
 import { PaperProvider, IconButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import OrderData from "../Const/OrderData";
+import ActivityLoading from "../Components/ActivityLoading";
+import { useSelector } from "react-redux";
+
 import CurrentOrder from "../Components/CurrentOrder";
 import PastOrders from "../Components/PastOrders";
+import { orderHandler } from "../Handlers/orderHandler";
 
 const Order = () => {
+  const { fetchOrderFunc, UsrOrders } = orderHandler();
   const navigation = useNavigation();
-  const [newOrders, setNewOrders] = useState([]);
-  const [pastOrders, setPastOrders] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+  const [orderData, setOrderData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const user = useSelector((state) => state.user);
+
+  //This useEffect will fetch the orders of the user
   useEffect(() => {
-    if (OrderData.length > 0) {
-      let newOrder = OrderData.filter(
-        (order) => order.Status === "Placed" || order.Status === "Confirmed"
-      );
-      setNewOrders(newOrder);
+    setLoading(true);
+    fetchOrderFunc(user.email);
+  }, []);
 
-      let pastOrder = OrderData.filter(
-        (order) => order.Status === "Delivered" || order.Status === "Canceled"
-      );
-      setPastOrders(pastOrder);
+  //This useEffect will set the orders in the state
+  useEffect(() => {
+    if (UsrOrders) {
+      // console.log("Orders are From View Order Screen", UsrOrders);
+      setOrderData(UsrOrders);
     }
+    setLoading(false);
+  }, [UsrOrders]);
 
-    // console.log(OrderData);
-  }, [OrderData]); //chnage the DEpendency array according to your need
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+
+    try {
+      fetchOrderFunc(user.email); // Await the result of getLikedItems
+    } finally {
+      setRefreshing(false); // Always set refreshing to false at the end
+    }
+  }, []);
 
   return (
     <PaperProvider>
-      <Pressable
-        style={{
-          flexDirection: "row",
-
-          backgroundColor: "#AFEEEE",
-
-          alignItems: "center",
-          paddingHorizontal: 5,
+      <ScrollView
+        contentContainerStyle={{
+          paddingHorizontal: 10,
+          marginTop: 20,
+          paddingBottom: 20,
         }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={["#0066b2"]}
+          />
+        }
       >
-        <IconButton
-          icon="menu"
-          iconColor="#000"
-          size={30}
-          onPress={() => navigation.toggleDrawer()}
-        />
-        <Text style={{ fontSize: 25, fontWeight: "500" }}> Orders </Text>
-      </Pressable>
-      {OrderData?.length > 0 ? ( //check if there is any order or not
-        <ScrollView
-          contentContainerStyle={{ paddingHorizontal: 10, marginTop: 20 }}
-        >
-          {newOrders?.length > 0 && //check if there is any new order or not
-            newOrders.map((order, index) => (
-              <CurrentOrder key={order._id || index} data={order} />
-            ))}
+        {orderData?.length > 0 ? (
+          <>
+            {orderData
+              .filter(
+                (order) =>
+                  order.status === "Placed" || order.status === "Confirmed"
+              )
+              .map((order) => (
+                <CurrentOrder key={order._id} data={order} />
+              ))}
 
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "500",
+                marginVertical: 40,
+                alignSelf: "center",
+              }}
+            >
+              Past Orders
+            </Text>
+
+            {orderData
+              .filter(
+                (order) =>
+                  order.status === "Delivered" || order.status === "Canceled"
+              )
+              .map((order) => (
+                <PastOrders key={order._id} data={order} />
+              ))}
+          </>
+        ) : (
           <Text
             style={{
-              fontSize: 20,
-              fontWeight: "500",
-              marginVertical: 40,
+              marginTop: "70%",
               alignSelf: "center",
+              fontSize: 18,
+              fontWeight: "500",
             }}
           >
-            Past Orders
+            You Haven't Ordered Anything Yet
           </Text>
-
-          {pastOrders?.length > 0 &&
-            pastOrders.map((order, index) => (
-              <PastOrders key={order._id || index} data={order} />
-            ))}
-        </ScrollView>
-      ) : (
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          <Text>You Haven't Order any thing Yet</Text>
-        </View>
-      )}
+        )}
+        {loading && <ActivityLoading />}
+      </ScrollView>
     </PaperProvider>
   );
 };

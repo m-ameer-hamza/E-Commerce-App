@@ -132,7 +132,7 @@ const SignUp = () => {
     }
 
     setLoading(true);
-    console.log("Google Sign-Up initiated");
+
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();

@@ -6,6 +6,12 @@ import React from "react";
 const PastOrders = ({ data }) => {
   const navigation = useNavigation();
 
+  function formatDate(mongoDate) {
+    // Split the date string at the 'T' character to separate date and time
+    const datePart = mongoDate.split("T")[0];
+    return datePart;
+  }
+
   return (
     <Pressable
       onPress={() => navigation.navigate("ViewOrderInfo", { data: data })}
@@ -38,9 +44,9 @@ const PastOrders = ({ data }) => {
             }}
           >
             <Text style={{ fontSize: 17, marginRight: 5, fontWeight: 600 }}>
-              {data.Status}
+              {data.status}
             </Text>
-            {data.Status == "Delivered" ? (
+            {data.status == "Delivered" ? (
               <Icon source="check-circle" color="green" size={20} />
             ) : (
               <Icon source="cancel" color="red" size={20} />
@@ -54,7 +60,9 @@ const PastOrders = ({ data }) => {
           }}
         >
           <View>
-            <Text style={{ fontSize: 16 }}>Date: {data.Date}</Text>
+            <Text style={{ fontSize: 16 }}>
+              Date: {formatDate(data.orderDate)}
+            </Text>
             <Text
               style={{
                 fontSize: 16,
@@ -63,7 +71,7 @@ const PastOrders = ({ data }) => {
                 marginTop: 20,
               }}
             >
-              Total: {data.Total}
+              Total: {data.total}
             </Text>
           </View>
         </View>

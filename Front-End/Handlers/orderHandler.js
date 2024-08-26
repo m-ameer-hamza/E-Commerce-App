@@ -4,29 +4,23 @@ import { useOrderApi } from "../CustomeHooks/useOrderApi";
 import { BACK_END_URL } from "../Global";
 
 export const orderHandler = () => {
-  const [clicked, setIsClicked] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [UsrOrders, setUsrOrders] = useState([]);
 
   const {
     createOrder,
+    getAllOrders,
     error,
-    loading,
+
     response,
     statusCode,
     setError,
-    setLoading,
+
     setResponse,
     setStatusCode,
   } = useOrderApi();
 
-  //useEffect to handle loading.
-  //This useEffect will run when the loading state changes
-  //and when the clicked state changes
-  useEffect(() => {
-    if (loading) {
-    }
-  }, [loading, clicked]);
-
+  //This useEffect will handle the response and error from the api
   useEffect(() => {
     if (error) {
       if (error === "Provide Details") {
@@ -44,22 +38,20 @@ export const orderHandler = () => {
 
       //clear the state after showing the alert
       setError(false);
-      setLoading(false);
+
       setResponse(false);
     }
 
-    if (!loading && !error && response) {
+    if (!error && response) {
       //clear the states
       setError(false);
-      setLoading(false);
-      setResponse(false);
 
-      if (response.message === "OrderCreated" || statusCode == 201) {
-        alert(" Order Created Successfully!!");
+      if (response.message === "Order Created Successfully!!") {
+        alert(" Order Placed");
         setOrderPlaced(true);
-      } else if (response.message === "Products Fetched") {
-        setProducts(response.products);
-        setSaleProducts(response.discountedProducts);
+      } else if (response.message === "Orders Fetched") {
+        // console.log("From Orders Handler Orders are", response.data);
+        setUsrOrders(response.data);
       } else if (response.message === "Product Searched!!") {
         console.log(
           "From Products Handler Searched Products is",
@@ -71,9 +63,7 @@ export const orderHandler = () => {
   }, [response, error]);
 
   const createOrderFunc = async (cart, total, paymentMethod, address) => {
-    setIsClicked(true);
-
-    console.log("Order Details", cart.cartArray, total, paymentMethod, address);
+    //console.log("Order Details", cart.cartArray, total, paymentMethod, address);
     let url = `${BACK_END_URL}/e-commerce/orders`;
     try {
       await createOrder(url, cart.cartArray, total, paymentMethod, address);
@@ -81,9 +71,19 @@ export const orderHandler = () => {
       console.log("Error", error);
     }
   };
+  const fetchOrderFunc = async (email) => {
+    let url = `${BACK_END_URL}/e-commerce/orders`;
+    try {
+      await getAllOrders(url, email);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
 
   return {
     createOrderFunc,
+    fetchOrderFunc,
+    UsrOrders,
     orderPlaced,
   };
 };

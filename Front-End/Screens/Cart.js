@@ -20,11 +20,11 @@ const Cart = () => {
     //dispatching the action to calculate the total price of the cart
 
     dispatch(calculateDiscountedTotal());
-    console.log(cart.discountedTotal);
+    // console.log(cart.discountedTotal);
 
     setDisTotal(cart.discountedTotal);
 
-    console.log(cart.cartArray);
+    // console.log(cart.cartArray);
   }, [cart.cartArray, cart.discountedTotal, cart.total]);
 
   const navigation = useNavigation();

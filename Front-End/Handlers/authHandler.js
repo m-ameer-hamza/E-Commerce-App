@@ -127,7 +127,6 @@ export const authHandlers = () => {
   };
 
   const signUpFunc = async (username, email, password, userType, loginWith) => {
-    setIsClicked(true);
     setEmail(email);
     try {
       await createUser(
