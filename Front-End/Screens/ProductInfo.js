@@ -24,7 +24,7 @@ const ProductInfo = ({ route }) => {
   const height = (width * 75) / 100;
 
   const [expandedId, setExpandedId] = useState(null);
-  const [selectedValues, setSelectedValues] = useState([]);
+  const [selectedValues, setSelectedValues] = useState({});
   const [iconName, setIconName] = useState("cards-heart-outline");
   const [iconColor, setIconColor] = useState("#777");
   const [addedToCart, setAddedToCart] = useState(false);
@@ -78,8 +78,12 @@ const ProductInfo = ({ route }) => {
   };
 
   //this function will handle the value change of the radio button
+
   const handleValueChange = (key, value) => {
-    setSelectedValues((prev) => [...prev, { [key]: value }]);
+    setSelectedValues((prevSelectedValues) => ({
+      ...prevSelectedValues,
+      [key]: value,
+    }));
   };
 
   //this function will apply discount on the price.
@@ -88,9 +92,26 @@ const ProductInfo = ({ route }) => {
     return price - (price * parseInt(discount)) / 100;
   };
 
+  const objToArray = (obj) => {
+    // Initialize an empty array
+    const resultArray = [];
+
+    // Iterate over each key-value pair in the object
+    for (const [key, value] of Object.entries(obj)) {
+      // Push a new object with the current key-value pair into the result array
+      resultArray.push({ [key]: value });
+    }
+
+    // Return the resulting array
+    console.log(resultArray);
+    return resultArray;
+  };
+
   //this function will handle the add to cart button
   const addToCartHandler = (item) => {
-    if (selectedValues.length !== item.extra.length) {
+    // console.log(Object.keys(selectedValues).length);
+    // console.log(item.extra.length);
+    if (Object.keys(selectedValues).length !== item.extra.length) {
       alert("Please select all the options");
       return;
     }
@@ -102,7 +123,7 @@ const ProductInfo = ({ route }) => {
       price: item.price,
       image: item.images[0],
       discount: item.discount,
-      extra: selectedValues,
+      extra: objToArray(selectedValues),
     };
 
     dispatch(addToCart(product));
@@ -296,6 +317,7 @@ const ProductInfo = ({ route }) => {
                         <RadioButton.Item
                           label={values[0]}
                           value={values[0]}
+                          color="#0066b2"
                           status={
                             selectedValues[key] === values[0]
                               ? "checked"
@@ -322,6 +344,7 @@ const ProductInfo = ({ route }) => {
                               label={value}
                               value={value}
                               key={subIndex}
+                              color="#0066b2"
                             />
                           ))}
                         </View>

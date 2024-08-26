@@ -24,7 +24,7 @@ const Cart = () => {
 
     setDisTotal(cart.discountedTotal);
 
-    // console.log(cart.cartArray);
+    console.log(cart.cartArray.extra);
   }, [cart.cartArray, cart.discountedTotal, cart.total]);
 
   const navigation = useNavigation();
