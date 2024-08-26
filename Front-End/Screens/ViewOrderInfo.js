@@ -35,15 +35,20 @@ const ViewOrderInfo = ({ route }) => {
       <View
         style={{
           padding: 10,
-          flexDirection: "row",
+          flexDirection: "column",
           marginLeft: 20,
           marginTop: 20,
         }}
       >
-        <Text style={{ fontSize: 18, fontWeight: "400" }}>Subtotal: </Text>
-        <Text style={{ fontSize: 20, fontWeight: "bold" }}>{disTotal} </Text>
+        <Text style={{ fontSize: 20, fontWeight: "500" }}>
+          Subtotal: {data.total}
+        </Text>
+        <Text style={{ fontSize: 14, marginTop: 2 }}>
+          {" "}
+          (including delivery charges)
+        </Text>
       </View>
-      <Pressable
+      <View
         style={{
           backgroundColor: "#ffc72c",
           padding: 10,
@@ -55,25 +60,33 @@ const ViewOrderInfo = ({ route }) => {
         }}
       >
         {/* Checkout Button */}
-        {cartLength > 0 ? (
-          <Pressable
-            onPress={() => {
-              navigation.navigate("OrderConfirm");
-            }}
-          >
-            <Text style={{ fontSize: 17, fontWeight: "400" }}>
-              Proceed to Buy ({cartLength}) items
-            </Text>
-          </Pressable>
-        ) : (
-          <Text style={{ fontSize: 17, fontWeight: "500" }}>Cart is Empty</Text>
-        )}
-      </Pressable>
+
+        <Text style={{ fontSize: 17, fontWeight: "500" }}>
+          Your order is {data.status}
+        </Text>
+      </View>
       <View style={{ marginHorizontal: 10 }}>
-        {cart.cartArray?.map((item, index) => (
+        {data.products.map((item, index) => (
           <CartItem key={index} item={item} />
         ))}
       </View>
+
+      {/* <Pressable
+        style={{
+          backgroundColor: "#ffc72c",
+          padding: 10,
+          borderRadius: 5,
+          justifyContent: "center",
+          alignItems: "center",
+          marginHorizontal: 10,
+          marginTop: 10,
+          width: "70%",
+          alignSelf: "center",
+          marginBottom: 20,
+        }}
+      >
+        <Text style={{ fontSize: 18, fontWeight: "500" }}>Order Again</Text>
+      </Pressable> */}
     </ScrollView>
   );
 };

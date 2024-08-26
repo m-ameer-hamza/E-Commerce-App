@@ -7,13 +7,21 @@ import {
   Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { TouchableRipple, IconButton } from "react-native-paper";
+import { TouchableRipple, IconButton, Icon } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import Drawer from "../assets/drawer.png";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { logoutAppSettings } from "../Redux/appSettingsSlice";
+import { logoutUser } from "../Redux/userSlice";
+import { logout } from "../Redux/authSlice";
+import { clearCart } from "../Redux/cartSlice";
+import { logoutSession } from "../Redux/sessionSlice";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 export default CustomDrawerContent = (props) => {
   const navigation = useNavigation();
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   // Define route configurations with text and icons
   const routeConfigs = {
@@ -40,6 +48,37 @@ export default CustomDrawerContent = (props) => {
     },
     // Add more routes here
     // Orders: { label: "My Orders", icon: "receipt-outline" },
+  };
+
+  //clear JWT token
+  const clearJWT = async () => {
+    try {
+      await AsyncStorage.removeItem("jwt");
+      return true;
+    } catch (error) {
+      console.log("Error", error);
+      return false;
+    }
+  };
+
+  const googleSignOut = async () => {
+    try {
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+      return true;
+    } catch (error) {
+      console.log("Error", error);
+      return false;
+    }
+  };
+
+  const clearReduxData = async () => {
+    dispatch(logoutAppSettings());
+    dispatch(logoutUser());
+
+    dispatch(clearCart());
+    dispatch(logoutSession());
+    dispatch(logout());
   };
 
   return (
@@ -115,17 +154,15 @@ export default CustomDrawerContent = (props) => {
         style={InlineStyles.logoutButton}
         onPress={async () => {
           // Handle logout logic here
-          if (await clearJWT()) {
-            clearReduxUserData();
-            setIsLogOut(false);
-            navigation.navigate("Login");
+          if ((await clearJWT()) && (await googleSignOut())) {
+            clearReduxData();
           } else {
-            setIsLogOut(false);
             alert("Sorry!!!Cannot Log you Out.");
           }
         }}
       >
         <Text style={InlineStyles.logoutText}>Logout</Text>
+        <IconButton icon="logout" size={27} iconColor="#d9534f" />
       </TouchableOpacity>
     </View>
   );
@@ -145,13 +182,15 @@ const InlineStyles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   logoutButton: {
-    padding: 20,
+    padding: 10,
     borderTopWidth: 1,
     borderTopColor: "#ddd",
     alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
   },
   logoutText: {
-    fontSize: 18,
+    fontSize: 20,
     color: "#d9534f",
   },
 });

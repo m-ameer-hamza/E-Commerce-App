@@ -1,7 +1,9 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 
 const CurrentOrder = ({ data }) => {
+  const navigation = useNavigation();
   function formatDate(mongoDate) {
     // Split the date string at the 'T' character to separate date and time
     const datePart = mongoDate.split("T")[0];
@@ -9,6 +11,9 @@ const CurrentOrder = ({ data }) => {
   }
   return (
     <Pressable
+      onPress={() => {
+        navigation.navigate("ViewOrderInfo", { data: data });
+      }}
       style={{
         flexDirection: "column",
         borderWidth: 1,
