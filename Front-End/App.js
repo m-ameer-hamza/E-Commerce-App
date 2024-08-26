@@ -1,5 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Platform, View, ScrollView } from "react-native";
+import { StyleSheet, Platform, StatusBar } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -13,7 +12,7 @@ import { STRIPE_PUBLISHABLE_KEY } from "./Global";
 export default function App() {
   return (
     <SafeAreaView style={styles.container}>
-      {/* <StatusBar style="auto" /> */}
+      <StatusBar barStyle="dark-content" />
 
       <Provider store={store}>
         <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY}>

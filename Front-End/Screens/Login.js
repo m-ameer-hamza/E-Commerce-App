@@ -102,7 +102,7 @@ const Login = () => {
             <Text
               style={{
                 fontSize: 17,
-                fontWeight: "bold",
+                fontWeight: "600",
                 marginTop: 2,
                 color: "#041E42",
                 letterSpacing: 1.2,
