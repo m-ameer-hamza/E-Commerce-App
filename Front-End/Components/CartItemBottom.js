@@ -62,6 +62,13 @@ const CartItemBottom = ({ item }) => {
       </View>
 
       <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
+        <Pressable onPress={() => decreaseProHandler(item)}>
+          {item && item.quantity > 1 ? (
+            <Icon source="minus" size={30} color="#333" />
+          ) : (
+            <Icon source="trash-can" size={30} color="#333" />
+          )}
+        </Pressable>
         <View
           style={{
             backgroundColor: "#D0D0D0",
@@ -78,6 +85,13 @@ const CartItemBottom = ({ item }) => {
             {itemPriceCalculation(item?.price, item?.quantity, item?.discount)}
           </Text>
         </View>
+        <Pressable
+          onPress={() => {
+            addProductHandler(item);
+          }}
+        >
+          <Icon source="plus" size={30} color="#333" />
+        </Pressable>
       </View>
     </View>
   );
