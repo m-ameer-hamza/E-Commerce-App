@@ -60,7 +60,7 @@ const ProductInfo = ({ route }) => {
         alert("Product NOT Saved in Like");
       }
     } else {
-      const isRemove = await unlikeItemAsync(likedItem.id);
+      const isRemove = await unlikeItemAsync(likedItem._id);
 
       if (isRemove) {
         setIconName("cards-heart-outline");

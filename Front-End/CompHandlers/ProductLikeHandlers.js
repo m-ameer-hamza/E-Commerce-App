@@ -29,7 +29,7 @@ export const ProductLikeHandlers = () => {
       let likedItems = jsonValue != null ? JSON.parse(jsonValue) : [];
 
       // Remove the item by filtering out the one with the specified itemId
-      likedItems = likedItems.filter((item) => item.id !== itemId);
+      likedItems = likedItems.filter((item) => item._id !== itemId);
 
       // Save the updated list back to AsyncStorage
       await AsyncStorage.setItem("likedItems", JSON.stringify(likedItems));
@@ -61,7 +61,7 @@ export const ProductLikeHandlers = () => {
       const items = jsonValue != null ? JSON.parse(jsonValue) : [];
 
       // Check if the item with the specified itemId exists in the liked items list
-      const isLiked = items.some((item) => item.id === itemId);
+      const isLiked = items.some((item) => item._id === itemId);
 
       return isLiked;
     } catch (e) {

@@ -13,6 +13,7 @@ import ActivityLoader from "../Components/ActivityLoader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { ProductLikeHandlers } from "../CompHandlers/ProductLikeHandlers";
+import { BACK_END_URL } from "../Global";
 
 const LikedItems = () => {
   const [likedItems, setLikedItems] = useState([]);
@@ -39,12 +40,15 @@ const LikedItems = () => {
     } finally {
       setRefreshing(false); // Always set refreshing to false at the end
     }
+
+    console.log(likedItems);
   }, []);
 
   // This function will remove the liked item from the liked items list
   const unlikeItem = async (itemId) => {
     setLoading(true);
     await unlikeItemAsync(itemId);
+    setLikedItems(await getLikedItems());
     setLoading(false);
   };
 
@@ -96,7 +100,7 @@ const LikedItems = () => {
                 }}
               >
                 <Image
-                  source={item.images[0]}
+                  source={{ uri: `${BACK_END_URL}/${item.images[0]}` }}
                   resizeMode="contain"
                   style={{
                     width: 140,
@@ -163,7 +167,7 @@ const LikedItems = () => {
 
                 <IconButton
                   onPress={() => {
-                    unlikeItem(item.id);
+                    unlikeItem(item._id);
                   }}
                   icon="heart"
                   iconColor="#ffac1c"
