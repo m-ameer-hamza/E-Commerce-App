@@ -97,7 +97,10 @@ const SignUp = () => {
     console.log("Navigate", navigate);
     if (navigate) {
       console.log("Navigate to Email Verification");
-      navigation.navigate("EmailVerification", { email: email });
+      navigation.navigate("EmailVerification", {
+        email: email,
+        reSendOtp: "not-send",
+      });
     }
   }, [navigate]);
 

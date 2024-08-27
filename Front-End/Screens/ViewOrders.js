@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import CurrentOrder from "../Components/CurrentOrder";
 import PastOrders from "../Components/PastOrders";
 import { orderHandler } from "../Handlers/orderHandler";
+import ReduxStore from "../Redux/store";
 
 const Order = () => {
   const { fetchOrderFunc, UsrOrders } = orderHandler();
@@ -27,7 +28,7 @@ const Order = () => {
   //This useEffect will fetch the orders of the user
   useEffect(() => {
     setLoading(true);
-    fetchOrderFunc(user.email);
+    fetchOrderFunc(ReduxStore.getState().user.email);
   }, []);
 
   //This useEffect will set the orders in the state
@@ -43,7 +44,7 @@ const Order = () => {
     setRefreshing(true);
 
     try {
-      fetchOrderFunc(user.email); // Await the result of getLikedItems
+      fetchOrderFunc(ReduxStore.getState().user.email); // Await the result of getLikedItems
     } finally {
       setRefreshing(false); // Always set refreshing to false at the end
     }
@@ -90,7 +91,7 @@ const Order = () => {
             {orderData
               .filter(
                 (order) =>
-                  order.status === "Delivered" || order.status === "Canceled"
+                  order.status === "Delivered" || order.status === "Cancel"
               )
               .map((order) => (
                 <PastOrders key={order._id} data={order} />

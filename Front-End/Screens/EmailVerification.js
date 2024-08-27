@@ -10,14 +10,24 @@ import { authHandlers } from "../Handlers/authHandler";
 
 export default function EmailVerification({ route }) {
   //getting email from previous screen
-  const { email } = route.params;
-  const { verifyOTPFunc } = authHandlers();
+  const { email, reSendOtp } = route.params;
+  const { verifyOTPFunc, regenOTPFunc } = authHandlers();
 
   const [usrEmail, setUsrEmail] = useState("");
 
   useEffect(() => {
     setUsrEmail(email);
   }, [email]);
+
+  useEffect(() => {
+    if (reSendOtp === "send") {
+      //send otp to user
+      //here is the code to send otp
+      // sendOTPFunc(usrEmail);
+      regenOTPFunc(usrEmail);
+      alert("OTP has been sent to your email");
+    }
+  }, [usrEmail]);
 
   //state for otp input
   const [valideOTP, setValideOTP] = useState(false);

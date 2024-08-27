@@ -69,6 +69,7 @@ const CartItemBottom = ({ item }) => {
             <Icon source="trash-can" size={30} color="#333" />
           )}
         </Pressable>
+
         <View
           style={{
             backgroundColor: "#D0D0D0",
@@ -85,6 +86,7 @@ const CartItemBottom = ({ item }) => {
             {itemPriceCalculation(item?.price, item?.quantity, item?.discount)}
           </Text>
         </View>
+
         <Pressable
           onPress={() => {
             addProductHandler(item);

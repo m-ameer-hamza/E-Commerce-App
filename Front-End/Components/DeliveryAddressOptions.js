@@ -19,12 +19,14 @@ import { useSelector } from "react-redux";
 import { addressHandlers } from "../Handlers/addressHandler";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
+import ReduxStore from "../Redux/store";
 
 const AddressDeliveryList = ({ currStepHandler, setOrder, order }) => {
   const [checked, setChecked] = useState(null);
   const user = useSelector((state) => state.user);
   const [loader, setLoader] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [email, setEmail] = useState("");
   const navigation = useNavigation();
 
   const {
@@ -35,16 +37,16 @@ const AddressDeliveryList = ({ currStepHandler, setOrder, order }) => {
 
   useEffect(() => {
     setLoader(true);
-    getAllAddressFunc(user.email).finally(() => {
+    getAllAddressFunc(ReduxStore.getState().user.email).finally(() => {
       setLoader(false);
     });
-  }, [user.email]);
+  }, [ReduxStore.getState().user.email]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
 
     try {
-      getAllAddressFunc(user.email); // Await the result of getLikedItems
+      getAllAddressFunc(ReduxStore.getState().user.email); // Await the result of getLikedItems
     } finally {
       setRefreshing(false); // Always set refreshing to false at the end
     }

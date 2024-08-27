@@ -194,6 +194,23 @@ export function useAuthApi() {
     }
   };
 
+  const regenOTP = async (email, url) => {
+    try {
+      setLoading(true);
+      const res = await axios.get(url, {
+        params: {
+          email: email,
+        },
+      });
+
+      setResponse(res.data);
+      setError(null);
+      setStatusCode(res.status);
+    } catch (error) {
+      ErrorHandler(error);
+    }
+  };
+
   function ErrorHandler(error) {
     if (error.response) {
       // The request was made and the server responded with a status code
@@ -235,6 +252,7 @@ export function useAuthApi() {
     googleLogin,
     tokenRefresh,
     verifyLoginUser,
+    regenOTP,
     verifyOTP,
     error,
     statusCode,

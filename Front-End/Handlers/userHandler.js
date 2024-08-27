@@ -6,6 +6,7 @@ import { editSession } from "../Redux/sessionSlice";
 import { editUserName } from "../Redux/userSlice";
 import { useSelector } from "react-redux";
 import { BACK_END_URL } from "../Global";
+
 export function userHandler() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -64,6 +65,7 @@ export function userHandler() {
         alert("User Name Modified");
       } else if (response.message === "Password Updated Successfully") {
         alert("Your Password Modified!!");
+        toggleSession();
       }
     }
   }, [response, error]);

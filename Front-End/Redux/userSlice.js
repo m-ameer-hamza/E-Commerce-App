@@ -1,6 +1,7 @@
 const initialStateLoginUser = {
   name: "",
   email: "",
+  signUpMethod: "",
   userAddresses: [],
 };
 
@@ -12,6 +13,7 @@ export default function userSlice(state = initialStateLoginUser, action) {
         ...state,
         email: action.payload.email,
         name: action.payload.name,
+        signUpMethod: action.payload.signUpMethod,
       };
 
     case "user/logout":
@@ -36,12 +38,13 @@ export default function userSlice(state = initialStateLoginUser, action) {
 }
 
 // ACTION CREATOR
-export function saveUser(email, name) {
+export function saveUser(email, name, signUpMethod) {
   return {
     type: "user/saveUser",
     payload: {
       email: email,
       name: name,
+      signUpMethod: signUpMethod,
     },
   };
 }

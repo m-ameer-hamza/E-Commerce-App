@@ -24,6 +24,7 @@ export const authHandlers = () => {
     tokenRefresh,
     verifyLoginUser,
     verifyOTP,
+    regenOTP,
     error,
 
     response,
@@ -45,6 +46,8 @@ export const authHandlers = () => {
       if (error === "Email already exists") {
         alert("User already exists");
         navigation.navigate("Login");
+      } else if (error === "User not found") {
+        alert("User Not found");
       } else if (error === "Token is expired!!") {
         //alert("Token is expired!!");
         toggleSession();
@@ -55,8 +58,10 @@ export const authHandlers = () => {
       } else if (error == "Bad Request") {
         alert("Bad Request");
       } else if (error === "User is not verified") {
-        alert("User is not verified");
-        navigation.navigate("EmailVerification", { email: email });
+        navigation.navigate("EmailVerification", {
+          email: email,
+          reSendOtp: "send",
+        });
       } else if (error === "Email or password not match") {
         alert("Creditentials not match");
       } else if (error === "No response from server") {
@@ -83,7 +88,11 @@ export const authHandlers = () => {
       console.log("Response Message", response.message);
 
       if (response.message === "Successfully Logined In") {
-        savingLoginedUser({ email: email, userName: response.userName });
+        savingLoginedUser({
+          email: email,
+          userName: response.userName,
+          signUpMethod: response.signUpMethod,
+        });
         dispatch(toggleAuth());
         setNavigate(true);
       } else if (response.message === "OTP verified") {
@@ -113,7 +122,7 @@ export const authHandlers = () => {
 
   const savingLoginedUser = (data) => {
     // console.log(data);
-    dispatch(saveUser(data.email, data.userName));
+    dispatch(saveUser(data.email, data.userName, data.signUpMethod));
     dispatch(editSession(true));
   };
 
@@ -192,6 +201,14 @@ export const authHandlers = () => {
     }
   };
 
+  const regenOTPFunc = async (email) => {
+    try {
+      await regenOTP(email, `${BACK_END_URL}/e-commerce/users/regenerateOTP`);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
   return {
     loginFunc,
     signUpFunc,
@@ -199,6 +216,7 @@ export const authHandlers = () => {
     refreshTokenFunc,
     verifyUserFunc,
     verifyOTPFunc,
+    regenOTPFunc,
     navigate,
   };
 };

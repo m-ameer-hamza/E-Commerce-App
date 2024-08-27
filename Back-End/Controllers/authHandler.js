@@ -65,6 +65,7 @@ exports.login = async (req, res, next) => {
     status: "Loged In",
     message: "Successfully Logined In",
     userName: loginUser.name,
+    signUpMethod: loginUser.signUpMethod,
     token,
   });
 };
@@ -96,6 +97,7 @@ exports.googleLogin = async (req, res, next) => {
     status: "Loged In",
     message: "Successfully Logined In",
     userName: loginUser.name,
+    signUpMethod: loginUser.signUpMethod,
     token,
   });
 };

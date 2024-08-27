@@ -153,12 +153,18 @@ export default CustomDrawerContent = (props) => {
       <TouchableOpacity
         style={InlineStyles.logoutButton}
         onPress={async () => {
-          // Handle logout logic here
-          if ((await clearJWT()) && (await googleSignOut())) {
-            clearReduxData();
-          } else {
-            alert("Sorry!!!Cannot Log you Out.");
+          if (user.signUpMethod === "google") {
+            try {
+              await googleSignOut();
+            } catch (e) {
+              console.log(e.message);
+            }
           }
+          if (await clearJWT()) {
+            clearReduxData();
+          }
+
+          // Handle logout logic here
         }}
       >
         <Text style={InlineStyles.logoutText}>Logout</Text>

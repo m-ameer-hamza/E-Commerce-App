@@ -193,6 +193,43 @@ exports.searchUser = async (req, res, next) => {
   res.status(200).json({ message: "Found", userData: findUser });
 };
 
+exports.regenOTP = async (req, res, next) => {
+  //1)- Check if email is present in the query
+  const { email } = req.query;
+  if (!email) {
+    return next(new appError("Provide the Email", 400));
+  }
+  //2)- Search for user in the database
+
+  let usr;
+  try {
+    usr = await Users.findOne({ email: email });
+  } catch (err) {
+    return next(new appError("Could Not search for user", 500));
+  }
+
+  if (!usr) {
+    return next(new appError("User Not Found", 404));
+  }
+
+  //logined Users are save in req.user
+  let optCode;
+  try {
+    optCode = await sendEmailToUser(email);
+  } catch (err) {
+    return next(new appError("Email Cannot be send", 407));
+  }
+
+  if (!optCode) {
+    return next(new appError("OTP Cannot be send", 407));
+  }
+
+  usr.optCode = optCode;
+  usr.optCodeTime = Date.now();
+  usr.save({ validateBeforeSave: false }); //save without validation
+  res.status(200).json({ message: "OTP send to your registered email" });
+};
+
 //delete a user
 exports.deleteUser = async (req, res) => {
   try {

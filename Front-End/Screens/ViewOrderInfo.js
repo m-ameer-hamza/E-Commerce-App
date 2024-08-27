@@ -67,7 +67,7 @@ const ViewOrderInfo = ({ route }) => {
       </View>
       <View style={{ marginHorizontal: 10 }}>
         {data.products.map((item, index) => (
-          <CartItem key={index} item={item} />
+          <CartItem key={index} item={item} disable={true} />
         ))}
       </View>
 

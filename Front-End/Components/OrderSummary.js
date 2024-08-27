@@ -326,6 +326,7 @@ const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
           marginTop: 30,
           width: "80%",
           alignSelf: "center",
+          marginBottom: 27,
         }}
       >
         <Text style={{ fontSize: 18, fontWeight: "500", letterSpacing: 0.4 }}>

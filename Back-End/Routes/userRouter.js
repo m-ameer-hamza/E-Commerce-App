@@ -17,6 +17,7 @@ router
   .post("/googleLogin", authHandler.googleLogin)
   .get("/refreshToken", authHandler.tokenRefresh)
   .get("/verifyUser", authHandler.verifyUser)
+  .get("/regenerateOTP", userHandlers.regenOTP)
   .patch(
     "/updateUserName",
     authHandler.verifyUserLogedIn,
