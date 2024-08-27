@@ -23,12 +23,13 @@ export const authHandlers = () => {
     googleLogin,
     tokenRefresh,
     verifyLoginUser,
+    verifyOTP,
     error,
-    loading,
+
     response,
     statusCode,
     setError,
-    setLoading,
+
     setResponse,
     setStatusCode,
   } = useAuthApi();
@@ -36,10 +37,6 @@ export const authHandlers = () => {
   //useEffect to handle loading.
   //This useEffect will run when the loading state changes
   //and when the clicked state changes
-  useEffect(() => {
-    if (loading) {
-    }
-  }, [loading, clicked]);
 
   useEffect(() => {
     if (error) {
@@ -53,6 +50,8 @@ export const authHandlers = () => {
         toggleSession();
       } else if (error === "Wrong Login Method") {
         alert("Wrong Login Method");
+      } else if (error === "OTP does not match") {
+        alert("OTP does not match");
       } else if (error == "Bad Request") {
         alert("Bad Request");
       } else if (error === "User is not verified") {
@@ -69,21 +68,28 @@ export const authHandlers = () => {
 
       //clear the state after showing the alert
       setError(false);
-      setLoading(false);
+
       setResponse(false);
     }
 
-    if (!loading && !error && response) {
+    console.log("Response from auth Handler", response);
+    if (!error && response) {
       //clear the states
       setError(false);
-      setLoading(false);
+
       setResponse(false);
       setStatusCode(null);
+
+      console.log("Response Message", response.message);
 
       if (response.message === "Successfully Logined In") {
         savingLoginedUser({ email: email, userName: response.userName });
         dispatch(toggleAuth());
         setNavigate(true);
+      } else if (response.message === "OTP verified") {
+        //Navigate to login page
+        alert("Email Verified Successfully");
+        navigation.navigate("Login");
       } else if (response.message === "User is verified") {
         setNavigate(true);
       } else if (response.message === "Token Refreshed") {
@@ -177,12 +183,22 @@ export const authHandlers = () => {
     }
   };
 
+  const verifyOTPFunc = async (email, otp) => {
+    console.log("From verifyOTPFunc", email, otp);
+    try {
+      await verifyOTP(email, otp, `${BACK_END_URL}/e-commerce/users/verifyOTP`);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
   return {
     loginFunc,
     signUpFunc,
     googleLoginFunc,
     refreshTokenFunc,
     verifyUserFunc,
+    verifyOTPFunc,
     navigate,
   };
 };

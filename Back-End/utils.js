@@ -80,3 +80,49 @@
 //     console.log("Email sent: " + info.response);
 //   });
 // }
+const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
+
+const CLIENT_ID =
+  "628112462978-8g5j65q54vh4l6qek4jlo6k7b8trnm2e.apps.googleusercontent.com";
+const CLIENT_SECRET = "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";
+const REDIRECT_URI = "https://developers.google.com/oauthplayground";
+const REFRESH_TOKEN =
+  "1//04cqY2D-2vZS8CgYIARAAGAQSNwF-L9IrX4y_tX92nTjQMMNn9qugQEGBIEMpV-YWv8tAZtISqZt_6dyUcXSK1k1L5SJUglcIupY";
+const oAuth2Client = new google.auth.OAuth2(
+  CLIENT_ID,
+  CLIENT_SECRET,
+  REDIRECT_URI
+);
+
+oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+
+exports.sendEmail = async (to, subject, text) => {
+  try {
+    const accessToken = await oAuth2Client.getAccessToken();
+    const transport = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        type: "OAuth2",
+        user: "az889480@gmail.com",
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        refreshToken: REFRESH_TOKEN,
+        accessToken: accessToken,
+      },
+    });
+    const mailOptions = {
+      from: "az889480@gmail.com",
+      to: to,
+      subject: subject,
+      text: text,
+    };
+
+    const result = await transport.sendMail(mailOptions);
+
+    return result;
+  } catch (error) {
+    console.log(error.message);
+    return error;
+  }
+};

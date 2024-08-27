@@ -1,5 +1,6 @@
 const Users = require("../Models/userModel");
 const appError = require("../error");
+const { sendEmail } = require("../utils");
 
 //method for filering the body.
 //This method is called by updateMe Hnadler
@@ -34,6 +35,24 @@ function processUserObject(user) {
   }
 }
 
+//This method will send the email to the user
+async function sendEmailToUser(email) {
+  console.log("Sending Email to User is called");
+  //generate a random number 6 digit
+  const random = Math.floor(100000 + Math.random() * 900000);
+  const subject = "Email Verification";
+  const text = `Your verification code is ${random}`;
+
+  try {
+    await sendEmail(email, subject, text);
+
+    return random;
+  } catch (err) {
+    console.log(err.message);
+    return null;
+  }
+}
+
 //creating  a user
 exports.createUser = async (req, res, next) => {
   if (!req.body) {
@@ -44,6 +63,27 @@ exports.createUser = async (req, res, next) => {
   //if yes, then set the verified field to true
   //This is done because google users are already verified
   let modifiedUser = processUserObject(req.body);
+
+  let optCode;
+  //If the user is not logined with google, then send the email to the user
+  if (req.body.loginWith != "google") {
+    optCode = await sendEmailToUser(req.body.email);
+  }
+
+  //If the email is not send, then return the error
+  if (!optCode && req.body.loginWith != "google") {
+    return next(new appError("Could not send Email", 500));
+  }
+
+  //Add the optCode and time of generation with 5 mints added to current time to the user
+
+  if (req.body.loginWith != "google") {
+    modifiedUser = {
+      ...modifiedUser,
+      optCode: optCode,
+      optCodeTime: Date.now() + 5 * 60,
+    };
+  }
 
   try {
     const user = await Users.create(modifiedUser);

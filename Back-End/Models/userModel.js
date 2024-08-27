@@ -39,6 +39,12 @@ const userSchema = new mongoose.Schema({
     default: "Not-Verified",
   },
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
+  optCode: {
+    type: Number,
+  },
+  optCodeTime: {
+    type: Date,
+  },
 
   Address: [], //array of addresses
 

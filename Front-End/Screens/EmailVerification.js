@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { OtpInput } from "react-native-otp-entry";
 import { TouchableRipple } from "react-native-paper";
@@ -6,10 +6,18 @@ import validator from "validator";
 import { useNavigation } from "@react-navigation/native";
 
 import LogoComponent from "../Components/Logo";
+import { authHandlers } from "../Handlers/authHandler";
 
 export default function EmailVerification({ route }) {
   //getting email from previous screen
   const { email } = route.params;
+  const { verifyOTPFunc } = authHandlers();
+
+  const [usrEmail, setUsrEmail] = useState("");
+
+  useEffect(() => {
+    setUsrEmail(email);
+  }, [email]);
 
   //state for otp input
   const [valideOTP, setValideOTP] = useState(false);
@@ -34,8 +42,7 @@ export default function EmailVerification({ route }) {
     //send otp to server for verification.
     //here is the code to verify
 
-    //after verification navigate to next screen
-    navigation.navigate("Login");
+    verifyOTPFunc(usrEmail, otp);
   };
 
   return (
@@ -63,7 +70,7 @@ export default function EmailVerification({ route }) {
             letterSpacing: 1,
           }}
         >
-          az889480@gmail.com
+          {usrEmail}
         </Text>
       </View>
       <View style={{ marginTop: 70 }}>

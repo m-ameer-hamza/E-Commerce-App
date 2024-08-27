@@ -309,6 +309,68 @@ exports.verifyUser = async (req, res, next) => {
   res.status(200).json({ message: "User is verified" });
 };
 
+//otp verification
+//This method will verify the user using the otp
+exports.verifyUserOTP = async (req, res, next) => {
+  //1)- Check email is present in query
+  const { email } = req.query;
+
+  if (!email) {
+    return next(new appError("Provide the Email", 400));
+  }
+
+  //2)- Check id opt is present in body
+  if (!req.body.otp) {
+    return next(new appError("Provide the OTP", 400));
+  }
+
+  //3)- Find the user with email
+  let user;
+
+  try {
+    user = await Users.findOne({ email: email });
+  } catch (err) {
+    return next(new appError("Could not find the user", 500));
+  }
+
+  //4)- Check if the user is found
+  if (!user) {
+    return next(new appError("User Not Found", 404));
+  }
+
+  //5)- Check if the opt is correct
+
+  //convert req.body.opt to number
+  const userOtp = parseInt(req.body.otp);
+
+  if (user.optCode !== userOtp) {
+    return next(new appError("Wrong OTP", 403));
+  }
+
+  //6)- Check if the opt is expired
+
+  //convert the time to 5 hours ahead  (UTC)
+  const currentTime = Date.now();
+
+  const otpTime =
+    user.optCodeTime.getTime() + 5 * 60 * 60 * 1000 + 5 * 60 * 1000;
+  console.log("OTP time", otpTime);
+  console.log("Current Time", currentTime);
+
+  if (otpTime < currentTime) {
+    return next(new appError("OTP is Expired", 400));
+  }
+
+  //7)- Update the user to verified
+
+  user.verified = "Verified";
+  user.optCode = null;
+  user.optCodeTime = null;
+  await user.save({ validateBeforeSave: false });
+
+  res.status(200).json({ message: "OTP verified", data: user });
+};
+
 //verify that the logined User is admin
 // exports.restrictTo = (...role) => {
 //   return (req, res, next) => {

@@ -22,6 +22,7 @@ router
     authHandler.verifyUserLogedIn,
     userHandlers.updateMe
   )
+  .patch("/verifyOTP", authHandler.verifyUserOTP)
   .post("/forgetPassword", authHandler.forgetPassword)
   .patch("/resetPassword", authHandler.resetPassword)
   .patch("/updatePassword", authHandler.updatePassword);

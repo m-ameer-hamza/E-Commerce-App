@@ -168,6 +168,32 @@ export function useAuthApi() {
       ErrorHandler(error);
     }
   };
+
+  const verifyOTP = async (email, otp, url) => {
+    console.log("OTP", otp);
+    console.log("Email", email);
+    try {
+      setLoading(true);
+      const res = await axios.patch(
+        url,
+        {
+          otp: otp,
+        },
+        {
+          params: {
+            email: email,
+          },
+        }
+      );
+
+      setResponse(res.data);
+      setError(null);
+      setStatusCode(res.status);
+    } catch (error) {
+      ErrorHandler(error);
+    }
+  };
+
   function ErrorHandler(error) {
     if (error.response) {
       // The request was made and the server responded with a status code
@@ -178,6 +204,8 @@ export function useAuthApi() {
         setError("Bad Request");
       } else if (error.response.data.status === 401) {
         setError("Email or password not match");
+      } else if (error.response.data.status === 403) {
+        setError("OTP does not match");
       } else if (error.response.data.status === 404) {
         setError("User not found");
       } else if (error.response.data.status === 406) {
@@ -207,6 +235,7 @@ export function useAuthApi() {
     googleLogin,
     tokenRefresh,
     verifyLoginUser,
+    verifyOTP,
     error,
     statusCode,
     setError,
