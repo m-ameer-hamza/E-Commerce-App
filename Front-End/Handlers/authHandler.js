@@ -152,14 +152,14 @@ export const authHandlers = () => {
     }
   };
 
-  const signUpFunc = async (username, email, password, userType, loginWith) => {
+  const signUpFunc = async (username, email, password, loginWith) => {
     setEmail(email);
     try {
       await createUser(
         username,
         email,
         password,
-        userType,
+
         loginWith,
         `${BACK_END_URL}/e-commerce/users/signup`
       );

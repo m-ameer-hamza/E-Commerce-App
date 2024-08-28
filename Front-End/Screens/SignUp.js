@@ -39,8 +39,10 @@ const SignUp = () => {
   const [isValideEmail, setIsValideEmail] = useState(true);
   const [isValidePassword, setIsValidePassword] = useState(true);
   const [isValideName, setIsValideName] = useState(true);
+  const [isPasswordWeak, setIsPasswordWeak] = useState(true);
   const [usrInfo, setUsrInfo] = useState(null);
-  const [signUpAs, setSignUpAs] = useState(null);
+
+  const [firstAttempt, setFirstAttempt] = useState(false);
 
   const [isPassSecure, setIsPassSecure] = useState(true);
   const [passIcon, setPassIcon] = useState("eye");
@@ -72,7 +74,6 @@ const SignUp = () => {
     }
 
     if (validator.isEmail(email)) {
-      // setIsValide({ ...isValide, email: true });
       setIsValideEmail(true);
     } else {
       //setIsValide({ ...isValide, email: false });
@@ -80,7 +81,7 @@ const SignUp = () => {
       return false;
     }
 
-    if (password.length > 5) {
+    if (password.length > 8) {
       // setIsValide({ ...isValide, password: true });
       // console.log("password is valid", password);
       setIsValidePassword(true);
@@ -90,13 +91,27 @@ const SignUp = () => {
       setIsValidePassword(false);
       return false;
     }
+
+    if (!validator.isAlphanumeric(password)) {
+      setIsPasswordWeak(true);
+    } else {
+      setIsPasswordWeak(false);
+      return false;
+    }
+    if (passAlphaNumeric(password)) {
+      setIsPasswordWeak(true);
+      return false;
+    } else {
+      setIsPasswordWeak(false);
+    }
+
     return true;
   };
 
   useEffect(() => {
-    console.log("Navigate", navigate);
+    // console.log("Navigate", navigate);
     if (navigate) {
-      console.log("Navigate to Email Verification");
+      // console.log("Navigate to Email Verification");
       navigation.navigate("EmailVerification", {
         email: email,
         reSendOtp: "not-send",
@@ -106,12 +121,14 @@ const SignUp = () => {
   }, [navigate]);
 
   const SignUp = async () => {
+    setFirstAttempt(true);
+
     let valide = validateInput();
     if (valide) {
       //send data to server
 
       setLoading(true);
-      await signUpFunc(name, email, password, signUpAs);
+      await signUpFunc(name, email, password);
 
       //clear the input fields
       setEmail("");
@@ -130,11 +147,6 @@ const SignUp = () => {
 
   // Somewhere in your code
   const googleSignUp = async () => {
-    if (signUpAs === null) {
-      alert("Please select the user type");
-      return;
-    }
-
     setLoading(true);
 
     try {
@@ -147,7 +159,6 @@ const SignUp = () => {
       if (userInfo) {
         navigation.navigate("GLoginPassword", {
           userInfo: userInfo,
-          userType: signUpAs,
         });
       } else {
         alert("Probelm in Google Sign-Up");
@@ -170,17 +181,57 @@ const SignUp = () => {
     setLoading(false);
   };
 
-  // const googleSignOut = async () => {
-  //   try {
-  //     console.log("Google Sign-Out initiated");
-  //     await GoogleSignin.revokeAccess(); // Optional: Revokes access to the current token
-  //     await GoogleSignin.signOut(); // Sign out the user
-  //     setUsrInfo(null); // Clear user info from state
-  //     console.log("User signed out successfully");
-  //   } catch (error) {
-  //     console.log("An error occurred during sign-out:", error);
-  //   }
-  // };
+  //These Validation will run after first attempt
+  const UserNameValidate = () => {
+    if (firstAttempt) {
+      if (validator.isAlpha(name.replace(/\s+/g, ""))) {
+        setIsValideName(true);
+      } else {
+        setIsValideName(false);
+      }
+    }
+  };
+
+  const EmailValidate = () => {
+    if (firstAttempt) {
+      if (validator.isEmail(email)) {
+        setIsValideEmail(true);
+      } else {
+        setIsValideEmail(false);
+      }
+    }
+  };
+
+  const PasswordValidate = () => {
+    if (firstAttempt) {
+      if (password.length > 8) {
+        setIsValidePassword(true);
+      } else {
+        setIsValidePassword(false);
+      }
+    }
+  };
+  const WeakPasswordValidate = () => {
+    if (firstAttempt) {
+      if (passAlphaNumeric(password)) {
+        setIsPasswordWeak(true);
+      } else {
+        setIsPasswordWeak(false);
+      }
+    }
+  };
+
+  //it is a helper function to check if password has alphabets and numbers
+  //it uses regex to check if password has alphabets and numbers
+  const passAlphaNumeric = (password) => {
+    const hasLetters = /[a-zA-Z]/.test(password);
+    const hasNumbers = /[0-9]/.test(password);
+
+    if (hasLetters && hasNumbers) {
+      return true;
+    }
+    return false;
+  };
 
   return (
     <PaperProvider>
@@ -199,42 +250,6 @@ const SignUp = () => {
             >
               Register a new account
             </Text>
-            {isValideEmail ? null : (
-              <Text
-                style={{
-                  color: "red",
-                  marginBottom: -20,
-                  marginTop: 5,
-                  letterSpacing: 0.7,
-                }}
-              >
-                *Enter Valide Email Address
-              </Text>
-            )}
-            {isValideName ? null : (
-              <Text
-                style={{
-                  color: "red",
-                  marginBottom: -20,
-                  marginTop: 5,
-                  letterSpacing: 0.7,
-                }}
-              >
-                *Enter Valide User Name
-              </Text>
-            )}
-
-            {isValidePassword ? null : (
-              <Text
-                style={{
-                  color: "red",
-                  marginBottom: -20,
-                  marginTop: 5,
-                }}
-              >
-                *Password must be 6 characters long
-              </Text>
-            )}
           </View>
           <View
             style={{
@@ -246,60 +261,121 @@ const SignUp = () => {
               gap: 25,
             }}
           >
-            <TextInput
-              value={name}
-              onChangeText={(text) => setName(text)}
-              style={{ borderRadius: 10, width: "80%" }}
-              mode="outlined"
-              outlineColor="#D0D0D0"
-              activeOutlineColor="#041E42"
-              error={isValideName ? false : true}
-              label="Enter your name"
-              contentStyle={{ fontSize: 16, letterSpacing: 1 }}
-            />
+            <View style={{ width: "80%" }}>
+              <TextInput
+                value={name}
+                onChangeText={(text) => setName(text)}
+                onBlur={() => {
+                  firstAttempt && UserNameValidate();
+                }}
+                style={{ borderRadius: 10, width: "100%" }}
+                mode="outlined"
+                outlineColor="#D0D0D0"
+                activeOutlineColor="#041E42"
+                error={isValideName ? false : true}
+                label="Enter your name"
+                contentStyle={{ fontSize: 16, letterSpacing: 1 }}
+              />
 
-            <TextInput
-              value={email}
-              onChangeText={(text) => setEmail(text)}
-              style={{ borderRadius: 10, width: "80%" }}
-              error={isValideEmail ? false : true}
-              mode="outlined"
-              outlineColor="#D0D0D0"
-              activeOutlineColor="#041E42"
-              label="Enter Email"
-              contentStyle={{ fontSize: 16, letterSpacing: 1 }}
-            />
-
-            <TextInput
-              value={password}
-              contentStyle={{
-                fontSize: 16,
-                letterSpacing: 1.3,
-              }}
-              onChangeText={(text) => setPassword(text)}
-              error={isValidePassword ? false : true}
-              secureTextEntry={isPassSecure}
-              style={{ borderRadius: 10, width: "80%" }}
-              mode="outlined"
-              outlineColor="#D0D0D0"
-              activeOutlineColor="#041E42"
-              label="Enter Password"
-              right={
-                <TextInput.Icon
-                  icon={passIcon}
-                  onPress={() => {
-                    if (passIcon === "eye") {
-                      setPassIcon("eye-off");
-                    } else {
-                      setPassIcon("eye");
-                    }
-                    setIsPassSecure(!isPassSecure);
+              {isValideName ? null : (
+                <Text
+                  style={{
+                    color: "red",
+                    marginBottom: -20,
+                    marginTop: 5,
                   }}
-                />
-              }
-            />
+                >
+                  *Enter Valide User Name
+                </Text>
+              )}
+            </View>
+            <View style={{ width: "80%", marginTop: isValideName ? 0 : 10 }}>
+              <TextInput
+                value={email}
+                onChangeText={(text) => setEmail(text)}
+                style={{ borderRadius: 10, width: "100%" }}
+                error={isValideEmail ? false : true}
+                onBlur={() => {
+                  firstAttempt && EmailValidate();
+                }}
+                mode="outlined"
+                outlineColor="#D0D0D0"
+                activeOutlineColor="#041E42"
+                label="Enter Email"
+                contentStyle={{ fontSize: 16, letterSpacing: 1 }}
+              />
+
+              {isValideEmail ? null : (
+                <Text
+                  style={{
+                    color: "red",
+                    marginBottom: -20,
+                    marginTop: 5,
+                  }}
+                >
+                  *Enter Valide Email
+                </Text>
+              )}
+            </View>
+            <View style={{ width: "80%", marginTop: isValideEmail ? 0 : 10 }}>
+              <TextInput
+                value={password}
+                contentStyle={{
+                  fontSize: 16,
+                  letterSpacing: 1.3,
+                }}
+                onChangeText={(text) => setPassword(text)}
+                error={isValidePassword ? false : true}
+                secureTextEntry={isPassSecure}
+                style={{ borderRadius: 10, width: "100%" }}
+                mode="outlined"
+                onBlur={() => {
+                  firstAttempt && PasswordValidate();
+                  firstAttempt && WeakPasswordValidate();
+                }}
+                outlineColor="#D0D0D0"
+                activeOutlineColor="#041E42"
+                label="Enter Password"
+                right={
+                  <TextInput.Icon
+                    icon={passIcon}
+                    onPress={() => {
+                      if (passIcon === "eye") {
+                        setPassIcon("eye-off");
+                      } else {
+                        setPassIcon("eye");
+                      }
+                      setIsPassSecure(!isPassSecure);
+                    }}
+                  />
+                }
+              />
+              {isValidePassword ? null : (
+                <Text
+                  style={{
+                    color: "red",
+                    marginBottom: -20,
+                    marginTop: 5,
+                  }}
+                >
+                  *Password must be 9 characters long
+                </Text>
+              )}
+
+              {isPasswordWeak ? null : (
+                <Text
+                  style={{
+                    color: "red",
+                    marginBottom: -20,
+                    marginTop: 5,
+                  }}
+                >
+                  *Password must be mix of alphabets and numbers
+                </Text>
+              )}
+            </View>
           </View>
-          <View
+          {/* <View
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -329,7 +405,7 @@ const SignUp = () => {
                 onPress={() => setSignUpAs("seller")}
               />
             </View>
-          </View>
+          </View> */}
 
           <View
             style={{

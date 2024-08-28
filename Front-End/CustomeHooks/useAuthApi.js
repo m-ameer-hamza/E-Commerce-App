@@ -26,7 +26,7 @@ export function useAuthApi() {
     userName,
     email,
     password,
-    userType,
+
     loginWith,
     url
   ) => {
@@ -35,7 +35,7 @@ export function useAuthApi() {
         name: userName,
         email: email,
         password: password,
-        userType: userType,
+
         signUpMethod: loginWith,
       });
 

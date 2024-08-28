@@ -48,10 +48,6 @@ const NewPassword = ({ route }) => {
     }
     setIsShortPassError(false);
 
-    console.log(
-      "REsult of Validator Package",
-      validator.isAlphanumeric(newPassword, "en-US")
-    );
     if (validator.isAlphanumeric(newPassword, "en-US")) {
       setIsWeakPassError(true);
       setLoading(false);
