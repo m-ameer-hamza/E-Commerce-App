@@ -10,32 +10,42 @@ import { authHandlers } from "../Handlers/authHandler";
 
 export default function EmailVerification({ route }) {
   //getting email from previous screen
-  const { email, reSendOtp } = route.params;
-  const { verifyOTPFunc, regenOTPFunc } = authHandlers();
+  const { email, navigateTo } = route.params;
+  const { verifyOTPFunc, regenOTPFunc, navigate, otpVerified } = authHandlers();
 
   const [usrEmail, setUsrEmail] = useState("");
+  const [valideOTP, setValideOTP] = useState(false);
+  const [otp, setOtp] = useState("");
+  const navigation = useNavigation();
 
+  useEffect(() => {
+    setUsrEmail(email);
+  }, []);
   useEffect(() => {
     setUsrEmail(email);
   }, [email]);
 
   useEffect(() => {
-    if (reSendOtp === "send") {
-      //send otp to user
-      //here is the code to send otp
-      // sendOTPFunc(usrEmail);
-      regenOTPFunc(usrEmail);
-      alert("OTP has been sent to your email");
+    if (navigateTo === "Login" && navigate) {
+      navigation.navigate("Login");
     }
-  }, [usrEmail]);
+  }, [navigate]);
 
-  //state for otp input
-  const [valideOTP, setValideOTP] = useState(false);
-  //state for otp data
-  const [otp, setOtp] = useState("");
+  useEffect(() => {
+    if (otpVerified && navigateTo === "NewPassword" && navigate) {
+      navigation.navigate("NewPassword", { email: usrEmail });
+    }
+  }, [otpVerified]);
 
-  //for navigation to next screen
-  const navigation = useNavigation();
+  // useEffect(() => {
+  //   if (reSendOtp === "send") {
+  //     //send otp to user
+  //     //here is the code to send otp
+  //     // sendOTPFunc(usrEmail);
+  //     regenOTPFunc(usrEmail);
+  //     alert("OTP has been sent to your email");
+  //   }
+  // }, [usrEmail]);
 
   const isNumericOTP = (otp) => {
     if (validator.isNumeric(otp)) {
@@ -49,9 +59,6 @@ export default function EmailVerification({ route }) {
 
   // function that verify the otp when button is clicked
   const otpVerifier = () => {
-    //send otp to server for verification.
-    //here is the code to verify
-
     verifyOTPFunc(usrEmail, otp);
   };
 

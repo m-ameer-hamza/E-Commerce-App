@@ -100,6 +100,7 @@ const SignUp = () => {
       navigation.navigate("EmailVerification", {
         email: email,
         reSendOtp: "not-send",
+        navigateTo: "Login",
       });
     }
   }, [navigate]);

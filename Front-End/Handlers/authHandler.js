@@ -11,6 +11,7 @@ import { toggleAuth } from "../Redux/authSlice";
 export const authHandlers = () => {
   const [clicked, setIsClicked] = useState(false);
   const [navigate, setNavigate] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
 
   const [email, setEmail] = useState("");
 
@@ -25,6 +26,8 @@ export const authHandlers = () => {
     verifyLoginUser,
     verifyOTP,
     regenOTP,
+    resetPassword,
+
     error,
 
     response,
@@ -47,7 +50,8 @@ export const authHandlers = () => {
         alert("User already exists");
         navigation.navigate("Login");
       } else if (error === "User not found") {
-        alert("User Not found");
+        alert("User Not found!!!!");
+        setNavigate(false);
       } else if (error === "Token is expired!!") {
         //alert("Token is expired!!");
         toggleSession();
@@ -55,8 +59,10 @@ export const authHandlers = () => {
         alert("Wrong Login Method");
       } else if (error === "OTP does not match") {
         alert("OTP does not match");
-      } else if (error == "Bad Request") {
-        alert("Bad Request");
+        setNavigate(false);
+      } else if (error == "Email or Password is missing") {
+        alert("Email or Password is missing");
+        setNavigate(false);
       } else if (error === "User is not verified") {
         navigation.navigate("EmailVerification", {
           email: email,
@@ -98,7 +104,12 @@ export const authHandlers = () => {
       } else if (response.message === "OTP verified") {
         //Navigate to login page
         alert("Email Verified Successfully");
-        navigation.navigate("Login");
+        setNavigate(true);
+        setOtpVerified(true);
+      } else if (response.message === "OTP send to your registered email") {
+        setNavigate(true);
+      } else if (response.message === "Password Updated Successfully") {
+        setNavigate(true);
       } else if (response.message === "User is verified") {
         setNavigate(true);
       } else if (response.message === "Token Refreshed") {
@@ -209,6 +220,18 @@ export const authHandlers = () => {
     }
   };
 
+  const resetPasswordFunc = async (email, password) => {
+    try {
+      await resetPassword(
+        email,
+        `${BACK_END_URL}/e-commerce/users/resetPassword`,
+        password
+      );
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
   return {
     loginFunc,
     signUpFunc,
@@ -217,6 +240,8 @@ export const authHandlers = () => {
     verifyUserFunc,
     verifyOTPFunc,
     regenOTPFunc,
+    resetPasswordFunc,
     navigate,
+    otpVerified,
   };
 };

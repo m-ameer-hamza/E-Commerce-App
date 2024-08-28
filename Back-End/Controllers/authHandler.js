@@ -20,7 +20,7 @@ exports.login = async (req, res, next) => {
   const loginUser = await Users.findOne({ email: req.body.email });
 
   if (!loginUser) {
-    return res.status(404).json({ status: "Error", message: "User Not Found" });
+    return res.status(404).json({ status: "Error", message: "User not found" });
   }
 
   //3)- Checck the sign up method
@@ -373,6 +373,31 @@ exports.verifyUserOTP = async (req, res, next) => {
   res.status(200).json({ message: "OTP verified", data: user });
 };
 
+exports.resetPassword = async (req, res, next) => {
+  //1)- Check if email is present in the query
+  const { email } = req.query;
+  if (!email) {
+    return next(new appError("Email is not present in the URL", 400));
+  }
+  //2)- Check is user is present in the DB
+  let user;
+  try {
+    user = await Users.findOne({ email: email });
+  } catch (err) {
+    return next(new appError("Could not find the user", 500));
+  }
+  //3)- Check if the user is found
+  if (!user) {
+    return next(new appError("User Not Found", 404));
+  }
+  //4)- Update the password
+  user.password = req.body.password;
+
+  await user.save({ validateBeforeSave: false });
+
+  res.status(200).json({ message: "Password Updated Successfully" });
+};
+
 //verify that the logined User is admin
 // exports.restrictTo = (...role) => {
 //   return (req, res, next) => {
@@ -385,112 +410,6 @@ exports.verifyUserOTP = async (req, res, next) => {
 //     next();
 //   };
 // };
-
-//forgetPassword Handler. This will generate  the OTP and send it to the user
-exports.forgetPassword = async (req, res, next) => {
-  if (!req.body.email) {
-    return next(new appError("Provide your Email!!", 400));
-  }
-
-  // 1)- Chck that the meil is present
-
-  const forgetUser = await Users.findOne({ email: req.body.email });
-  //Donot find the email
-
-  if (!forgetUser) {
-    return next(new appError("User Not found!!", 404));
-  }
-  // 2)- Generate a passwordResetToken(using the mongoose instant methods)
-
-  const resetOTP = await forgetUser.createOTP();
-
-  //waiting for saving the changes in the DB
-  //We are passing the option validateBeforeSave:false , not to validate the inputs according to schema
-  //when adding the changes in the already present document
-  await forgetUser.save({ validateBeforeSave: false });
-
-  //3)- Sending the OTP using the nodemailer
-  const mailSent = await utilities.ResetMailHandler(resetOTP);
-
-  if (!mailSent) {
-    return next(new appError("Password Reset Mail not send", 500));
-  }
-  res.status(200).json({ message: "Success", details: "OTP send on Email!!" });
-};
-
-//Reset Password Handler. This will reset the password of the user
-exports.resetPassword = async (req, res, next) => {
-  // 1)- Req contains the OTP and new Password
-  if (!req.body.otp || !req.body.newPassword) {
-    return next(new appError("Provide the OTP and new Password!!", 400));
-  }
-  //check if email is present in the URL or not
-  if (!req.query.email) {
-    return next(new appError("Email is not present in the URL", 401));
-  }
-  // 2)-Check that the user exists
-
-  const newPasswordUser = await Users.findOne({ email: req.query.email });
-
-  //console.log(newPasswordUser);
-  if (!newPasswordUser) {
-    return next(new appError("User Not Found", 401));
-  }
-  // 3)-Verify that OTP matches with saved one and time is not expired
-
-  //check if the time is expired or NOT
-  if (newPasswordUser.passwordRestDuration < Date.now()) {
-    //clear the OTP field and duration from DB if OTP is expired
-    newPasswordUser.passwordRestToken = undefined;
-    newPasswordUser.passwordRestDuration = undefined;
-
-    //saving the changes in DB
-    newPasswordUser.save({ validateBeforeSave: false });
-    return next(new appError("OTP expired!", 401));
-  }
-
-  //verify that OTP exists
-  if (!newPasswordUser.passwordRestToken) {
-    return next(
-      new appError("OTP is not generated. Go to Forget password!!", 400)
-    );
-  }
-  //check if the otp matches wiht the
-
-  if (
-    !(await newPasswordUser.matchPassword(
-      req.body.otp,
-      newPasswordUser.passwordRestToken
-    ))
-  ) {
-    return next(new appError("Invalid OTP", 401));
-  }
-
-  // 5)- Update the password, set the passwordChangeAt and send the JWT token
-
-  //updating the password.
-  // This will run the pre method of mongoose schema before updating
-  //the password. This method will hash the new password
-  newPasswordUser.password = req.body.newPassword;
-
-  //setting up the date on which password is changed
-  newPasswordUser.passwordChangeAt = Date.now();
-  //prevent from schema validation
-  newPasswordUser.save({ validateBeforeSave: false });
-
-  //genrating the token
-  const token = jwt.sign({ id: newPasswordUser._id }, process.env.SECREAT_KEY, {
-    expiresIn: process.env.TOKEN_DURATION,
-  });
-
-  //clear the OTP and expiry time
-  newPasswordUser.passwordRestDuration = undefined;
-  newPasswordUser.passwordRestToken = undefined;
-  res.status(200).json({
-    message: "Passowrd Changed. Your are Login with new password!!",
-    token,
-  });
-};
 
 //Update Current Loged In user password. This will update the password of the user
 // exports.updatePassword = async (req, res, next) => {

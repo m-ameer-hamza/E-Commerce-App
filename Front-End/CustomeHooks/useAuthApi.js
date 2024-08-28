@@ -211,6 +211,29 @@ export function useAuthApi() {
     }
   };
 
+  const resetPassword = async (email, url, password) => {
+    try {
+      setLoading(true);
+      const res = await axios.patch(
+        url,
+        {
+          password: password,
+        },
+        {
+          params: {
+            email: email,
+          },
+        }
+      );
+
+      setResponse(res.data);
+      setError(null);
+      setStatusCode(res.status);
+    } catch (error) {
+      ErrorHandler(error);
+    }
+  };
+
   function ErrorHandler(error) {
     if (error.response) {
       // The request was made and the server responded with a status code
@@ -218,7 +241,7 @@ export function useAuthApi() {
       if (error.response.data.status === 409) {
         setError("Email already exists");
       } else if (error.response.data.status === 400) {
-        setError("Bad Request");
+        setError("Email or Password is missing");
       } else if (error.response.data.status === 401) {
         setError("Email or password not match");
       } else if (error.response.data.status === 403) {
@@ -254,6 +277,7 @@ export function useAuthApi() {
     verifyLoginUser,
     regenOTP,
     verifyOTP,
+    resetPassword,
     error,
     statusCode,
     setError,
