@@ -17,7 +17,7 @@ import validator from "validator";
 import { authHandlers } from "../Handlers/authHandler";
 import ActivityLoading from "../Components/ActivityLoading";
 
-const NewPassword = ({ route }) => {
+const ResetPassword = ({ route }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isError, setIsError] = useState(false);
@@ -48,18 +48,32 @@ const NewPassword = ({ route }) => {
     }
     setIsShortPassError(false);
 
-    if (validator.isAlphanumeric(newPassword, "en-US")) {
+    console.log("Password Reset", passAlphaNumeric(newPassword));
+
+    if (passAlphaNumeric(newPassword)) {
+      console.log("Inside PassAlphaNumeric");
       setIsWeakPassError(true);
       setLoading(false);
       return;
     }
-    setIsWeakPassError(false);
+    setIsWeakPassError(true);
     //update password
     // await updatePasswordFunc(email, newPassword);
     resetPasswordFunc(email, newPassword);
     setLoading(false);
   };
 
+  //it is a helper function to check if password has alphabets and numbers
+  //it uses regex to check if password has alphabets and numbers
+  const passAlphaNumeric = (password) => {
+    const hasLetters = /[a-zA-Z]/.test(password);
+    const hasNumbers = /[0-9]/.test(password);
+
+    if (hasLetters && hasNumbers) {
+      return true;
+    }
+    return false;
+  };
   useEffect(() => {
     if (navigate) {
       alert("Password Updated");
@@ -84,7 +98,7 @@ const NewPassword = ({ route }) => {
             >
               Create New Password
             </Text>
-            {isShortPassError && (
+            {isShortPassError && !isWeakPassError && (
               <Text
                 style={{
                   fontSize: 15,
@@ -93,21 +107,33 @@ const NewPassword = ({ route }) => {
                   justifyContent: "center",
                 }}
               >
-                {" "}
-                Password is of min 8 length
+                Password is of min 9 length
               </Text>
             )}
-            {isWeakPassError && (
+            {isWeakPassError && !isShortPassError && (
               <Text
                 style={{
                   fontSize: 15,
                   color: "red",
                   textAlign: "center",
                   justifyContent: "center",
+                  paddingHorizontal: 30,
                 }}
               >
-                {" "}
                 *Weak Password. Combination of letters and number
+              </Text>
+            )}
+            {isWeakPassError && isShortPassError && (
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: "red",
+                  textAlign: "center",
+                  justifyContent: "center",
+                  paddingHorizontal: 30,
+                }}
+              >
+                *Password 8 letters and contains letters and numbers
               </Text>
             )}
           </View>
@@ -249,6 +275,6 @@ const NewPassword = ({ route }) => {
   );
 };
 
-export default NewPassword;
+export default ResetPassword;
 
 const styles = StyleSheet.create({});

@@ -92,17 +92,11 @@ const SignUp = () => {
       return false;
     }
 
-    if (!validator.isAlphanumeric(password)) {
-      setIsPasswordWeak(true);
-    } else {
-      setIsPasswordWeak(false);
-      return false;
-    }
     if (passAlphaNumeric(password)) {
       setIsPasswordWeak(true);
-      return false;
     } else {
       setIsPasswordWeak(false);
+      return false;
     }
 
     return true;

@@ -7,7 +7,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import GLoginPassword from "../Screens/GLoginPassword";
-import NewPassword from "../Screens/NewPassword";
+import ResetPassword from "../Screens/ResetPassword";
 
 export default function AuthStackNavigation() {
   const Stack = createNativeStackNavigator();
@@ -104,8 +104,8 @@ export default function AuthStackNavigation() {
         }}
       />
       <Stack.Screen
-        name="NewPassword"
-        component={NewPassword}
+        name="ResetPassword"
+        component={ResetPassword}
         options={{
           headerTitle: () => null,
 
@@ -120,12 +120,12 @@ export default function AuthStackNavigation() {
                   paddingBottom: 10,
                 }}
               >
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={() => navigation.goBack()}
                   style={{ marginRight: 10 }}
                 >
                   <Ionicons name="arrow-back" size={24} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                 <Text
                   style={{
@@ -134,7 +134,7 @@ export default function AuthStackNavigation() {
                     letterSpacing: 0.8,
                   }}
                 >
-                  Forget Password
+                  Password Reset
                 </Text>
               </View>
             );

@@ -17,7 +17,7 @@ import validator from "validator";
 import { authHandlers } from "../Handlers/authHandler";
 import ActivityLoading from "../Components/ActivityLoading";
 
-const Login = () => {
+const FogetPassword = () => {
   const [email, setEmail] = useState("");
   const { regenOTPFunc, navigate } = authHandlers();
   const [isError, setIsError] = useState(false);
@@ -166,6 +166,6 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default FogetPassword;
 
 const styles = StyleSheet.create({});

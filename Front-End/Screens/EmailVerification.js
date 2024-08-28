@@ -33,7 +33,7 @@ export default function EmailVerification({ route }) {
 
   useEffect(() => {
     if (otpVerified && navigateTo === "NewPassword" && navigate) {
-      navigation.navigate("NewPassword", { email: usrEmail });
+      navigation.navigate("ResetPassword", { email: usrEmail });
     }
   }, [otpVerified]);
 
