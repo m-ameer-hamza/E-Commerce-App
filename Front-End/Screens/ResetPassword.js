@@ -50,13 +50,13 @@ const ResetPassword = ({ route }) => {
 
     console.log("Password Reset", passAlphaNumeric(newPassword));
 
-    if (passAlphaNumeric(newPassword)) {
+    if (!passAlphaNumeric(newPassword)) {
       console.log("Inside PassAlphaNumeric");
       setIsWeakPassError(true);
       setLoading(false);
       return;
     }
-    setIsWeakPassError(true);
+    setIsWeakPassError(false);
     //update password
     // await updatePasswordFunc(email, newPassword);
     resetPasswordFunc(email, newPassword);

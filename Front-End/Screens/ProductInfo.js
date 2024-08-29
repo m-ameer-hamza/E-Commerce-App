@@ -11,12 +11,12 @@ import { useEffect, useState } from "react";
 import { RadioButton, IconButton } from "react-native-paper";
 import React from "react";
 import { List } from "react-native-paper";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../Redux/cartSlice";
+
 import { BACK_END_URL } from "../Global";
 
 import { ProductLikeHandlers } from "../CompHandlers/ProductLikeHandlers";
-
+import { useNavigation } from "@react-navigation/native";
+import { ProdAddToCartHander } from "../CompHandlers/ProdAddToCartHander";
 const ProductInfo = ({ route }) => {
   const { product } = route.params;
 
@@ -27,11 +27,11 @@ const ProductInfo = ({ route }) => {
   const [selectedValues, setSelectedValues] = useState({});
   const [iconName, setIconName] = useState("cards-heart-outline");
   const [iconColor, setIconColor] = useState("#777");
-  const [addedToCart, setAddedToCart] = useState(false);
 
-  const dispatch = useDispatch();
+  const navigation = useNavigation();
   const { likeItemSaveAsync, unlikeItemAsync, isItemLiked } =
     ProductLikeHandlers();
+  const { addProductToCart } = ProdAddToCartHander();
 
   useEffect(() => {
     const checkIfItemIsLiked = async () => {
@@ -92,43 +92,22 @@ const ProductInfo = ({ route }) => {
     return price - (price * parseInt(discount)) / 100;
   };
 
-  const objToArray = (obj) => {
-    // Initialize an empty array
-    const resultArray = [];
-
-    // Iterate over each key-value pair in the object
-    for (const [key, value] of Object.entries(obj)) {
-      // Push a new object with the current key-value pair into the result array
-      resultArray.push({ [key]: value });
-    }
-
-    // Return the resulting array
-    console.log(resultArray);
-    return resultArray;
-  };
-
   //this function will handle the add to cart button
   const addToCartHandler = (item) => {
-    // console.log(Object.keys(selectedValues).length);
-    // console.log(item.extra.length);
-    if (Object.keys(selectedValues).length !== item.extra.length) {
-      alert("Please select all the options");
-      return;
+    let proAdded = addProductToCart(item, selectedValues);
+
+    if (proAdded) {
+      navigation.navigate("Main");
     }
+  };
 
-    const product = {
-      _id: item._id,
-      title: item.title,
-      description: item.description,
-      price: item.price,
-      image: item.images[0],
-      discount: item.discount,
-      extra: objToArray(selectedValues),
-    };
+  //this function will handle the buy now button
+  const buyNowHandler = (item) => {
+    let proAdded = addProductToCart(item, selectedValues);
 
-    dispatch(addToCart(product));
-    setAddedToCart(true);
-    alert("Product added to cart");
+    if (proAdded) {
+      navigation.navigate("Cart");
+    }
   };
 
   //console.log(product);
@@ -292,7 +271,7 @@ const ProductInfo = ({ route }) => {
               </View>
             </List.Accordion>
           </List.AccordionGroup>
-          {product.extra && product.extra.length > 0 && (
+          {/* {product.extra && product.extra.length > 0 && (
             <List.Accordion title="Options" id="1">
               {product.extra.map((item, index) => {
                 const key = item.key; // Get the key like "Ram"
@@ -354,6 +333,66 @@ const ProductInfo = ({ route }) => {
                 );
               })}
             </List.Accordion>
+          )} */}
+
+          {product.extra && product.extra.length > 0 && (
+            <View>
+              {product.extra.map((item, index) => {
+                const key = item.key; // Get the key like "Ram"
+                const values = Array.isArray(item.values) ? item.values : []; // Ensure it's an array
+
+                return (
+                  <View
+                    key={index}
+                    style={{
+                      flexDirection: "column",
+
+                      marginVertical: 15,
+                      paddingHorizontal: 16,
+                    }}
+                  >
+                    {/* Display the key */}
+                    <Text style={{ flex: 1, fontWeight: "bold", fontSize: 18 }}>
+                      Select {key}
+                    </Text>
+
+                    {/* Display the values with radio buttons in a single row */}
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-around",
+                      }}
+                    >
+                      <RadioButton.Group
+                        onValueChange={(newValue) =>
+                          handleValueChange(key, newValue)
+                        }
+                        value={selectedValues[key]}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-evenly",
+                            flex: 2, // Adjust flex as needed to ensure proper spacing
+                          }}
+                        >
+                          {values.map((value, subIndex) => (
+                            <RadioButton.Item
+                              label={value}
+                              value={value}
+                              key={subIndex}
+                              color="#0066b2"
+                              style={{ marginHorizontal: 4 }}
+                            />
+                          ))}
+                        </View>
+                      </RadioButton.Group>
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
           )}
         </View>
       </View>
@@ -376,6 +415,7 @@ const ProductInfo = ({ route }) => {
         <Text style={{ fontSize: 20, fontWeight: "500" }}>Add to Cart</Text>
       </Pressable>
       <Pressable
+        onPress={() => buyNowHandler(product)}
         style={{
           backgroundColor: "#ffac1c",
           padding: 10,
