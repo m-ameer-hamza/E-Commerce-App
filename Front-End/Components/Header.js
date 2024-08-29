@@ -4,9 +4,13 @@ import { IconButton } from "react-native-paper";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
-const Header = ({ setAddressModel }) => {
-  const [searchQuery, setSearchQuery] = useState("");
-
+const Header = ({
+  setAddressModel,
+  products,
+  searchQuery,
+  setSearchQuery,
+  setSearchResults,
+}) => {
   const user = useSelector((state) => state.user);
 
   const navigation = useNavigation();
@@ -18,6 +22,17 @@ const Header = ({ setAddressModel }) => {
     } else {
       return text;
     }
+  };
+
+  const searchHandler = (text) => {
+    console.log("Typed text for search is", text);
+    setSearchQuery(text);
+    let filteredProducts = products.filter((product) => {
+      return product.title.toLowerCase().includes(text.toLowerCase());
+    });
+    // console.log(filteredProducts);
+
+    setSearchResults(filteredProducts);
   };
 
   return (
@@ -51,7 +66,9 @@ const Header = ({ setAddressModel }) => {
             fontWeight: "500",
           }}
           placeholder="Search"
-          onChangeText={setSearchQuery}
+          onChangeText={(text) => {
+            searchHandler(text);
+          }}
           value={searchQuery}
         />
         <IconButton
