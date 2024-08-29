@@ -29,6 +29,7 @@ const Home = () => {
   const [DealsData, setDealsData] = useState([]);
   const [ProductsData, setProductsData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
   const navigation = useNavigation();
   const { getAllProductsFunc, products, saleProducts } = productHandler();
@@ -63,12 +64,22 @@ const Home = () => {
             showsHorizontalScrollIndicator={false}
           >
             {CategoriesData.map((item, index) => {
+              const backgroundColor =
+                item.id === 1
+                  ? "#fff"
+                  : item.id === selectedCategoryId
+                  ? "#ddd"
+                  : "#fff";
+
               return (
                 <Pressable
-                  onPress={() => setMainCategories(item.name)}
+                  onPress={() => {
+                    setSelectedCategoryId(item.id);
+                    setMainCategories(item.name);
+                  }}
                   key={index}
                   style={{
-                    backgroundColor: "#fff",
+                    backgroundColor: backgroundColor,
                     margin: 10,
                     padding: 10,
                     borderRadius: 10,
