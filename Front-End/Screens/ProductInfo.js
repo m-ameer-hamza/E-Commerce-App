@@ -106,7 +106,9 @@ const ProductInfo = ({ route }) => {
     let proAdded = addProductToCart(item, selectedValues);
 
     if (proAdded) {
-      navigation.navigate("Cart");
+      navigation.navigate("CartStack", {
+        screen: "Cart",
+      });
     }
   };
 

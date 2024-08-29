@@ -12,6 +12,7 @@ import { useState } from "react";
 import AddNewAddress from "../Screens/AddNewAddress";
 import OrderConfirm from "../Screens/OrderConfirm";
 import MapLocation from "../Screens/MapLocation";
+import Cart from "../Screens/Cart";
 
 export default function HomeStackNavigation() {
   const Stack = createNativeStackNavigator();
