@@ -6,6 +6,7 @@ import ProfileStackNavigation from "../Navigation/ProfileStackNavigation";
 import OrderStackNavigation from "../Navigation/OrderStackNavigation";
 import { TouchableOpacity } from "react-native";
 import { Icon } from "react-native-paper";
+import CartStack from "../Navigation/CartStackNavigation";
 
 import LikedItemsStack from "../Navigation/LikedItemsStackNavigation";
 export default function DrawerNavigation() {
@@ -23,27 +24,15 @@ export default function DrawerNavigation() {
         }}
       />
       <Drawer.Screen
-        options={({ navigation }) => ({
-          headerLeft: () => (
-            <TouchableOpacity
-              style={{ paddingLeft: 20 }}
-              onPress={() => navigation.openDrawer()}
-            >
-              <Icon source="menu" size={30} iconColor="#000" />
-              {/* Adjust the size here */}
-            </TouchableOpacity>
-          ),
-          headerStyle: {
-            backgroundColor: "#AFEEEE",
-            height: 70,
-          },
-          headerTitleStyle: {
-            fontSize: 25,
-          },
-        })}
-        name="Settings"
-        component={Settings}
+        name="CartStack"
+        component={CartStack}
+        options={{
+          headerShown: false,
+          drawerLabel: () => null,
+          drawerIcon: () => null,
+        }}
       />
+
       <Drawer.Screen
         name="ProfileStack"
         options={{
@@ -70,6 +59,28 @@ export default function DrawerNavigation() {
           drawerIcon: () => null,
         }}
         component={OrderStackNavigation}
+      />
+      <Drawer.Screen
+        options={({ navigation }) => ({
+          headerLeft: () => (
+            <TouchableOpacity
+              style={{ paddingLeft: 20 }}
+              onPress={() => navigation.openDrawer()}
+            >
+              <Icon source="menu" size={30} iconColor="#000" />
+              {/* Adjust the size here */}
+            </TouchableOpacity>
+          ),
+          headerStyle: {
+            backgroundColor: "#AFEEEE",
+            height: 70,
+          },
+          headerTitleStyle: {
+            fontSize: 25,
+          },
+        })}
+        name="Settings"
+        component={Settings}
       />
     </Drawer.Navigator>
   );

@@ -73,6 +73,7 @@ const OrderConfirm = () => {
           {/*/WE can create a separte component and return it here  Order Summary*/}
           {currStep == 3 && (
             <OrderSummary
+              setCurrStep={setCurrStep}
               order={order}
               paySecreatKey={paySecreatKey}
               setPaySecreatKey={setPaySecreatKey}

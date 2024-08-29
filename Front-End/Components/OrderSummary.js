@@ -9,8 +9,14 @@ import { authHandlers } from "../Handlers/authHandler";
 import ActivityLoading from "../Components/ActivityLoading";
 import PasswordConfirm from "../Components/PasswordConfirm";
 import ReduxStore from "../Redux/store";
+import { useNavigation } from "@react-navigation/native";
 
-const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
+const OrderSummary = ({
+  order,
+  paySecreatKey,
+  setPaySecreatKey,
+  setCurrStep,
+}) => {
   const { verifyUserFunc } = authHandlers();
   const session = useSelector((state) => state.session.session);
 
@@ -23,6 +29,7 @@ const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
   const [loading, setLoading] = useState(false);
 
   const cart = useSelector((state) => state.cart);
+  const navigation = useNavigation();
 
   //Function to check if the user is verified or not
   const checkOut = async () => {
@@ -97,7 +104,11 @@ const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
               {displayAddress(order.address?.saveAs)}
             </Text>
           </View>
-          <Pressable>
+          <Pressable
+            onPress={() => {
+              setCurrStep(0);
+            }}
+          >
             <Icon source="chevron-right" size={30} />
           </Pressable>
         </View>
@@ -137,7 +148,12 @@ const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
               <Text style={{ fontSize: 16, fontWeight: "600" }}>
                 ({cartLength}) item
               </Text>
-              <Pressable style={{ paddingLeft: 10 }}>
+              <Pressable
+                style={{ paddingLeft: 10 }}
+                onPress={() => {
+                  navigation.navigate("Cart");
+                }}
+              >
                 <Icon source="chevron-right" size={30} />
               </Pressable>
             </View>
@@ -306,7 +322,11 @@ const OrderSummary = ({ order, paySecreatKey, setPaySecreatKey }) => {
               </View>
             )}
           </View>
-          <Pressable>
+          <Pressable
+            onPress={() => {
+              setCurrStep(2);
+            }}
+          >
             <Icon source="chevron-right" size={30} />
           </Pressable>
         </View>

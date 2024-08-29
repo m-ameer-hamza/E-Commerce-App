@@ -46,8 +46,11 @@ export default CustomDrawerContent = (props) => {
       icon: "shopping",
       focusIcon: "shopping-outline",
     },
-    // Add more routes here
-    // Orders: { label: "My Orders", icon: "receipt-outline" },
+    CartStack: {
+      label: "Cart",
+      icon: "cart",
+      focusIcon: "cart-outline",
+    },
   };
 
   //clear JWT token
@@ -119,8 +122,18 @@ export default CustomDrawerContent = (props) => {
               centered={true}
               key={index}
               onPress={() => {
-                navigation.navigate(route.name);
-                props.navigation.closeDrawer();
+                if (route.name === "CartStack") {
+                  navigation.navigate("BottomNavigation", {
+                    screen: "CartStack",
+                  });
+                } else if (route.name === "BottomNavigation") {
+                  navigation.navigate("BottomNavigation", {
+                    screen: "Home",
+                  });
+                } else {
+                  navigation.navigate(route.name);
+                  props.navigation.closeDrawer();
+                }
               }}
               style={InlineStyles.drawerItem}
             >

@@ -25,7 +25,7 @@ const Header = ({
   };
 
   const searchHandler = (text) => {
-    console.log("Typed text for search is", text);
+    //console.log("Typed text for search is", text);
     setSearchQuery(text);
     let filteredProducts = products.filter((product) => {
       return product.title.toLowerCase().includes(text.toLowerCase());

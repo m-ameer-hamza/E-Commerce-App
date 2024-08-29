@@ -15,6 +15,7 @@ import {
 } from "react-native-paper";
 import AddressesList from "./AddressesList";
 import { useSelector } from "react-redux";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { addressHandlers } from "../Handlers/addressHandler";
 import { useNavigation } from "@react-navigation/native";
@@ -35,12 +36,14 @@ const AddressDeliveryList = ({ currStepHandler, setOrder, order }) => {
     addresses,
   } = addressHandlers();
 
-  useEffect(() => {
+  const fetchAddress = useCallback(() => {
     setLoader(true);
     getAllAddressFunc(ReduxStore.getState().user.email).finally(() => {
       setLoader(false);
     });
   }, [ReduxStore.getState().user.email]);
+
+  useFocusEffect(fetchAddress);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
