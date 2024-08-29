@@ -1,13 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 
-const OrderStepHeader = ({ currStep }) => {
+const OrderStepHeader = ({ currStep, setCurrStep }) => {
   const steps = [
     { title: "Address", content: "Address Form" },
     { title: "Delivery", content: "Delivery Form" },
     { title: "Payment", content: "Payment Form" },
     { title: "Place Order", content: "Order Summary" },
   ];
+  const navigation = useNavigation();
   return (
     <View
       style={{
@@ -25,7 +27,25 @@ const OrderStepHeader = ({ currStep }) => {
         }}
       >
         {steps.map((step, index) => (
-          <View
+          <Pressable
+            onPress={() => {
+              if (index < currStep) {
+                // Go to step index
+
+                if (index === 0) {
+                  setCurrStep(0);
+                }
+                if (index === 1) {
+                  setCurrStep(1);
+                }
+                if (index === 2) {
+                  setCurrStep(2);
+                }
+                if (index === 3) {
+                  setCurrStep(3);
+                }
+              }
+            }}
             key={index}
             style={{ justifyContent: "center", alignItems: "center" }}
           >
@@ -67,7 +87,7 @@ const OrderStepHeader = ({ currStep }) => {
             <Text style={{ textAlign: "center", marginTop: 8 }}>
               {step.title}
             </Text>
-          </View>
+          </Pressable>
         ))}
       </View>
     </View>

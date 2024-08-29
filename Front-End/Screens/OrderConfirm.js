@@ -33,7 +33,7 @@ const OrderConfirm = () => {
     <PaperProvider>
       <View style={{ flex: 1 }}>
         <ScrollView>
-          <OrderStepHeader currStep={currStep} />
+          <OrderStepHeader currStep={currStep} setCurrStep={setCurrStep} />
 
           <View style={{ borderTopWidth: 2, borderColor: "#D0D0D0" }} />
 
