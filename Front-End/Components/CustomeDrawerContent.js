@@ -114,7 +114,22 @@ export default CustomDrawerContent = (props) => {
       >
         {props.state.routes.map((route, index) => {
           const { label, icon, focusIcon } = routeConfigs[route.name] || {};
-          const focused = props.state.index === index;
+          let focused = props.state.index === index;
+
+          {
+            /* if (route.name === "BottomNavigation") {
+            const bottomTabRoute =
+              props.state.routes[props.state.index].state?.routeNames?.[
+                props.state.routes[props.state.index].state?.index
+              ] ?? "Home";
+
+            if (bottomTabRoute === "Home") {
+              focused = label === "Home";
+            } else if (bottomTabRoute === "CartStack") {
+              focused = label === "Cart";
+            }
+          } */
+          }
 
           return (
             <TouchableRipple

@@ -5,7 +5,7 @@ import { Icon } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import { removeItemCart, addToCart } from "../Redux/cartSlice";
 
-const CartItemBottom = ({ item }) => {
+const CartItemBottom = ({ item, disable }) => {
   const dispatch = useDispatch();
   // This function calculates the price of the item
   //applay discount if avaliable
@@ -62,13 +62,15 @@ const CartItemBottom = ({ item }) => {
       </View>
 
       <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
-        <Pressable onPress={() => decreaseProHandler(item)}>
-          {item && item.quantity > 1 ? (
-            <Icon source="minus" size={30} color="#333" />
-          ) : (
-            <Icon source="trash-can" size={30} color="#333" />
-          )}
-        </Pressable>
+        {!disable && (
+          <Pressable onPress={() => decreaseProHandler(item)}>
+            {item && item.quantity > 1 ? (
+              <Icon source="minus" size={30} color="#333" />
+            ) : (
+              <Icon source="trash-can" size={30} color="#333" />
+            )}
+          </Pressable>
+        )}
 
         <View
           style={{
@@ -87,13 +89,15 @@ const CartItemBottom = ({ item }) => {
           </Text>
         </View>
 
-        <Pressable
-          onPress={() => {
-            addProductHandler(item);
-          }}
-        >
-          <Icon source="plus" size={30} color="#333" />
-        </Pressable>
+        {!disable && (
+          <Pressable
+            onPress={() => {
+              addProductHandler(item);
+            }}
+          >
+            <Icon source="plus" size={30} color="#333" />
+          </Pressable>
+        )}
       </View>
     </View>
   );

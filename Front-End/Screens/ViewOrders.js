@@ -10,6 +10,7 @@ import { PaperProvider, IconButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import ActivityLoading from "../Components/ActivityLoading";
 import { useSelector } from "react-redux";
+import { useFocusEffect } from "@react-navigation/native";
 
 import CurrentOrder from "../Components/CurrentOrder";
 import PastOrders from "../Components/PastOrders";
@@ -26,10 +27,17 @@ const Order = () => {
   const user = useSelector((state) => state.user);
 
   //This useEffect will fetch the orders of the user
-  useEffect(() => {
+  const fetchOrders = useCallback(() => {
     setLoading(true);
-    fetchOrderFunc(ReduxStore.getState().user.email);
+    try {
+      fetchOrderFunc(user.email); // Fetch orders using the email from Redux state
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+  useFocusEffect(fetchOrders);
 
   //This useEffect will set the orders in the state
   useEffect(() => {

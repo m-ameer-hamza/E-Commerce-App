@@ -6,12 +6,15 @@ import CartItem from "../Components/CartItem";
 import { useNavigation } from "@react-navigation/native";
 import { calculateDiscountedTotal } from "../Redux/cartSlice";
 import { IconButton } from "react-native-paper";
+import OrderItem from "../Components/OrderItem";
 const ViewOrderInfo = ({ route }) => {
   const { data } = route.params;
 
   const cart = useSelector((state) => state.cart);
   const [disTotal, setDisTotal] = useState(0);
   const [cartLength, setCartLength] = useState(0);
+
+  const [cartItems, setCartItems] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -28,8 +31,28 @@ const ViewOrderInfo = ({ route }) => {
   }, [cart.cartArray, cart.discountedTotal, cart.total]);
 
   const navigation = useNavigation();
+
+  //this select will handle the radio button
+  const handleSelect = (item) => {
+    setCartItems((prevCart) => {
+      const itemInCart = prevCart.some((cartItem) => cartItem._id === item._id);
+
+      if (itemInCart) {
+        // Remove item from cart if it's already in the cart
+        return prevCart.filter((cartItem) => cartItem._id !== item._id);
+      } else {
+        // Add item to cart if it's not in the cart
+        return [...prevCart, item];
+      }
+    });
+  };
+
+  useEffect(() => {
+    console.log("Cart Items", cartItems);
+  }, [cartItems]);
+
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
+    <ScrollView style={{ flex: 1, backgroundColor: "#eee" }}>
       {/* Header of Cart Screen */}
 
       <View
@@ -66,12 +89,17 @@ const ViewOrderInfo = ({ route }) => {
         </Text>
       </View>
       <View style={{ marginHorizontal: 10 }}>
-        {data.products.map((item, index) => (
-          <CartItem key={index} item={item} disable={true} />
+        {data.products.map((item) => (
+          <OrderItem
+            key={item._id} // Use a unique identifier
+            item={item}
+            cartItems={cartItems}
+            onSelect={handleSelect}
+          />
         ))}
       </View>
 
-      {/* <Pressable
+      <Pressable
         style={{
           backgroundColor: "#ffc72c",
           padding: 10,
@@ -86,7 +114,7 @@ const ViewOrderInfo = ({ route }) => {
         }}
       >
         <Text style={{ fontSize: 18, fontWeight: "500" }}>Order Again</Text>
-      </Pressable> */}
+      </Pressable>
     </ScrollView>
   );
 };
