@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { ProductLikeHandlers } from "../CompHandlers/ProductLikeHandlers";
 import { BACK_END_URL } from "../Global";
+import { useFocusEffect } from "@react-navigation/native";
 
 const LikedItems = () => {
   const [likedItems, setLikedItems] = useState([]);
@@ -23,12 +24,23 @@ const LikedItems = () => {
 
   const { getLikedItems, unlikeItemAsync } = ProductLikeHandlers();
 
-  useEffect(() => {
-    setLoading(true);
-    setLikedItems(getLikedItems());
-    setLoading(false);
-    console.log("Liked Items useEffect");
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      const fetchLikedItems = async () => {
+        setLoading(true);
+        try {
+          const items = await getLikedItems();
+          setLikedItems(items);
+        } catch (error) {
+          console.error("Error fetching liked items: ", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchLikedItems();
+    }, [])
+  );
 
   // Function to handle pull-to-refresh
   const onRefresh = useCallback(async () => {
