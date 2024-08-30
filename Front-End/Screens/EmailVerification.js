@@ -23,6 +23,8 @@ export default function EmailVerification({ route }) {
 
   useEffect(() => {
     setUsrEmail(email);
+    setIsResendDisabled(true);
+    startCountdown();
   }, []);
   useEffect(() => {
     setUsrEmail(email);
@@ -65,6 +67,7 @@ export default function EmailVerification({ route }) {
     verifyOTPFunc(usrEmail, otp);
   };
 
+  //This function is used to start the countdown timer when the user clicks on the resend button
   const startCountdown = () => {
     let timeLeft = 120; // 2 minutes in seconds
     setCountdown(timeLeft);
@@ -81,16 +84,25 @@ export default function EmailVerification({ route }) {
     }, 1000);
   };
 
+  //This function is used to format the time in minutes and seconds
+  //Example: 2:05 . It will display on REsend Button when the countdown is running
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
+  //This function is used to handle the resend button click
+  //It will restart the countdown timer and disable the resend button
+  //It will also send the OTP to the user
   const handleResend = () => {
+    regenOTPFunc(usrEmail);
+
     setIsVerifyDisabled(false); // Enable Verify button
     setIsResendDisabled(true); // Disable Resend button during countdown
-    startCountdown(); // Restart countdown
+    startCountdown(); // Restart
+
+    alert("OTP has been Re-sent to your email");
   };
 
   return (
