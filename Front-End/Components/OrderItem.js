@@ -23,7 +23,7 @@ const OrderItem = ({ item, cartItems, onSelect }) => {
           value={item.id}
           status={isChecked ? "checked" : "unchecked"}
           onPress={handlePress}
-          color="#00b2b5"
+          color="#0066b2"
         />
         <Pressable onPress={handlePress} style={styles.pressable}>
           <View style={styles.imageContainer}>

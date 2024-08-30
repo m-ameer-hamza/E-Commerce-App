@@ -55,7 +55,7 @@ const ViewOrderInfo = ({ route }) => {
       alert("Please select the products");
       return;
     } else {
-      console.log("Products to order again are", prod);
+      // console.log("Products to order again are", prod);
       let result = againAddProductToCart(prod);
       if (!result) {
         alert("Sorry! Product is not added to cart");

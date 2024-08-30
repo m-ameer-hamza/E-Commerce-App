@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { OtpInput } from "react-native-otp-entry";
 import { TouchableRipple } from "react-native-paper";
 import validator from "validator";
@@ -17,6 +17,9 @@ export default function EmailVerification({ route }) {
   const [valideOTP, setValideOTP] = useState(false);
   const [otp, setOtp] = useState("");
   const navigation = useNavigation();
+  const [isVerifyDisabled, setIsVerifyDisabled] = useState(false);
+  const [isResendDisabled, setIsResendDisabled] = useState(true);
+  const [countdown, setCountdown] = useState(0);
 
   useEffect(() => {
     setUsrEmail(email);
@@ -62,6 +65,34 @@ export default function EmailVerification({ route }) {
     verifyOTPFunc(usrEmail, otp);
   };
 
+  const startCountdown = () => {
+    let timeLeft = 120; // 2 minutes in seconds
+    setCountdown(timeLeft);
+
+    const intervalId = setInterval(() => {
+      timeLeft -= 1;
+      setCountdown(timeLeft);
+
+      if (timeLeft <= 0) {
+        clearInterval(intervalId);
+        setIsResendDisabled(false); // Enable Resend button
+        setIsVerifyDisabled(true); // Disable Verify button
+      }
+    }, 1000);
+  };
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+  };
+
+  const handleResend = () => {
+    setIsVerifyDisabled(false); // Enable Verify button
+    setIsResendDisabled(true); // Disable Resend button during countdown
+    startCountdown(); // Restart countdown
+  };
+
   return (
     <View
       style={{
@@ -104,43 +135,88 @@ export default function EmailVerification({ route }) {
         />
       </View>
 
-      {valideOTP && (
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-around",
+          marginTop: 40,
+        }}
+      >
         <TouchableRipple
           rippleColor="#b88d63"
           onPress={() => {
+            if (!valideOTP) {
+              alert("Please enter a valid OTP");
+              return;
+            }
+            startCountdown();
             otpVerifier();
           }}
+          disabled={isVerifyDisabled}
           style={{
-            //   height: "6%",
-            width: "50%",
+            width: "35%",
             alignSelf: "center",
             marginTop: "10%",
           }}
         >
           <View
             style={{
-              backgroundColor: "#fe8710",
-
+              backgroundColor: isVerifyDisabled ? "#b88d63" : "#fe8710",
               flexDirection: "row",
               justifyContent: "center",
               alignItems: "center",
               borderRadius: 10,
               width: "100%",
+              paddingVertical: 10,
             }}
           >
             <Text
               style={{
                 color: "#fff",
-                fontSize: 22,
+                fontSize: 20,
                 letterSpacing: 1,
-                paddingVertical: "6%",
               }}
             >
               Verify
             </Text>
           </View>
         </TouchableRipple>
-      )}
+
+        <TouchableRipple
+          rippleColor="#b88d63"
+          disabled={isResendDisabled}
+          onPress={() => {
+            handleResend();
+          }}
+          style={{
+            width: "35%",
+            alignSelf: "center",
+            marginTop: "10%",
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: countdown > 0 ? "#b88d63" : "#fe8710",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 10,
+              width: "100%",
+              paddingVertical: 10,
+            }}
+          >
+            <Text
+              style={{
+                color: "#fff",
+                fontSize: 20,
+                letterSpacing: 1,
+              }}
+            >
+              {countdown > 0 ? formatTime(countdown) : "Resend"}
+            </Text>
+          </View>
+        </TouchableRipple>
+      </View>
     </View>
   );
 }

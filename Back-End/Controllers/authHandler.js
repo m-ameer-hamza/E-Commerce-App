@@ -355,7 +355,7 @@ exports.verifyUserOTP = async (req, res, next) => {
   const currentTime = Date.now();
 
   const otpTime =
-    user.optCodeTime.getTime() + 5 * 60 * 60 * 1000 + 5 * 60 * 1000;
+    user.optCodeTime.getTime() + 5 * 60 * 60 * 1000 + 2 * 60 * 1000; //converting the time to PK time and adding 2 minutes
   console.log("OTP time", otpTime);
   console.log("Current Time", currentTime);
 

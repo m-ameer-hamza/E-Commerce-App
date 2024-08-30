@@ -40,6 +40,8 @@ const FogetPassword = () => {
 
     regenOTPFunc(email);
     setLoading(false);
+
+    alert("OTP sent to your email");
   };
 
   useEffect(() => {
