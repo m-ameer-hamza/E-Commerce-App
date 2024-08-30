@@ -5,6 +5,8 @@ import { IconButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import ViewOrders from "../Screens/ViewOrders";
 import ViewOrderInfo from "../Screens/ViewOrderInfo";
+import CartStack from "./CartStackNavigation";
+import BottomNavigation from "./BottomNavigation";
 
 export default function ProfileStackNavigation() {
   const Stack = createNativeStackNavigator();

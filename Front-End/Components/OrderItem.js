@@ -23,6 +23,7 @@ const OrderItem = ({ item, cartItems, onSelect }) => {
           value={item.id}
           status={isChecked ? "checked" : "unchecked"}
           onPress={handlePress}
+          color="#00b2b5"
         />
         <Pressable onPress={handlePress} style={styles.pressable}>
           <View style={styles.imageContainer}>
@@ -39,9 +40,12 @@ const OrderItem = ({ item, cartItems, onSelect }) => {
             </Text>
             <View style={styles.extraContainer}>
               {item?.extra?.map((extra, idx) => (
-                <View key={idx}>
+                <View key={`extra-${idx}`}>
                   {Object.keys(extra).map((key, index) => (
-                    <View key={index} style={styles.extraRow}>
+                    <View
+                      key={`extra-${idx}-${key}-${index}`}
+                      style={styles.extraRow}
+                    >
                       <Text style={styles.extraKey}>{key}</Text>
                       <View style={styles.extraValueContainer}>
                         <Text style={styles.extraValue}>{extra[key]}</Text>

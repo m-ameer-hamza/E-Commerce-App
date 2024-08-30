@@ -45,7 +45,19 @@ export const ProdAddToCartHander = () => {
     return true;
   };
 
+  const againAddProductToCart = (prod) => {
+    //1)- prod is an array of objects. So we need to iterate over it and push the objects into the cart
+
+    prod.forEach((item) => {
+      dispatch(addToCart(item));
+    });
+
+    alert("Products added to cart");
+    return true;
+  };
+
   return {
     addProductToCart,
+    againAddProductToCart,
   };
 };
