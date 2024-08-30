@@ -17,9 +17,11 @@ import validator from "validator";
 import { authHandlers } from "../Handlers/authHandler";
 import ActivityLoading from "../Components/ActivityLoading";
 
-const FogetPassword = () => {
+const FogetPassword = ({ route }) => {
+  const { ResetNavigate } = route.params;
+
   const [email, setEmail] = useState("");
-  const { regenOTPFunc, navigate } = authHandlers();
+  const { regenOTPFunc, navigate, setNavigate } = authHandlers();
   const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -49,8 +51,12 @@ const FogetPassword = () => {
       navigation.navigate("EmailVerification", {
         email: email,
         navigateTo: "NewPassword",
+        ResetNavigate: ResetNavigate,
       });
     }
+    return () => {
+      setNavigate(false);
+    };
   }, [navigate]);
 
   return (

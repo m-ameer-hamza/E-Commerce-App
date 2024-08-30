@@ -184,7 +184,7 @@ export const styles = StyleSheet.create({
       paddingHorizontal: "7%",
 
       borderBottomWidthWidth: 1,
-      paddingVertical: "7%",
+      paddingVertical: "5%",
       justifyContent: "space-between",
 
       flexDirection: "row",

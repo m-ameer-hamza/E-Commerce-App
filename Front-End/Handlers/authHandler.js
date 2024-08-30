@@ -242,6 +242,7 @@ export const authHandlers = () => {
     regenOTPFunc,
     resetPasswordFunc,
     navigate,
+    setNavigate,
     otpVerified,
   };
 };

@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 
-const CurrentOrder = ({ data }) => {
+const CurrentOrder = ({ data, key }) => {
   const navigation = useNavigation();
   function formatDate(mongoDate) {
     // Split the date string at the 'T' character to separate date and time

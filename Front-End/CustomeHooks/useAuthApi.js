@@ -201,6 +201,11 @@ export function useAuthApi() {
         params: {
           email: email,
         },
+        headers: {
+          "Cache-Control": "no-cache",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
       });
 
       setResponse(res.data);

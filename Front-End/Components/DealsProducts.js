@@ -4,7 +4,7 @@ import { Image, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { BACK_END_URL } from "../Global";
 
-const DealsProducts = ({ item, index }) => {
+const DealsProducts = ({ item, key }) => {
   //index
   const navigation = useNavigation();
   return (
@@ -14,7 +14,7 @@ const DealsProducts = ({ item, index }) => {
           product: item,
         });
       }}
-      key={index}
+      key={key}
       style={{
         flexDirection: "row",
         backgroundColor: "#fff",

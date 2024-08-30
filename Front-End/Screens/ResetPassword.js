@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Pressable,
   Keyboard,
+  BackHandler,
 } from "react-native";
 import React, { useEffect } from "react";
 
@@ -13,7 +14,7 @@ import { TextInput, Button, PaperProvider } from "react-native-paper";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import LogoComponent from "../Components/Logo";
-import validator from "validator";
+
 import { authHandlers } from "../Handlers/authHandler";
 import ActivityLoading from "../Components/ActivityLoading";
 
@@ -30,7 +31,7 @@ const ResetPassword = ({ route }) => {
   const [isWeakPassError, setIsWeakPassError] = useState(false);
 
   const navigation = useNavigation();
-  const { email } = route.params;
+  const { email, ResetNavigate } = route.params;
   const { resetPasswordFunc, navigate } = authHandlers();
 
   const updatePassword = async () => {
@@ -63,6 +64,20 @@ const ResetPassword = ({ route }) => {
     setLoading(false);
   };
 
+  //if press back button it will navigate to login screen
+  useEffect(() => {
+    const onBackPress = () => {
+      navigation.navigate("Login");
+      return true;
+    };
+
+    BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+    return () => {
+      BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    };
+  }, []);
+
   //it is a helper function to check if password has alphabets and numbers
   //it uses regex to check if password has alphabets and numbers
   const passAlphaNumeric = (password) => {
@@ -77,7 +92,14 @@ const ResetPassword = ({ route }) => {
   useEffect(() => {
     if (navigate) {
       alert("Password Updated");
-      navigation.navigate("Login");
+      if (ResetNavigate) {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Profile" }],
+        });
+      } else {
+        navigation.navigate("Login");
+      }
     }
   }, [navigate]);
 

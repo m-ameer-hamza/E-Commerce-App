@@ -8,7 +8,8 @@ import {
 
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-
+import { toggleAuth } from "../Redux/authSlice";
+import { useDispatch } from "react-redux";
 import { styles } from "../Const/Styles";
 import UpdateUserName from "./UpdateUserName";
 
@@ -16,6 +17,7 @@ export default function Profile() {
   const theme = useSelector((state) => state.settings.theme);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   let containerColor, fontColor, listColor, fontColorDes;
   if (theme === "light") {
@@ -55,6 +57,7 @@ export default function Profile() {
       <ScrollView
         contentContainerStyle={[styles.Settings.Container, containerColor]}
       >
+        {/* Update User Name  */}
         <Pressable
           style={[styles.Settings.listContainer, listColor]}
           onPress={() => {
@@ -78,6 +81,8 @@ export default function Profile() {
             <Icon source="account-edit" size={35} color="grey" />
           </View>
         </Pressable>
+
+        {/* Update Password */}
         <Pressable
           onPress={() => {
             navigation.navigate("UpdatePassword");
@@ -99,6 +104,36 @@ export default function Profile() {
             }}
           >
             <Icon source="pencil-lock" size={35} color="grey" />
+          </View>
+        </Pressable>
+        {/* Forget Password */}
+        <Pressable
+          onPress={() => {
+            //toggle the auth state
+            navigation.navigate("AuthStackNavigation", {
+              screen: "ForgetPassword",
+              params: {
+                ResetNavigate: true,
+              },
+            });
+          }}
+          style={[styles.Settings.listContainer, listColor]}
+        >
+          <View style={[styles.Settings.fontColor]}>
+            <Text style={[{ fontSize: 20, fontWeight: "bold" }, fontColor]}>
+              Forget Password
+            </Text>
+            <Text style={[{ fontSize: 14, marginTop: "5%" }, fontColorDes]}>
+              Click here to recover your password.
+            </Text>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Icon source="lock-reset" size={35} color="grey" />
           </View>
         </Pressable>
       </ScrollView>

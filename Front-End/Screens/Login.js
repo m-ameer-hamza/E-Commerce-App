@@ -166,7 +166,11 @@ const Login = () => {
               marginRight: "10%",
             }}
           >
-            <Pressable onPress={() => navigation.navigate("ForgetPassword")}>
+            <Pressable
+              onPress={() =>
+                navigation.navigate("ForgetPassword", { ResetNavigate: false })
+              }
+            >
               <Text style={{ color: "#007FFF", fontWeight: "500" }}>
                 Forget Password?
               </Text>

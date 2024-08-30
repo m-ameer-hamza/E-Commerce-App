@@ -10,7 +10,7 @@ import { authHandlers } from "../Handlers/authHandler";
 
 export default function EmailVerification({ route }) {
   //getting email from previous screen
-  const { email, navigateTo } = route.params;
+  const { email, navigateTo, ResetNavigate } = route.params;
   const { verifyOTPFunc, regenOTPFunc, navigate, otpVerified } = authHandlers();
 
   const [usrEmail, setUsrEmail] = useState("");
@@ -38,7 +38,10 @@ export default function EmailVerification({ route }) {
 
   useEffect(() => {
     if (otpVerified && navigateTo === "NewPassword" && navigate) {
-      navigation.navigate("ResetPassword", { email: usrEmail });
+      navigation.navigate("ResetPassword", {
+        email: usrEmail,
+        ResetNavigate: ResetNavigate,
+      });
     }
   }, [otpVerified]);
 

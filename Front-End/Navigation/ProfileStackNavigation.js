@@ -5,6 +5,7 @@ import UpdateUserName from "../Screens/UpdateUserName";
 import UpdatePassword from "../Screens/UpdatePassword";
 import { Icon } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import AuthStackNavigation from "../Navigation/AuthStackNavigation";
 
 export default function ProfileStackNavigation() {
   const Stack = createNativeStackNavigator();
@@ -30,6 +31,13 @@ export default function ProfileStackNavigation() {
       <Stack.Screen
         name="UpdatePassword"
         component={UpdatePassword}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AuthStackNavigation"
+        component={AuthStackNavigation}
         options={{
           headerShown: false,
         }}
