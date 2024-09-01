@@ -125,7 +125,15 @@ const Home = () => {
                   })
                 }
               </ScrollView>
-              <View style={{ width: "100%" }}>
+
+              {/* This will display the Crousal cmponent. */}
+              {/* The crousal is present in the Components folder. It is used to display the images in a slider. */}
+              <View
+                style={{
+                  width: "100%",
+                  paddingVertical: 10,
+                }}
+              >
                 <Crousal />
               </View>
               {mainCategories === "All" ? (
