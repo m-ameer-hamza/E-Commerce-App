@@ -118,17 +118,18 @@ export default CustomDrawerContent = (props) => {
 
           {
             /* if (route.name === "BottomNavigation") {
-            const bottomTabRoute =
-              props.state.routes[props.state.index].state?.routeNames?.[
-                props.state.routes[props.state.index].state?.index
-              ] ?? "Home";
+              const bottomTabRoute =
+                props.state.routes[props.state.index].state?.routeNames?.[
+                  props.state.routes[props.state.index].state?.index
+                ] ?? "Home";
 
-            if (bottomTabRoute === "Home") {
-              focused = label === "Home";
-            } else if (bottomTabRoute === "CartStack") {
-              focused = label === "Cart";
-            }
-          } */
+              if (bottomTabRoute === "Home") {
+                focused = label === "Home";
+              } else if (bottomTabRoute === "CartStack") {
+                label = "Cart";
+                focused = label === "Cart";
+              }
+            } */
           }
 
           return (

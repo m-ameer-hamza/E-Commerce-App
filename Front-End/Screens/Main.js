@@ -138,7 +138,13 @@ const Home = () => {
 
                   <View>
                     {DealsData.map((item, index) => {
-                      return <DealsProducts index={index} item={item} />;
+                      return (
+                        <DealsProducts
+                          key={item._id}
+                          index={index}
+                          item={item}
+                        />
+                      );
                     })}
                   </View>
 
@@ -190,7 +196,9 @@ const Home = () => {
               </Text>
               <View>
                 {searchResults?.map((item, index) => {
-                  return <DealsProducts index={index} item={item} />;
+                  return (
+                    <DealsProducts key={item._id} index={index} item={item} />
+                  );
                 })}
               </View>
             </View>
