@@ -18,6 +18,7 @@ import Header from "../Components/Header";
 import ActiivityLoading from "../Components/ActivityLoading";
 import { productHandler } from "../Handlers/productsHandler";
 import DealsProducts from "../Components/DealsProducts";
+import Crousal from "../Components/Crousal";
 
 const Home = () => {
   const [DropDownCategory, setDropDownCategory] = useState("Select Category");
@@ -124,6 +125,9 @@ const Home = () => {
                   })
                 }
               </ScrollView>
+              <View style={{ width: "100%" }}>
+                <Crousal />
+              </View>
               {mainCategories === "All" ? (
                 <View>
                   {/* Image Slider */}
