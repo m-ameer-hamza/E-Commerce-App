@@ -159,7 +159,6 @@ export const authHandlers = () => {
         username,
         email,
         password,
-
         loginWith,
         `${BACK_END_URL}/e-commerce/users/signup`
       );

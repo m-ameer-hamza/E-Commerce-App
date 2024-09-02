@@ -2,12 +2,30 @@ const Users = require("../Models/userModel");
 const appError = require("../error");
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
-const utilities = require("../utils");
+const { sendEmail } = require("../utils");
 const dotenv = require("dotenv");
 const { decode } = require("punycode");
 
 //settign up the path to config file
 dotenv.config({ path: "./config.env" });
+
+//This method will send the email to the user
+async function sendEmailToUser(email) {
+  console.log("Sending Email to User is called");
+  //generate a random number 6 digit
+  const random = Math.floor(100000 + Math.random() * 900000);
+  const subject = "Email Verification";
+  const text = `Your verification code is ${random}`;
+
+  try {
+    await sendEmail(email, subject, text);
+
+    return random;
+  } catch (err) {
+    console.log(err.message);
+    return null;
+  }
+}
 
 //login user handler
 exports.login = async (req, res, next) => {
@@ -47,6 +65,16 @@ exports.login = async (req, res, next) => {
   //4)- Check if the user is verified or not
 
   if (loginUser.verified === "Not-Verified") {
+    let otp = await sendEmailToUser(loginUser.email);
+
+    if (!otp) {
+      return res.status(407).json({
+        message: "Could not send the OTP. Your email is not verified",
+      });
+    }
+    loginUser.optCode = otp;
+    loginUser.optCodeTime = Date.now();
+    await loginUser.save({ validateBeforeSave: false });
     return res.status(403).json({ message: "User is not verified" });
   }
 
@@ -249,6 +277,7 @@ exports.updatePassword = async (req, res, next) => {
   });
 };
 
+//this will verify the user using the jwt token
 exports.verifyUser = async (req, res, next) => {
   // 1)- JWT Token is there
   if (

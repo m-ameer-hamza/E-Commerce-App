@@ -22,20 +22,12 @@ export function useAuthApi() {
   };
 
   //Checked
-  const createUser = async (
-    userName,
-    email,
-    password,
-
-    loginWith,
-    url
-  ) => {
+  const createUser = async (userName, email, password, loginWith, url) => {
     try {
       const res = await axios.post(url, {
         name: userName,
         email: email,
         password: password,
-
         signUpMethod: loginWith,
       });
 
