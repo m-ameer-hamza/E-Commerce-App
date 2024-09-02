@@ -1,5 +1,8 @@
 {
   "expo": {
+    "autolinking": {
+      "exclude": ["expo-splash-screen"]
+    },
     "entryPoint": "./index.js",
     "name": "Front-End",
     "slug": "Front-End",

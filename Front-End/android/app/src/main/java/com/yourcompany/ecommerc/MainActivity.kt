@@ -9,15 +9,15 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnable
 import com.facebook.react.defaults.DefaultReactActivityDelegate
 
 import expo.modules.ReactActivityDelegateWrapper
+import com.zoontek.rnbootsplash.RNBootSplash
 
 class MainActivity : ReactActivity() {
-  override fun onCreate(savedInstanceState: Bundle?) {
-    // Set the theme to AppTheme BEFORE onCreate to support
-    // coloring the background, status bar, and navigation bar.
-    // This is required for expo-splash-screen.
-    setTheme(R.style.AppTheme);
-    super.onCreate(null)
+  
+   override fun onCreate(savedInstanceState: Bundle?) {
+    RNBootSplash.init(this, R.style.BootTheme) // ⬅️ initialize the splash screen
+    super.onCreate(savedInstanceState) // super.onCreate(null) with react-native-screens
   }
+
 
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule
