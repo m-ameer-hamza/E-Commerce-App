@@ -60,28 +60,6 @@ export default function DrawerNavigation() {
         }}
         component={OrderStackNavigation}
       />
-      <Drawer.Screen
-        options={({ navigation }) => ({
-          headerLeft: () => (
-            <TouchableOpacity
-              style={{ paddingLeft: 20 }}
-              onPress={() => navigation.openDrawer()}
-            >
-              <Icon source="menu" size={30} iconColor="#000" />
-              {/* Adjust the size here */}
-            </TouchableOpacity>
-          ),
-          headerStyle: {
-            backgroundColor: "#AFEEEE",
-            height: 70,
-          },
-          headerTitleStyle: {
-            fontSize: 25,
-          },
-        })}
-        name="Settings"
-        component={Settings}
-      />
     </Drawer.Navigator>
   );
 }

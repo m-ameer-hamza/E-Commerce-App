@@ -59,7 +59,8 @@ const Product = ({ product }) => {
         marginVertical: 20,
 
         backgroundColor: "#fff",
-        width: "45%",
+        width: "50%",
+        paddingHorizontal: 5,
         alignItems: "center",
       }}
     >

@@ -1,6 +1,6 @@
 const initialAppSettings = {
   theme: "dark",
-  fontSize: "medium",
+  fontSize: "large",
 };
 
 export default function appSettingsSlice(state = initialAppSettings, action) {
