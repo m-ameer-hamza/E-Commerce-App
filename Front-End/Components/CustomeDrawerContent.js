@@ -17,6 +17,8 @@ import { logout } from "../Redux/authSlice";
 import { clearCart } from "../Redux/cartSlice";
 import { logoutSession } from "../Redux/sessionSlice";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { routeConfigs } from "../Const/DrawerRoutes";
+import { loadingAppSettings } from "../Redux/appSettingsSlice";
 
 export default CustomDrawerContent = (props) => {
   const navigation = useNavigation();
@@ -24,34 +26,6 @@ export default CustomDrawerContent = (props) => {
   const dispatch = useDispatch();
 
   // Define route configurations with text and icons
-  const routeConfigs = {
-    BottomNavigation: {
-      label: "Home",
-      icon: "home",
-      focusIcon: "home-outline",
-    },
-    ProfileStack: {
-      label: "Profile",
-      icon: "account",
-      focusIcon: "account-outline",
-    },
-    Settings: { label: "Settings", icon: "cog", focusIcon: "cog-outline" },
-    LikedItemsStack: {
-      label: "Liked",
-      icon: "heart",
-      focusIcon: "heart-outline",
-    },
-    OrderStack: {
-      label: "Orders",
-      icon: "shopping",
-      focusIcon: "shopping-outline",
-    },
-    CartStack: {
-      label: "Cart",
-      icon: "cart",
-      focusIcon: "cart-outline",
-    },
-  };
 
   //clear JWT token
   const clearJWT = async () => {
@@ -116,22 +90,6 @@ export default CustomDrawerContent = (props) => {
           const { label, icon, focusIcon } = routeConfigs[route.name] || {};
           let focused = props.state.index === index;
 
-          {
-            /* if (route.name === "BottomNavigation") {
-              const bottomTabRoute =
-                props.state.routes[props.state.index].state?.routeNames?.[
-                  props.state.routes[props.state.index].state?.index
-                ] ?? "Home";
-
-              if (bottomTabRoute === "Home") {
-                focused = label === "Home";
-              } else if (bottomTabRoute === "CartStack") {
-                label = "Cart";
-                focused = label === "Cart";
-              }
-            } */
-          }
-
           return (
             <TouchableRipple
               rippleColor="#ccc"
@@ -182,6 +140,7 @@ export default CustomDrawerContent = (props) => {
       <TouchableOpacity
         style={InlineStyles.logoutButton}
         onPress={async () => {
+          dispatch(loadingAppSettings(true));
           if (user.signUpMethod === "google") {
             try {
               await googleSignOut();
@@ -192,8 +151,7 @@ export default CustomDrawerContent = (props) => {
           if (await clearJWT()) {
             clearReduxData();
           }
-
-          // Handle logout logic here
+          dispatch(loadingAppSettings(false));
         }}
       >
         <Text style={InlineStyles.logoutText}>Logout</Text>

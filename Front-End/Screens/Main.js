@@ -155,10 +155,11 @@ const Home = () => {
                   <Crousal />
                 </View>
                 {mainCategories === "All" ? (
+                  // This View will be displayed on default when no category is seleceted from the main top.
+                  // It will display all the products.
+                  //This is the default option
                   <View>
-                    {/* Image Slider */}
-
-                    {/* Hot Deals for the week */}
+                    {/* Trending Deals for the week */}
 
                     <Text
                       style={{ padding: 15, fontSize: 20, fontWeight: "bold" }}

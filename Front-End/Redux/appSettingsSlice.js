@@ -1,6 +1,7 @@
 const initialAppSettings = {
   theme: "dark",
   fontSize: "large",
+  loading: false,
 };
 
 export default function appSettingsSlice(state = initialAppSettings, action) {
@@ -15,10 +16,17 @@ export default function appSettingsSlice(state = initialAppSettings, action) {
         ...state,
         fontSize: action.payload.fontSize,
       };
+
     case "appSettings/logout":
       return {
         ...state,
         theme: "dark",
+      };
+
+    case "appSettings/loading":
+      return {
+        ...state,
+        loading: action.payload,
       };
     default:
       return state;
@@ -38,6 +46,13 @@ export function editFontSize(fontSize) {
     payload: {
       fontSize: fontSize,
     },
+  };
+}
+
+export function loadingAppSettings(loading) {
+  return {
+    type: "appSettings/loading",
+    payload: loading,
   };
 }
 

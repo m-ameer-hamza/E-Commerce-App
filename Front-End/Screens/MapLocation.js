@@ -28,7 +28,6 @@ const MapLocation = () => {
 
   //Hnadlers of the component
   const fetchLocation = async () => {
-    // console.log("From fetch Loaction", yourLocation);
     if (yourLocation) {
       const location = await Location.reverseGeocodeAsync({
         latitude: yourLocation.coords.latitude,
