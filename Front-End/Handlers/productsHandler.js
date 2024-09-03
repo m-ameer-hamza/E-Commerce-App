@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import { useProductsApi } from "../CustomeHooks/useProductsApi";
 import { BACK_END_URL } from "../Global";
 export const productHandler = () => {
