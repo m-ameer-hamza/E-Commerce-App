@@ -11,7 +11,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.yourcompany.ecommerc"
@@ -35,9 +34,7 @@
           "enableGooglePay": true
         }
       ],
-
       "expo-updates",
-
       [
         "expo-location",
         {
