@@ -43,6 +43,8 @@ const MapLocation = () => {
         area: location[0].district,
         houseAddress: location[0].formattedAddress,
       });
+
+      alert("Location Details Fetched Successfully");
     } else {
       alert("Error fetching location details.");
     }
