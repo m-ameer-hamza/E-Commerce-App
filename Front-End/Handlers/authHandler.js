@@ -27,13 +27,10 @@ export const authHandlers = () => {
     verifyOTP,
     regenOTP,
     resetPassword,
-
     error,
-
     response,
     statusCode,
     setError,
-
     setResponse,
     setStatusCode,
   } = useAuthApi();
@@ -67,6 +64,7 @@ export const authHandlers = () => {
         navigation.navigate("EmailVerification", {
           email: email,
           reSendOtp: "send",
+          navigateTo: "Home",
         });
       } else if (error === "Email or password not match") {
         alert("Creditentials not match");

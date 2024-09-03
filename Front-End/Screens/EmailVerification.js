@@ -7,11 +7,14 @@ import { useNavigation } from "@react-navigation/native";
 
 import LogoComponent from "../Components/Logo";
 import { authHandlers } from "../Handlers/authHandler";
+import { useDispatch } from "react-redux";
+import { toggleAuth } from "../Redux/authSlice";
 
 export default function EmailVerification({ route }) {
   //getting email from previous screen
   const { email, navigateTo, ResetNavigate } = route.params;
-  const { verifyOTPFunc, regenOTPFunc, navigate, otpVerified } = authHandlers();
+  const { verifyOTPFunc, regenOTPFunc, navigate, otpVerified, setNavigate } =
+    authHandlers();
 
   const [usrEmail, setUsrEmail] = useState("");
   const [valideOTP, setValideOTP] = useState(false);
@@ -20,6 +23,7 @@ export default function EmailVerification({ route }) {
   const [isVerifyDisabled, setIsVerifyDisabled] = useState(false);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
   const [countdown, setCountdown] = useState(0);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setUsrEmail(email);
@@ -32,8 +36,19 @@ export default function EmailVerification({ route }) {
 
   useEffect(() => {
     if (navigateTo === "Login" && navigate) {
+      setNavigate(false);
       navigation.navigate("Login");
     }
+    setNavigate(false);
+  }, [navigate]);
+
+  useEffect(() => {
+    if (navigateTo === "Home" && navigate) {
+      setNavigate(false);
+
+      dispatch(toggleAuth());
+    }
+    setNavigate(false);
   }, [navigate]);
 
   useEffect(() => {
