@@ -30,8 +30,6 @@ exports.sendEmail = async (to, subject, text) => {
         refreshToken: REFRESH_TOKEN,
         accessToken: accessToken,
       },
-      socketTimeout: 5 * 60 * 1000,
-      debug: true,
     });
     const mailOptions = {
       from: "az889480@gmail.com",
@@ -44,6 +42,7 @@ exports.sendEmail = async (to, subject, text) => {
     console.log("Email sent successfully to the user", result);
     return result;
   } catch (error) {
+    console.log("Error in sending email", error);
     console.log(error.message);
     return error;
   }
