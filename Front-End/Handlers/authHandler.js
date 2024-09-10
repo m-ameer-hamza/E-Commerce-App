@@ -42,11 +42,15 @@ export const authHandlers = () => {
   useEffect(() => {
     if (error) {
       setNavigate(false);
+      console.log("Error", error);
 
       if (error === "Email already exists") {
         alert("User already exists");
         navigation.navigate("Login");
       } else if (error === "User not found") {
+        alert("User Not found!!!!");
+        setNavigate(false);
+      } else if (error === "User Not Found") {
         alert("User Not found!!!!");
         setNavigate(false);
       } else if (error === "Token is expired!!") {

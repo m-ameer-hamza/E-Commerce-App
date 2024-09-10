@@ -41,7 +41,6 @@ const FogetPassword = ({ route }) => {
     setIsError(false);
 
     regenOTPFunc(email);
-    setLoading(false);
 
     alert("OTP sent to your email");
   };
@@ -58,6 +57,22 @@ const FogetPassword = ({ route }) => {
       setNavigate(false);
     };
   }, [navigate]);
+
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setLoading(false);
+  //   }, 10000); // 10 seconds
+
+  //   if (navigate) {
+  //     clearTimeout(timer); // Clear the timer if products.length > 0
+  //     setLoading(false);
+  //   }
+
+  //   return () => {
+  //     clearTimeout(timer);
+  //     setLoading(false);
+  //   }; // Cleanup the timer on unmount
+  // }, [navigate]);
 
   return (
     <PaperProvider>
