@@ -8,16 +8,18 @@ const Products = [
     features: ["Invertor", "Glass Door", "3-year warranty"],
     price: 50000,
     discount: "10%",
-    images: [require("../assets/Deals/fridge1.png")],
+    images: ["assets/Products/fridge1.png"],
+    sold: 5,
     extra: [
       {
-        Color: ["blue", "green", "black"],
+        key: "Color",
+        value: ["blue", "green", "black"],
       },
       {
-        Size: ["small", "medium", "large"],
+        key: "Size",
+        value: ["small", "medium", "large"],
       },
     ],
-    sold: 5,
   },
   {
     id: 2,
@@ -25,19 +27,21 @@ const Products = [
     name: "Fridges",
     title: "Dawlence Avante+ Fridge",
     description: "Dawlence Avante+ Series Fridge.",
-    features: ["Invertor", "Glass Door", "3-year warranty,"],
+    features: ["Invertor", "Glass Door", "3-year warranty"],
     price: 150000,
     discount: "15%",
-    images: [require("../assets/Deals/fridge2.png")],
+    images: ["assets/Products/fridge2.png"],
+    sold: 10,
     extra: [
       {
-        Colors: ["blue", "green", "black"],
+        key: "Color",
+        value: ["blue", "green", "black"],
       },
       {
-        Size: ["small", "medium", "large"],
+        key: "Size",
+        value: ["small", "medium", "large"],
       },
     ],
-    sold: 10,
   },
   {
     id: 3,
@@ -45,17 +49,19 @@ const Products = [
     name: "Mobile Phones",
     title: "Samsung S23",
     description: "Samsung S23 (12GB, 256GB)",
-    features: ["12GB", "Blue Color", "3-year warranty,"],
+    features: ["12GB", "Blue Color", "3-year warranty"],
     price: 170000,
     discount: "",
-    images: [require("../assets/Deals/phone.png")],
+    images: ["assets/Products/phone.png"],
     sold: 15,
     extra: [
       {
-        Color: ["blue", "green", "black"],
+        key: "Color",
+        value: ["blue", "green", "black"],
       },
       {
-        Ram: ["8GB", "12GB"],
+        key: "Ram",
+        value: ["8GB", "12GB"],
       },
     ],
   },
@@ -68,11 +74,12 @@ const Products = [
     features: ["4GB", "White Color", "50MP Camera"],
     price: 80000,
     discount: "15%",
-    images: [require("../assets/Deals/phone2.png")],
+    images: ["assets/Products/phone2.png"],
     sold: 20,
     extra: [
       {
-        Ram: ["4GB", "6GB"],
+        key: "Ram",
+        value: ["4GB", "6GB"],
       },
     ],
   },
@@ -85,7 +92,7 @@ const Products = [
     features: ["Velvet Material", "Sky Blue", "6 Seater"],
     price: 85000,
     discount: "10%",
-    images: [require("../assets/Deals/sofa.png")],
+    images: ["assets/Products/sofa.png"],
     sold: 25,
     extra: [],
   },
@@ -98,14 +105,16 @@ const Products = [
     features: ["10KG", "White Color", "3-year warranty"],
     price: 65000,
     discount: "",
-    images: [require("../assets/Deals/washing.png")],
+    images: ["assets/Products/washing.png"],
     sold: 0,
     extra: [
       {
-        Color: ["red", "white", "black"],
+        key: "Color",
+        value: ["red", "white", "black"],
       },
       {
-        Capacity: ["10KG", "14KG"],
+        key: "Capacity",
+        value: ["10KG", "14KG"],
       },
     ],
   },
@@ -116,14 +125,15 @@ const Products = [
     title: "AKG Handfrees",
     description:
       "AKG Earphones. Original AKG Earphones. Handsfree with Top Base",
-    features: ["3.5mm Jack", "Black Color", "2-months warranty,"],
+    features: ["3.5mm Jack", "Black Color", "2-months warranty"],
     price: 500,
     discount: "",
-    images: [require("../assets/Deals/handfree.png")],
+    images: ["assets/Products/handfree.png"],
     sold: 25,
     extra: [
       {
-        Color: ["white", "black"],
+        key: "Color",
+        value: ["white", "black"],
       },
     ],
   },
@@ -134,17 +144,19 @@ const Products = [
     title: "Sony Wireless HeadPhones",
     description:
       "Sony Wireless HeadPhones. Original Sony HeadPhones. Long lasting battery",
-    features: ["Wireless", "Multiple Colors", "2-year warranty,"],
+    features: ["Wireless", "Multiple Colors", "2-year warranty"],
     price: 30000,
     discount: "",
-    images: [require("../assets/Deals/headphones.png")],
+    images: ["assets/Products/headphones.png"],
     sold: 60,
     extra: [
       {
-        Color: ["blue", "white", "black"],
+        key: "Color",
+        value: ["blue", "white", "black"],
       },
     ],
-
+  },
+  {
     id: 9,
     category: "Furniture",
     name: "Sofa, Bed & Tables",
@@ -153,17 +165,20 @@ const Products = [
     features: ["King Size", "Wooden Material", "10-year warranty"],
     price: 45000,
     discount: "5%",
-    images: [require("../assets/Deals/bed.png")],
+    images: ["assets/Products/bed.png"],
     sold: 15,
     extra: [
       {
-        Color: ["brown", "black"],
+        key: "Color",
+        value: ["brown", "black"],
       },
       {
-        Size: ["king", "queen"],
+        key: "Size",
+        value: ["king", "queen"],
       },
     ],
-
+  },
+  {
     id: 10,
     category: "Furniture",
     name: "Sofa, Bed & Tables",
@@ -172,17 +187,20 @@ const Products = [
     features: ["Glass Material", "Transparent", "5-year warranty"],
     price: 25000,
     discount: "",
-    images: [require("../assets/Deals/table.png")],
+    images: ["assets/Products/table.png"],
     sold: 10,
     extra: [
       {
-        Color: ["transparent", "black"],
+        key: "Color",
+        value: ["transparent", "black"],
       },
       {
-        Size: ["small", "medium", "large"],
+        key: "Size",
+        value: ["small", "medium", "large"],
       },
     ],
-
+  },
+  {
     id: 11,
     category: "Electronics",
     name: "Washing Machines",
@@ -191,17 +209,20 @@ const Products = [
     features: ["8KG", "White Color", "2-year warranty"],
     price: 45000,
     discount: "",
-    images: [require("../assets/Deals/washing2.png")],
+    images: ["assets/Products/washing2.png"],
     sold: 5,
     extra: [
       {
-        Color: ["red", "white", "black"],
+        key: "Color",
+        value: ["red", "white", "black"],
       },
       {
-        Capacity: ["8KG", "12KG"],
+        key: "Capacity",
+        value: ["8KG", "12KG"],
       },
     ],
-
+  },
+  {
     id: 12,
     category: "Electronics",
     name: "Fridges",
@@ -210,17 +231,20 @@ const Products = [
     features: ["8KG", "White Color", "2-year warranty"],
     price: 55000,
     discount: "",
-    images: [require("../assets/Deals/fridge3.png")],
+    images: ["assets/Products/fridge3.png"],
     sold: 10,
     extra: [
       {
-        Color: ["red", "white", "black"],
+        key: "Color",
+        value: ["red", "white", "black"],
       },
       {
-        Size: ["small", "medium", "large"],
+        key: "Size",
+        value: ["small", "medium", "large"],
       },
     ],
-
+  },
+  {
     id: 13,
     category: "Electronics",
     name: "Fridges",
@@ -229,52 +253,30 @@ const Products = [
     features: ["Invertor", "Glass Door", "3-year warranty"],
     price: 60000,
     discount: "",
-    images: [require("../assets/Deals/fridge4.png")],
+    images: ["assets/Products/fridge4.png"],
     sold: 5,
     extra: [
       {
-        Color: ["blue", "green", "black"],
+        key: "Color",
+        value: ["blue", "green", "black"],
       },
       {
-        Size: ["small", "medium", "large"],
+        key: "Size",
+        value: ["small", "medium", "large"],
       },
     ],
-
+  },
+  {
     id: 14,
     category: "Phones & Accessories",
     name: "Mobile Phones",
     title: "Oppo A53",
     description: "Oppo A53 (6GB, 128GB)",
-    features: ["6GB", "White Color", "3-year warranty,"],
+    features: ["6GB", "White Color", "3-year warranty"],
     price: 45000,
     discount: "",
-    images: [require("../assets/Deals/phone3.png")],
+    images: ["assets/Products/phone3.png"],
     sold: 15,
-    extra: [
-      {
-        Color: ["blue", "green", "black"],
-      },
-      {
-        Ram: ["4GB", "6GB"],
-      },
-    ],
-
-    id: 15,
-    category: "Phones & Accessories",
-    name: "Mobile Phones",
-    title: "Redmi Note 13",
-    description: "Redmi Note 13 (4GB, 64GB)",
-    features: ["4GB", "White Color", "50MP Camera"],
-    price: 80000,
-    discount: "15%",
-    images: [require("../assets/Deals/phone4.png")],
-    sold: 20,
-    extra: [
-      {
-        Ram: ["4GB", "6GB"],
-      },
-    ],
+    extra: [],
   },
 ];
-
-export default Products;

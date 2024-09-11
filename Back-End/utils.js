@@ -35,7 +35,37 @@ exports.sendEmail = async (to, subject, text) => {
       from: "az889480@gmail.com",
       to: to,
       subject: subject,
-      text: text,
+      html: `
+        <div
+          style="display: flex; justify-content: center; align-items: center; padding: 0; margin: 0; background-color: #f5f5f5; width: 100%;"
+        >
+          <table 
+            style="max-width: 600px; background-color: #ffffff; border-radius: 10px; padding: 20px; width: 100%; margin: 0 auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"
+            cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="text-align: center; padding-bottom: 20px;">
+                
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">
+                <h3 style="font-size: 22px; color: #333;">Email Verification Code</h3>
+                <p style="font-size: 16px; color: #555;">We are sending this email because you created an account or applied for a password reset.</p>
+                <p style="font-size: 16px; color: #555;">This OTP is used to verify your email address and will <strong>expire after 5 minutes</strong>.</p>
+                <h4 style="font-size: 18px; color: #333; margin-top: 20px;">Verification Code:</h4>
+                <h2 
+                  style="color: rgb(0, 119, 255); font-size: xx-large; letter-spacing: 1.2px; font-weight: 600; font-style: italic; margin-bottom: 20px;">
+                  ${text}
+                </h2>
+                <p style="font-size: 16px; color: #555;">Use this code to verify your email. If you did not request this, please ignore this message.</p>
+                <p style="font-size: 16px; color: #555;">Do not share this code with anyone.</p>
+                <h4 style="font-size: 16px; color: #333; margin-top: 30px;">Thank you. Stay Happy. Keep Shopping!</h4>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `,
+      text: `Your OTP is ${text}`,
     };
 
     const result = await transport.sendMail(mailOptions);
